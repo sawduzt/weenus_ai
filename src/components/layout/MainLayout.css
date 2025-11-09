@@ -1,0 +1,88 @@
+/**
+ * MainLayout Component Styles
+ * 
+ * Defines the primary layout structure with sidebar, main content,
+ * and Windows Mica effects.
+ */
+
+.main-layout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  transition: all var(--transition-normal);
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--sidebar-width);
+  transition: margin-left var(--transition-normal);
+  position: relative;
+  z-index: 1;
+}
+
+/* Collapsed Sidebar State */
+.main-layout.sidebar-collapsed .main-content {
+  margin-left: var(--sidebar-width-collapsed);
+}
+
+/* Content Area */
+.content-area {
+  flex: 1;
+  padding: var(--spacing-lg);
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg-primary);
+  position: relative;
+  min-height: 0; /* Allow flex shrinking */
+}
+
+/* Content Area Glass Effect */
+.content-area::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.02) 0%, 
+      rgba(255, 255, 255, 0.005) 100%
+    );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Mica Backdrop */
+.mica-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -2;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(0, 120, 212, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 60%),
+    radial-gradient(circle at 40% 60%, rgba(245, 158, 11, 0.04) 0%, transparent 60%),
+    linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .content-area {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .content-area {
+    padding: var(--spacing-sm);
+  }
+}

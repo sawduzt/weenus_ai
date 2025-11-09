@@ -1,0 +1,165 @@
+/**
+ * StatusBar Component Styles
+ * 
+ * Styles for the bottom status bar showing connection status,
+ * system information, and application details.
+ */
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--statusbar-height);
+  padding: 0 var(--spacing-md);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-primary);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 5;
+}
+
+/* Status Sections */
+.status-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Connection Status */
+.connection-status {
+  flex: 1;
+  min-width: 0;
+}
+
+.status-icon {
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+.status-text {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.status-detail {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* System Information */
+.system-info {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  white-space: nowrap;
+}
+
+.status-label {
+  color: var(--text-muted);
+}
+
+.status-value {
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-family: var(--font-family-mono);
+}
+
+/* Application Info */
+.app-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+.app-version {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.build-info {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Status Indicators */
+.status-bar .status-icon {
+  animation: pulse 2s infinite;
+}
+
+/* Connected state - green indicator */
+.connection-status:has(.status-icon:contains("🟢")) .status-text {
+  color: var(--success);
+}
+
+/* Disconnected state - red indicator */
+.connection-status:has(.status-icon:contains("🔴")) .status-text {
+  color: var(--error);
+}
+
+/* Hover Effects */
+.status-section:hover .status-text,
+.status-section:hover .status-value {
+  color: var(--text-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .status-bar {
+    padding: 0 var(--spacing-sm);
+    gap: var(--spacing-sm);
+  }
+  
+  .system-info {
+    gap: var(--spacing-sm);
+  }
+  
+  .status-item {
+    gap: 2px;
+  }
+  
+  .status-detail {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .status-bar {
+    font-size: 10px;
+  }
+  
+  .system-info .status-item:not(:first-child) {
+    display: none;
+  }
+  
+  .build-info {
+    display: none;
+  }
+}
+
+/* Theme-specific adjustments */
+[data-theme="light"] .status-bar {
+  background: rgba(233, 236, 239, 0.9);
+  border-top-color: var(--border-secondary);
+}
+
+/* Smooth transitions */
+.status-bar,
+.status-section,
+.status-item {
+  transition: 
+    background-color var(--transition-normal),
+    border-color var(--transition-normal),
+    color var(--transition-normal);
+}
