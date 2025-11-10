@@ -85,7 +85,7 @@
   overflow: hidden;
   transition: opacity var(--transition-normal);
   text-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
-  font-family: 'Comic Neue', var(--font-family-sans);
+}
 }
 
 .sidebar.collapsed .app-name {
@@ -328,7 +328,6 @@
   text-align: left;
   width: calc(100% - var(--spacing-md) * 2);
   font-weight: 600;
-  font-family: 'Comic Neue', var(--font-family-sans);
   font-size: 14px;
   box-shadow: 0 2px 8px rgba(255, 107, 157, 0.15);
 }

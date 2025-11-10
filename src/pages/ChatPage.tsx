@@ -5,7 +5,7 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, Trash2, User, Bot, RefreshCw } from 'lucide-react';
+import { Send, User, Bot, RefreshCw } from 'lucide-react';
 import { useOllama } from '../hooks/useOllama';
 import { useChat } from '../hooks/useChat';
 import { useToast } from '../components/ui/ToastProvider';
@@ -38,7 +38,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
     setCurrentModel,
   } = useOllama();
 
-  const { activeChat, switchChat, createNewChat, deleteChat, refreshChats } = useChat();
+  const { activeChat, switchChat, createNewChat, refreshChats } = useChat();
 
   // Get messages from active chat or empty array
   const messages = activeChat?.messages || [];
@@ -61,8 +61,11 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   useEffect(() => {
     if (activeChatId && activeChatId !== activeChat?.id) {
       switchChat(activeChatId);
+    } else if (!activeChatId && activeChat) {
+      // Clear active chat when activeChatId is set to null (New Chat button)
+      chatService.setActiveChat(null).then(() => refreshChats());
     }
-  }, [activeChatId, activeChat?.id, switchChat]);
+  }, [activeChatId, activeChat, switchChat, refreshChats]);
 
   // Check connection on mount
   useEffect(() => {
@@ -205,16 +208,6 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
     } finally {
       setIsGeneratingResponse(false);
       setLoadingMessage('');
-    }
-  };
-
-  const handleClearMessages = async () => {
-    if (!activeChatId) return;
-    
-    if (confirm('Delete this entire chat? This cannot be undone.')) {
-      await deleteChat(activeChatId);
-      onChatChange(null);
-      toast.success('Chat Deleted', 'Chat has been removed');
     }
   };
 
@@ -387,51 +380,28 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           <p style={{ margin: '2px 0 0 0', fontSize: '12px' }}>Powered by Ollama</p>
         </div>
         
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          {/* Model Selector */}
-          <select
-            value={currentModel}
-            onChange={(e) => setCurrentModel(e.target.value)}
-            disabled={isGeneratingResponse}
-            style={{
-              padding: '8px 12px',
-              borderRadius: '8px',
-              border: '1px solid var(--border)',
-              background: 'var(--surface)',
-              color: 'var(--text)',
-              fontSize: '14px',
-              cursor: 'pointer',
-            }}
-          >
-            <option value="">Select a model...</option>
-            {models.map((model) => (
-              <option key={model.name} value={model.name}>
-                {model.name}
-              </option>
-            ))}
-          </select>
-
-          {/* Clear Chat */}
-          <button
-            onClick={handleClearMessages}
-            disabled={messages.length === 0 || isGeneratingResponse}
-            style={{
-              padding: '8px 12px',
-              borderRadius: '8px',
-              border: '1px solid var(--border)',
-              background: 'var(--surface)',
-              color: 'var(--text)',
-              cursor: messages.length === 0 ? 'not-allowed' : 'pointer',
-              opacity: messages.length === 0 ? 0.5 : 1,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}
-          >
-            <Trash2 size={16} />
-            Clear
-          </button>
-        </div>
+        {/* Model Selector */}
+        <select
+          value={currentModel}
+          onChange={(e) => setCurrentModel(e.target.value)}
+          disabled={isGeneratingResponse}
+          style={{
+            padding: '8px 12px',
+            borderRadius: '8px',
+            border: '1px solid var(--border)',
+            background: 'var(--surface)',
+            color: 'var(--text)',
+            fontSize: '14px',
+            cursor: 'pointer',
+          }}
+        >
+          <option value="">Select a model...</option>
+          {models.map((model) => (
+            <option key={model.name} value={model.name}>
+              {model.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Messages Area */}

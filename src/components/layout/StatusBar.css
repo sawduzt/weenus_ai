@@ -22,7 +22,7 @@
   z-index: 5;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0; /* Rounded top-left and top-right corners */
   box-shadow: 0 -2px 8px rgba(255, 107, 157, 0.1);
-  font-family: 'Quicksand', var(--font-family-sans);
+}
 }
 
 /* Status Sections */

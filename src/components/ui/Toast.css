@@ -112,7 +112,7 @@
   font-size: var(--font-size-base);
   color: var(--text-primary);
   line-height: 1.4;
-  font-family: 'Quicksand', var(--font-family-sans);
+}
 }
 
 .toast-message {

@@ -596,4 +596,49 @@ fix: Messages display immediately, AI responses work with fun loading indicators
 - Added animated Unicode spinner during AI thinking
 ```
 
+### ✅ UI Polish & Bug Fixes (November 10, 2025 - Latest)
+
+**Fixed Critical Issues:**
+1. **New Chat Button Now Works** ✅
+   - Fixed ChatPage to properly handle `activeChatId` being set to `null`
+   - Added logic to call `chatService.setActiveChat(null)` when New Chat is clicked
+   - Chat state now properly clears, allowing fresh conversation to start
+   - Synchronizes between App.tsx prop changes and ChatPage state
+
+2. **Removed Unnecessary Clear Button** ✅
+   - Removed Clear/Trash button from ChatPage header (redundant with delete in sidebar)
+   - Cleaned up unused imports (`Trash2` icon)
+   - Removed `handleClearMessages` function and `deleteChat` from useChat destructuring
+   - Simplified UI with just Model Selector in header
+
+3. **Standardized Font to System Default** ✅
+   - Removed all custom web fonts (Comic Neue, Nunito, Quicksand)
+   - Switched to modern system font stack for consistency
+   - Font: `-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif`
+   - Mono font: `'SF Mono', 'Monaco', 'Cascadia Code', 'Courier New', monospace`
+   - Removed Google Fonts import from global.css
+   - Removed all `font-family` overrides from component CSS files
+
+**Technical Changes:**
+- Updated ChatPage.tsx useEffect to handle null activeChatId
+- Modified global.css typography variables
+- Cleaned up Sidebar.css, Toast.css, StatusBar.css font declarations
+- Better alignment with system UI conventions
+
+**Files Modified:**
+- `src/pages/ChatPage.tsx` - Fixed New Chat handling, removed Clear button
+- `src/styles/global.css` - Updated font stack, removed Google Fonts
+- `src/components/layout/Sidebar.css` - Removed font overrides
+- `src/components/ui/Toast.css` - Removed font overrides
+- `src/components/layout/StatusBar.css` - Removed font overrides
+
+**Git Commit:**
+```
+fix: New Chat button works, removed Clear button, standardized fonts
+- Fixed New Chat button by handling null activeChatId in ChatPage
+- Removed redundant Clear button from chat header
+- Switched to system font stack for cleaner, native appearance
+- Removed all custom web fonts (Comic Neue, Nunito, Quicksand)
+```
+
 ---
