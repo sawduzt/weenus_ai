@@ -5,7 +5,7 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, User, Bot, RefreshCw } from 'lucide-react';
+import { Send, User, Bot, RefreshCw, MessageCircle, Lightbulb } from 'lucide-react';
 import { useOllama } from '../hooks/useOllama';
 import { useChat } from '../hooks/useChat';
 import { useToast } from '../components/ui/ToastProvider';
@@ -386,8 +386,8 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
               <li>Wait for "Ollama is running" message</li>
               <li>Click "Check Connection" above</li>
             </ol>
-            <p style={{ marginTop: '16px', fontSize: '14px', color: 'var(--text-secondary)' }}>
-              💡 Tip: If the "Start Ollama" button doesn't work, Ollama may not be installed or not in your system PATH.
+            <p style={{ marginTop: '16px', fontSize: '14px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Lightbulb size={16} /> Tip: If the "Start Ollama" button doesn't work, Ollama may not be installed or not in your system PATH.
             </p>
           </div>
         </div>
@@ -453,14 +453,14 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
       <div className="messages-container" style={{
         flex: 1,
         overflowY: 'auto',
-        padding: '24px',
+        padding: '12px',
         display: 'flex',
         flexDirection: 'column',
         gap: '16px',
       }}>
         {messages.length === 0 ? (
           <div className="coming-soon">
-            <div className="coming-soon-icon">💬</div>
+            <div className="coming-soon-icon"><MessageCircle size={48} /></div>
             <h2>Start a Conversation</h2>
             <p>Select a model and type your message below</p>
           </div>
@@ -473,7 +473,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '8px',
-                  padding: '16px',
+                  padding: '12px',
                   borderRadius: '12px',
                   background: message.role === 'user' ? 'var(--surface)' : 'var(--background)',
                   border: '1px solid var(--border)',
@@ -505,7 +505,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '8px',
-                padding: '16px',
+                padding: '12px',
                 borderRadius: '12px',
                 background: 'var(--background)',
                 border: '1px solid var(--pink)',
@@ -540,7 +540,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '8px',
-                padding: '16px',
+                padding: '12px',
                 borderRadius: '12px',
                 background: 'var(--background)',
                 border: '1px solid var(--pink)',

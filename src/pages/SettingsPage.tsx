@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { FolderOpen, Save } from 'lucide-react';
+import { FolderOpen, Save, Settings as SettingsIcon, Bot, Sliders, Wrench, Download, Upload, RotateCcw } from 'lucide-react';
 import { useToast } from '../components/ui/ToastProvider';
 import './SettingsPage.css';
 
@@ -148,10 +148,10 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
   };
 
   const tabs = [
-    { id: 'general', label: 'General', icon: '⚙️' },
-    { id: 'models', label: 'Models', icon: '🤖' },
-    { id: 'parameters', label: 'Parameters', icon: '🎛️' },
-    { id: 'advanced', label: 'Advanced', icon: '🔧' },
+    { id: 'general', label: 'General', icon: <SettingsIcon size={16} /> },
+    { id: 'models', label: 'Models', icon: <Bot size={16} /> },
+    { id: 'parameters', label: 'Parameters', icon: <Sliders size={16} /> },
+    { id: 'advanced', label: 'Advanced', icon: <Wrench size={16} /> },
   ];
 
   return (
@@ -420,14 +420,14 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
               <div className="setting-group">
                 <h3>Data Management</h3>
                 <div className="button-group">
-                  <button onClick={exportSettings} className="setting-button">
-                    📁 Export Settings
+                  <button onClick={exportSettings} className="setting-button" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Download size={16} /> Export Settings
                   </button>
-                  <button className="setting-button">
-                    📂 Import Settings
+                  <button className="setting-button" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Upload size={16} /> Import Settings
                   </button>
-                  <button onClick={resetToDefaults} className="setting-button danger">
-                    🔄 Reset to Defaults
+                  <button onClick={resetToDefaults} className="setting-button danger" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <RotateCcw size={16} /> Reset to Defaults
                   </button>
                 </div>
               </div>
