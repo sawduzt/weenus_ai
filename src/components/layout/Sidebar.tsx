@@ -93,8 +93,6 @@ export function Sidebar({
     }
   };
 
-  const chatsToDisplay = searchQuery ? searchResults : Array.from(groupedChats.entries());
-
   return (
     <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       {/* Sidebar Header */}

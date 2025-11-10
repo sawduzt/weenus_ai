@@ -7,7 +7,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Trash2, User, Bot, RefreshCw } from 'lucide-react';
 import { useOllama } from '../hooks/useOllama';
+import { useChat } from '../hooks/useChat';
 import { useToast } from '../components/ui/ToastProvider';
+import { chatService } from '../services/chat';
+import type { ChatMessage } from '../types/chat.types';
 import './ChatPage.css';
 
 export interface ChatPageProps {
@@ -22,19 +25,29 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   const [isStartingOllama, setIsStartingOllama] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const toast = useToast();
+  const isFirstMessage = useRef(false);
 
   const {
     isConnected,
     checkConnection,
     models,
     loadModels,
-    messages,
     currentModel,
     setCurrentModel,
     isGenerating,
-    sendMessageStream,
-    clearMessages,
   } = useOllama();
+
+  const { activeChat, switchChat, createNewChat, deleteChat } = useChat();
+
+  // Get messages from active chat or empty array
+  const messages = activeChat?.messages || [];
+
+  // Sync active chat when prop changes
+  useEffect(() => {
+    if (activeChatId && activeChatId !== activeChat?.id) {
+      switchChat(activeChatId);
+    }
+  }, [activeChatId, activeChat?.id, switchChat]);
 
   // Check connection on mount
   useEffect(() => {
@@ -67,13 +80,99 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
     setStreamingResponse('');
 
     try {
-      await sendMessageStream(userInput, (chunk: string) => {
-        setStreamingResponse((prev: string) => prev + chunk);
+      // Create new chat if none active
+      let chatId = activeChatId;
+      if (!chatId) {
+        const newChat = await createNewChat(currentModel);
+        chatId = newChat.id;
+        onChatChange(chatId);
+        isFirstMessage.current = true;
+      }
+
+      // Create user message
+      const userMessage: ChatMessage = {
+        id: `msg-${Date.now()}-user`,
+        role: 'user',
+        content: userInput,
+        timestamp: new Date(),
+        model: currentModel,
+      };
+
+      // Add user message to chat
+      await chatService.addMessage(chatId, userMessage);
+
+      // Generate AI response
+      let fullResponse = '';
+      const response = await fetch('http://localhost:11434/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: currentModel,
+          prompt: userInput,
+          stream: true,
+        }),
       });
+
+      if (!response.ok || !response.body) {
+        throw new Error('Failed to get response from Ollama');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split('\n').filter(line => line.trim());
+
+        for (const line of lines) {
+          try {
+            const json = JSON.parse(line);
+            if (json.response) {
+              fullResponse += json.response;
+              setStreamingResponse(fullResponse);
+            }
+          } catch (e) {
+            console.error('Error parsing chunk:', e);
+          }
+        }
+      }
+
+      // Create assistant message
+      const assistantMessage: ChatMessage = {
+        id: `msg-${Date.now()}-assistant`,
+        role: 'assistant',
+        content: fullResponse,
+        timestamp: new Date(),
+        model: currentModel,
+      };
+
+      // Add assistant message to chat
+      await chatService.addMessage(chatId, assistantMessage);
+
+      // Generate title if this was the first message
+      if (isFirstMessage.current) {
+        isFirstMessage.current = false;
+        await chatService.generateTitle(chatId, userInput, currentModel);
+      }
+
+      setStreamingResponse('');
     } catch (error) {
       console.error('Chat error:', error);
-    } finally {
+      toast.error('Chat Error', 'Failed to send message. Please try again.');
       setStreamingResponse('');
+    }
+  };
+
+  const handleClearMessages = async () => {
+    if (!activeChatId) return;
+    
+    if (confirm('Delete this entire chat? This cannot be undone.')) {
+      await deleteChat(activeChatId);
+      onChatChange(null);
+      toast.success('Chat Deleted', 'Chat has been removed');
     }
   };
 
@@ -269,7 +368,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
 
           {/* Clear Chat */}
           <button
-            onClick={clearMessages}
+            onClick={handleClearMessages}
             disabled={messages.length === 0 || isGenerating}
             style={{
               padding: '8px 12px',
