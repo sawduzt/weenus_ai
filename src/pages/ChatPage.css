@@ -204,9 +204,32 @@
 }
 
 .model-selector option {
-  background: var(--bg-tertiary);
+  background: var(--bg-secondary);
   color: var(--text-primary);
   padding: var(--spacing-sm);
+}
+
+/* Better dropdown styling */
+select.model-selector {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+}
+
+select.model-selector option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 8px;
+}
+
+select.model-selector option:hover {
+  background: var(--bg-tertiary);
+}
+
+select.model-selector:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(255, 107, 157, 0.2);
 }
 
 .parameters-button {

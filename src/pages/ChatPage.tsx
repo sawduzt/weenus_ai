@@ -385,19 +385,26 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           value={currentModel}
           onChange={(e) => setCurrentModel(e.target.value)}
           disabled={isGeneratingResponse}
+          className="model-selector"
           style={{
             padding: '8px 12px',
             borderRadius: '8px',
-            border: '1px solid var(--border)',
-            background: 'var(--surface)',
-            color: 'var(--text)',
+            border: '1px solid var(--border-primary)',
+            background: 'var(--bg-secondary)',
+            color: 'var(--text-primary)',
             fontSize: '14px',
             cursor: 'pointer',
           }}
         >
-          <option value="">Select a model...</option>
+          <option value="" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+            Select a model...
+          </option>
           {models.map((model) => (
-            <option key={model.name} value={model.name}>
+            <option 
+              key={model.name} 
+              value={model.name}
+              style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
+            >
               {model.name}
             </option>
           ))}
