@@ -26,6 +26,14 @@ const electronAPI = {
     getVersion: () => ipcRenderer.invoke('get-app-version'),
     getPlatform: () => ipcRenderer.invoke('get-platform'),
   },
+
+  // Ollama operations
+  ollama: {
+    start: () => ipcRenderer.invoke('ollama-start'),
+    stop: () => ipcRenderer.invoke('ollama-stop'),
+    restart: (modelPath?: string) => ipcRenderer.invoke('ollama-restart', modelPath),
+  },
+
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
@@ -34,13 +42,34 @@ const electronAPI = {
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electronAPI', electronAPI)
+    console.log('✅ Preload: electronAPI exposed successfully via contextBridge')
+    
+    // Verify the exposure worked
+    setTimeout(() => {
+      contextBridge.exposeInMainWorld('__electronAPITest', { test: 'working' })
+      console.log('✅ Preload: Test API exposed')
+    }, 100)
   } catch (error) {
-    console.error(error)
+    console.error('❌ Preload: Failed to expose electronAPI:', error)
   }
 } else {
   // @ts-ignore (define in dts)
   window.electronAPI = electronAPI
+  console.log('✅ Preload: electronAPI exposed directly to window')
 }
+
+// Debug: Log API structure
+console.log('🔍 Preload: electronAPI structure:', {
+  store: !!electronAPI.store,
+  fileSystem: !!electronAPI.fileSystem,
+  window: !!electronAPI.window,
+  app: !!electronAPI.app,
+  windowMethods: electronAPI.window ? Object.keys(electronAPI.window) : 'No window methods',
+  contextIsolated: process.contextIsolated
+})
+
+// Additional debug: Test if IPC is working at all
+console.log('🔍 Preload: Testing ipcRenderer availability:', !!ipcRenderer)
 
 // Type definitions for the exposed API
 export type ElectronAPI = typeof electronAPI

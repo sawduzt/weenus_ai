@@ -35,6 +35,7 @@ export default defineConfig({
     rollupOptions: {
       // Optimize bundle splitting
       output: {
+        format: 'es', // Ensure ES modules
         manualChunks: {
           vendor: ['react', 'react-dom'],
           redux: ['@reduxjs/toolkit', 'react-redux'],
@@ -45,8 +46,10 @@ export default defineConfig({
     },
     // Generate source maps for debugging
     sourcemap: true,
-    // Target modern browsers for better performance
-    target: 'esnext',
+    // Target for Electron compatibility
+    target: 'es2020',
+    // Ensure proper minification for Electron
+    minify: 'esbuild',
   },
   
   // CSS configuration
@@ -62,7 +65,7 @@ export default defineConfig({
   },
   
   // Electron-specific configuration
-  base: './', // Relative paths for Electron
+  base: process.env.NODE_ENV === 'production' ? './' : '/', // Relative paths for Electron production
   
   // Optimize dependencies
   optimizeDeps: {

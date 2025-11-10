@@ -5,7 +5,7 @@
  * It handles the overall layout, theme management, and routing.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { MainLayout } from './components/layout/MainLayout';
 import { ChatPage } from './pages/ChatPage';
 import { SettingsPage } from './pages/SettingsPage';
@@ -32,13 +32,8 @@ function App(): JSX.Element {
     currentTheme: 'dark',
   });
 
-  // Ollama connection monitoring
-  const { isConnected, connectionStatus, checkConnection } = useOllama();
-
-  // Initialize connection check on app start
-  useEffect(() => {
-    checkConnection();
-  }, [checkConnection]);
+  // Get Ollama connection status
+  const { connectionStatus } = useOllama();
 
   // Navigation handler
   const handlePageChange = (page: AppPage): void => {

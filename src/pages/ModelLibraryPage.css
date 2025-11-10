@@ -44,6 +44,15 @@
   position: relative;
   flex: 1;
   max-width: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: var(--spacing-md);
+  color: var(--text-muted);
+  z-index: 1;
 }
 
 .search-input {
@@ -55,19 +64,17 @@
   color: var(--text-primary);
 }
 
-.search-icon {
-  position: absolute;
-  left: var(--spacing-md);
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-muted);
-}
-
 .library-stats {
   display: flex;
   gap: var(--spacing-lg);
   color: var(--text-muted);
   font-size: var(--font-size-sm);
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 
 .models-grid {
@@ -204,9 +211,26 @@
 .installed-badge {
   background: var(--success);
   color: white;
-  padding: 2px 8px;
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-xs);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* Loading animation */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .model-description {

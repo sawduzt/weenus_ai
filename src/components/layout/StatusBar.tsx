@@ -5,12 +5,11 @@
  * at the bottom of the application window.
  */
 
-import React from 'react';
-import { OllamaConnectionStatus } from '../../services/ollama';
+import { ConnectionStatus } from '../../types/global.types';
 import './StatusBar.css';
 
 export interface StatusBarProps {
-  connectionStatus: OllamaConnectionStatus;
+  connectionStatus: ConnectionStatus;
 }
 
 export function StatusBar({ connectionStatus }: StatusBarProps): JSX.Element {
@@ -30,21 +29,25 @@ export function StatusBar({ connectionStatus }: StatusBarProps): JSX.Element {
 
   const getConnectionStatusText = (): string => {
     if (connectionStatus.connected) {
-      return `Connected to Ollama ${connectionStatus.version || ''}`;
+      return `Connected to Ollama`;
     } else {
-      return connectionStatus.error || 'Disconnected from Ollama';
+      return connectionStatus.error || 'Ollama Disconnected';
     }
-  };
-
-  const getConnectionStatusIcon = (): string => {
-    return connectionStatus.connected ? '🟢' : '🔴';
   };
 
   return (
     <div className="status-bar">
       {/* Connection Status */}
       <div className="status-section connection-status">
-        <span className="status-icon">{getConnectionStatusIcon()}</span>
+        <span 
+          className="status-icon" 
+          style={{ 
+            color: connectionStatus.connected ? '#22c55e' : '#ef4444',
+            fontSize: '12px',
+          }}
+        >
+          ●
+        </span>
         <span className="status-text">{getConnectionStatusText()}</span>
         <span className="status-detail">
           Last checked: {formatLastChecked(connectionStatus.lastChecked)}

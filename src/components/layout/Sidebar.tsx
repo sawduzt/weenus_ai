@@ -6,6 +6,19 @@
  */
 
 import React, { useState } from 'react';
+import { 
+  MessageCircle, 
+  Image, 
+  Video, 
+  Bot, 
+  Settings, 
+  ChevronLeft,
+  Plus,
+  Zap,
+  HelpCircle,
+  Rabbit,
+  type LucideIcon
+} from 'lucide-react';
 import { AppPage } from '../../App';
 import './Sidebar.css';
 
@@ -19,7 +32,7 @@ export interface SidebarProps {
 interface NavigationItem {
   id: AppPage;
   label: string;
-  icon: string;
+  icon: LucideIcon;
   description: string;
 }
 
@@ -27,31 +40,31 @@ const navigationItems: NavigationItem[] = [
   {
     id: 'chat',
     label: 'Chat',
-    icon: '💬',
+    icon: MessageCircle,
     description: 'AI Chat Interface',
   },
   {
     id: 'image-gen',
     label: 'Image Generation',
-    icon: '🎨',
+    icon: Image,
     description: 'Generate Images with AI',
   },
   {
     id: 'video-gen',
     label: 'Video Generation',
-    icon: '🎬',
+    icon: Video,
     description: 'Generate Videos with AI',
   },
   {
     id: 'models',
     label: 'Model Library',
-    icon: '🤖',
+    icon: Bot,
     description: 'Manage AI Models',
   },
   {
     id: 'settings',
     label: 'Settings',
-    icon: '⚙️',
+    icon: Settings,
     description: 'Application Settings',
   },
 ];
@@ -71,18 +84,26 @@ export function Sidebar({
   return (
     <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       {/* Sidebar Header */}
-      <div className="sidebar-header">
-        <div className="app-logo">
-          <span className="logo-icon">🧠</span>
+      <div className="sidebar-header" style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}>
+        <div 
+          className={`app-logo ${collapsed ? 'clickable' : ''}`}
+          onClick={collapsed ? onToggle : undefined}
+          title={collapsed ? 'Expand sidebar' : undefined}
+          style={collapsed ? { WebkitAppRegion: 'no-drag', cursor: 'pointer' } as React.CSSProperties : {}}
+        >
+          <Rabbit size={24} className="logo-icon" />
           {!collapsed && <span className="app-name">Weenus AI</span>}
         </div>
-        <button
-          className="sidebar-toggle"
-          onClick={onToggle}
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          {collapsed ? '▶' : '◀'}
-        </button>
+        {!collapsed && (
+          <button
+            className="sidebar-toggle"
+            onClick={onToggle}
+            title="Collapse sidebar"
+            style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
+          >
+            <ChevronLeft size={16} />
+          </button>
+        )}
       </div>
 
       {/* Navigation Items */}
@@ -97,7 +118,9 @@ export function Sidebar({
                   onClick={() => onPageChange(item.id)}
                   title={collapsed ? item.description : ''}
                 >
-                  <span className="nav-icon">{item.icon}</span>
+                  <span className="nav-icon">
+                    <item.icon size={20} />
+                  </span>
                   {!collapsed && (
                     <div className="nav-content">
                       <span className="nav-label">{item.label}</span>
@@ -127,7 +150,7 @@ export function Sidebar({
               ))}
             </ul>
             <button className="new-chat-button">
-              <span className="new-chat-icon">+</span>
+              <Plus size={16} className="new-chat-icon" />
               New Chat
             </button>
           </div>
@@ -139,13 +162,13 @@ export function Sidebar({
         <div className="sidebar-footer">
           <div className="quick-actions">
             <button className="quick-action" title="New Chat">
-              <span>💬</span>
+              <MessageCircle size={16} />
             </button>
             <button className="quick-action" title="Quick Settings">
-              <span>⚡</span>
+              <Zap size={16} />
             </button>
             <button className="quick-action" title="Help">
-              <span>❓</span>
+              <HelpCircle size={16} />
             </button>
           </div>
         </div>

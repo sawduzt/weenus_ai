@@ -1,4 +1,4 @@
-re# 🧠 Weenus AI
+# 🧠 Weenus AI
 
 > *A sleek, modern desktop AI application featuring chat, image generation, and comprehensive model management*
 
@@ -16,33 +16,48 @@ re# 🧠 Weenus AI
 
 </div>
 
-## 🚧 Development Status
+## 🚀 Development Status
 
-**Current Phase: Phase 2 Complete - Core Infrastructure Ready** 
+**Current Status: Ollama Integration Complete - Fully Functional Chat!** 
 
-### ✅ Completed Features (Phase 1 & 2)
+### ✅ **MILESTONE: Complete Ollama Integration (November 10, 2025)**
+
+**🎯 Phase 1, 2, 3 & 4 - COMPLETE**
 - ✅ **Project Foundation**: Complete TypeScript + Electron + React setup
 - ✅ **Code Quality**: ESLint, Prettier, comprehensive linting configured  
-- ✅ **Ollama Integration**: Full API client with connection monitoring
-- ✅ **React Hooks**: `useOllama` and `useOllamaChat` for easy integration
-- ✅ **UI Framework**: Modern layout with Windows Mica effects
-- ✅ **Theming System**: Dark/Light themes with CSS custom properties
-- ✅ **Navigation**: Collapsible sidebar with page routing
+- ✅ **Ollama Integration**: Full API client with connection monitoring, auto-start, auto-restart
+- ✅ **React Hooks**: `useOllama` for connection, models, and streaming chat
+- ✅ **UI Framework**: Modern layout with Windows Mica effects and pink theme
+- ✅ **Theming System**: Cute pink theme with light/dark variants, green connection indicator
+- ✅ **Professional Icons**: Complete Lucide React vector icon system (bunny logo!)
+- ✅ **Custom Window Controls**: Minimize, maximize, close buttons (fully functional)
+- ✅ **Navigation**: Responsive sidebar with enhanced collapse/expand UX
 - ✅ **Application Pages**: Chat, Settings, Model Library, Image Gen, Video Gen
-- ✅ **Documentation**: Comprehensive docs for all components and APIs
+- ✅ **Frameless Design**: Custom title bar with draggable regions
+- ✅ **Enhanced Spacing**: Proper padding and rounded corners throughout
+- ✅ **UI Polish Complete**: No emojis, consistent iconography, rounded chat interface
+- ✅ **Chat Interface**: Real-time streaming chat with message bubbles, model selector, clear button
+- ✅ **Model Library**: Display installed models with metadata (name, size, modified date)
+- ✅ **Auto-Start Ollama**: One-click button to launch Ollama service automatically
+- ✅ **Connection Status**: Real-time connection indicator in status bar (red/green)
+- ✅ **Settings**: Model path configuration with folder picker and auto-restart
 
-### 🔨 Next Steps (Phase 3)
-- 🔄 **Chat Implementation**: Complete chat interface with streaming
-- 🔄 **Model Management**: Finish model download/delete functionality  
-- 🔄 **Settings Integration**: Wire up settings with actual functionality
-- 🔄 **Error Handling**: Polish error states and user feedback
+### 🎉 **Working Features**
+- 💬 **Streaming Chat**: Real-time responses from Ollama models
+- 🤖 **Model Selection**: Switch between installed models on-the-fly
+- 📦 **Model Library**: View all installed models with details
+- 🟢 **Connection Monitor**: Live status indicator showing Ollama connection
+- ▶️ **Auto-Start**: Click "Start Ollama" to launch service automatically
+- 📁 **Custom Model Path**: Configure where models are stored
+- 🔄 **Auto-Restart**: Save settings and restart Ollama with new configuration
+- 🗑️ **Clear Chat**: Reset conversation history
 
-### 📅 Future Phases
-- **Phase 4**: Model Management System (Advanced features)
-- **Phase 5**: Media Generation Features (Image/Video)
-- **Phase 6**: Advanced Features (Statistics, Widgets)
-- **Phase 7**: Polish & Enhancement
-- **Phase 8**: Testing & Documentation
+### 📅 **Next Phase (Ready to Begin)**
+- **Phase 5**: Chat History Persistence (save/load conversations)
+- **Phase 6**: Media Generation Features (Image/Video)  
+- **Phase 7**: Advanced Features (Statistics, Widgets)
+- **Phase 8**: Polish & Enhancement
+- **Phase 9**: Testing & Documentation
 
 ---
 
@@ -52,7 +67,8 @@ re# 🧠 Weenus AI
 - **🎥 Video Generation**: Generate videos with cutting-edge AI models
 - **🤖 Model Management**: Download, configure, and switch between AI models effortlessly
 - **📊 Real-time Statistics**: Monitor GPU usage, VRAM, tokens/second, and performance metrics
-- **🎨 Beautiful UI**: Modern design with Windows Mica effects and customizable themes
+- **🎨 Beautiful UI**: Modern design with Windows Mica effects, rounded corners, and customizable themes
+- **🐰 Bunny Logo**: Cute rabbit icon replacing generic sparkles for unique branding
 
 ### 🚀 Advanced Features
 - **📁 File Upload Support**: Chat with documents, images, and other files
@@ -105,26 +121,29 @@ This will:
 
 ### 3. First Time Setup
 1. **Install Ollama**: Download from [ollama.ai](https://ollama.ai) if not already installed
-2. **Download Models**: Use the built-in model downloader or run:
+2. **Start App**: Click "Start Ollama" button in the app, or manually run `ollama serve`
+3. **Download Models**: Use Ollama CLI to pull models:
    ```bash
    ollama pull llama2
+   ollama pull mistral
    ```
-3. **Configure Settings**: Set your preferences in the Settings tab
+4. **Configure Settings**: Optionally set custom model path in Settings → Models
+5. **Start Chatting**: Select a model and start your conversation!
 
 ## 📖 Documentation
 
 ### For Users
-- **[Installation Guide](docs/user/installation.md)**: Detailed setup instructions
-- **[User Manual](docs/user/manual.md)**: Complete feature walkthrough
-- **[Troubleshooting](docs/user/troubleshooting.md)**: Common issues and solutions
-- **[FAQ](docs/user/faq.md)**: Frequently asked questions
+- **[Getting Started](docs/user/GETTING_STARTED.md)**: Complete user guide and feature overview
+- **[Installation Guide](docs/user/installation.md)**: Detailed setup instructions (Coming Soon)
+- **[User Manual](docs/user/manual.md)**: Complete feature walkthrough (Coming Soon)  
+- **[Troubleshooting](docs/user/troubleshooting.md)**: Common issues and solutions (Coming Soon)
 
 ### For Developers
+- **[Development Setup](docs/DEVELOPMENT.md)**: Environment configuration and workflow
+- **[UI Framework](docs/UI_FRAMEWORK.md)**: Component documentation and design system
 - **[Project Structure](docs/developer/project-structure.md)**: Codebase organization
 - **[Build System](docs/developer/build-system.md)**: TypeScript and Vite configuration
 - **[Dependencies](docs/developer/dependencies.md)**: Library choices and reasoning
-- **[Contributing Guide](docs/developer/contributing.md)**: How to contribute
-- **[API Documentation](docs/developer/api.md)**: Internal APIs and interfaces
 
 ## 🛠️ Development
 
@@ -157,21 +176,22 @@ This will:
 ```
 Frontend (Renderer Process)
 ├── React 18.2           # UI Framework
-├── TypeScript 5.2       # Type Safety
-├── Redux Toolkit        # State Management
-├── Tailwind CSS         # Styling
-├── Framer Motion        # Animations
-└── Vite                 # Build Tool
+├── TypeScript 5.2       # Type Safety  
+├── Lucide React 0.292   # Professional Vector Icons ✅
+├── CSS Custom Props     # Pink Theme System ✅
+├── Framer Motion        # Smooth Animations
+└── Vite 4.5            # Fast Build Tool ✅
 
-Backend (Main Process)
-├── Electron 27          # Desktop Framework
-├── Node.js APIs         # File System, OS Integration
-└── IPC Communication   # Process Communication
+Desktop Integration
+├── Electron 27          # Cross-platform Framework ✅
+├── Custom Window        # Frameless Design ✅
+├── Windows Mica         # Transparency Effects ✅
+└── IPC Communication   # Process Communication ✅
 
 External Services
-├── Ollama API           # AI Model Backend
-├── Hugging Face         # Model Repository
-└── File System          # Local Storage
+├── Ollama API           # AI Model Backend ✅
+├── Hugging Face         # Model Repository (Planned)
+└── File System          # Local Storage ✅
 ```
 
 ### Key Design Principles

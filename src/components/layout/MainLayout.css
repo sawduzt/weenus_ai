@@ -22,6 +22,7 @@
   transition: margin-left var(--transition-normal);
   position: relative;
   z-index: 1;
+  overflow: hidden;
 }
 
 /* Collapsed Sidebar State */
@@ -32,12 +33,17 @@
 /* Content Area */
 .content-area {
   flex: 1;
-  padding: var(--spacing-lg);
+  padding: var(--spacing-xl);
   overflow-y: auto;
   overflow-x: hidden;
   background: var(--bg-primary);
   position: relative;
   min-height: 0; /* Allow flex shrinking */
+  border-radius: 0;
+  margin: var(--spacing-md) var(--spacing-md) var(--spacing-sm) var(--spacing-md); /* Top, right, bottom, left padding */
+  box-shadow: inset 0 2px 8px rgba(255, 107, 157, 0.1);
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
 }
 
 /* Content Area Glass Effect */
@@ -57,7 +63,7 @@
   z-index: -1;
 }
 
-/* Mica Backdrop */
+/* Mica Backdrop - Pink Cute Theme */
 .mica-backdrop {
   position: fixed;
   top: 0;
@@ -66,12 +72,13 @@
   bottom: 0;
   z-index: -2;
   background: 
-    radial-gradient(circle at 20% 20%, rgba(0, 120, 212, 0.08) 0%, transparent 60%),
-    radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 60%),
-    radial-gradient(circle at 40% 60%, rgba(245, 158, 11, 0.04) 0%, transparent 60%),
+    radial-gradient(circle at 20% 20%, rgba(255, 107, 157, 0.12) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(244, 114, 182, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 40% 60%, rgba(168, 85, 247, 0.06) 0%, transparent 60%),
+    radial-gradient(circle at 70% 30%, rgba(236, 72, 153, 0.04) 0%, transparent 60%),
     linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-  backdrop-filter: blur(50px);
-  -webkit-backdrop-filter: blur(50px);
+  backdrop-filter: blur(60px);
+  -webkit-backdrop-filter: blur(60px);
 }
 
 /* Responsive Adjustments */

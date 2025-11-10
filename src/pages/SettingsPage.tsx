@@ -5,7 +5,8 @@
  * API configuration, and user preferences.
  */
 
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { FolderOpen, Save } from 'lucide-react';
 import './SettingsPage.css';
 
 export interface SettingsPageProps {
@@ -14,8 +15,8 @@ export interface SettingsPageProps {
 
 interface Settings {
   theme: string;
-  ollamaUrl: string;
   defaultModel: string;
+  modelPath: string;
   autoSave: boolean;
   streamResponses: boolean;
   maxTokens: number;
@@ -27,8 +28,8 @@ interface Settings {
 
 const defaultSettings: Settings = {
   theme: 'dark',
-  ollamaUrl: 'http://localhost:11434',
   defaultModel: '',
+  modelPath: '',
   autoSave: true,
   streamResponses: true,
   maxTokens: 2048,
@@ -41,6 +42,20 @@ const defaultSettings: Settings = {
 export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element {
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const [activeTab, setActiveTab] = useState<string>('general');
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Load settings from electron store on mount
+  useEffect(() => {
+    const loadSettings = async () => {
+      if (window.electronAPI?.store) {
+        const savedModelPath = await window.electronAPI.store.get('modelPath');
+        if (savedModelPath) {
+          setSettings(prev => ({ ...prev, modelPath: savedModelPath }));
+        }
+      }
+    };
+    loadSettings();
+  }, []);
 
   const updateSetting = <K extends keyof Settings>(
     key: K,
@@ -51,6 +66,63 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
     // Handle special cases
     if (key === 'theme') {
       onThemeChange(value as string);
+    }
+    
+    // Save model path to electron store
+    if (key === 'modelPath' && window.electronAPI?.store) {
+      window.electronAPI.store.set('modelPath', value);
+    }
+  };
+
+  const handleSelectModelPath = async (): Promise<void> => {
+    if (!window.electronAPI?.fileSystem) {
+      alert('File system access is only available in the desktop app.');
+      return;
+    }
+
+    try {
+      const result = await window.electronAPI.fileSystem.showOpenDialog({
+        properties: ['openDirectory'],
+        title: 'Select Ollama Models Directory',
+        defaultPath: settings.modelPath || undefined,
+      });
+
+      if (!result.canceled && result.filePaths.length > 0) {
+        updateSetting('modelPath', result.filePaths[0]);
+      }
+    } catch (error) {
+      console.error('Error selecting model path:', error);
+      alert('Failed to open directory picker.');
+    }
+  };
+
+  const handleSaveSettings = async (): Promise<void> => {
+    if (!window.electronAPI?.ollama) {
+      alert('Settings save with Ollama restart is only available in the desktop app.');
+      return;
+    }
+
+    setIsSaving(true);
+    
+    try {
+      // Save model path to store
+      if (window.electronAPI?.store && settings.modelPath) {
+        await window.electronAPI.store.set('modelPath', settings.modelPath);
+      }
+
+      // Restart Ollama with new settings
+      const result = await window.electronAPI.ollama.restart(settings.modelPath || undefined);
+      
+      if (result.success) {
+        alert('Settings saved successfully! Ollama has been restarted with the new model path.');
+      } else {
+        alert(`Settings saved, but failed to restart Ollama:\n\n${result.error || 'Unknown error'}\n\nPlease restart Ollama manually.`);
+      }
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      alert('Failed to save settings and restart Ollama.');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -84,6 +156,30 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
       <div className="settings-header">
         <h1>Settings</h1>
         <p>Configure your Weenus AI experience</p>
+        <button
+          onClick={handleSaveSettings}
+          disabled={isSaving}
+          className="setting-button"
+          style={{
+            position: 'absolute',
+            top: '24px',
+            right: '24px',
+            padding: '10px 20px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: isSaving ? 'var(--border)' : 'var(--pink)',
+            color: 'white',
+            fontWeight: '600',
+            fontSize: '14px',
+            cursor: isSaving ? 'not-allowed' : 'pointer',
+            border: 'none',
+            borderRadius: '6px',
+          }}
+        >
+          <Save size={16} />
+          {isSaving ? 'Saving...' : 'Save & Restart Ollama'}
+        </button>
       </div>
 
       <div className="settings-content">
@@ -164,17 +260,36 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
               
               <div className="setting-group">
                 <label className="setting-label">
-                  Ollama API URL
-                  <input
-                    type="url"
-                    value={settings.ollamaUrl}
-                    onChange={(e) => updateSetting('ollamaUrl', e.target.value)}
-                    className="setting-input"
-                    placeholder="http://localhost:11434"
-                  />
+                  Ollama Models Directory
                 </label>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <input
+                    type="text"
+                    value={settings.modelPath}
+                    onChange={(e) => updateSetting('modelPath', e.target.value)}
+                    className="setting-input"
+                    placeholder="Default: %USERPROFILE%\.ollama\models (Windows) or ~/.ollama/models (Mac/Linux)"
+                    style={{ flex: 1 }}
+                  />
+                  <button
+                    onClick={handleSelectModelPath}
+                    className="setting-button"
+                    style={{
+                      padding: '8px 16px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    <FolderOpen size={16} />
+                    Browse
+                  </button>
+                </div>
                 <p className="setting-description">
-                  URL for your Ollama API server
+                  Location where Ollama models are stored. Leave empty to use the default location.
+                  <br />
+                  <strong>Note:</strong> Click "Save & Restart Ollama" in the top right to apply changes.
                 </p>
               </div>
 
@@ -185,11 +300,9 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
                     value={settings.defaultModel}
                     onChange={(e) => updateSetting('defaultModel', e.target.value)}
                     className="setting-input"
+                    disabled
                   >
-                    <option value="">Select default model...</option>
-                    <option value="llama2">Llama 2</option>
-                    <option value="codellama">Code Llama</option>
-                    <option value="mistral">Mistral</option>
+                    <option value="">Coming soon...</option>
                   </select>
                 </label>
                 <p className="setting-description">

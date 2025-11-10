@@ -12,13 +12,16 @@
   width: var(--sidebar-width);
   height: 100vh;
   background: var(--bg-secondary);
-  border-right: 1px solid var(--border-primary);
+  border-right: 2px solid var(--border-primary);
   display: flex;
   flex-direction: column;
   z-index: 10;
   transition: all var(--transition-normal);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  border-top-right-radius: var(--radius-xl);
+  border-bottom-right-radius: var(--radius-xl);
+  box-shadow: 0 8px 32px rgba(255, 107, 157, 0.1);
 }
 
 /* Collapsed State */
@@ -31,15 +34,42 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-md);
-  border-bottom: 1px solid var(--border-primary);
-  background: var(--bg-tertiary);
+  padding: var(--spacing-lg) var(--spacing-md);
+  border-bottom: 2px solid var(--border-primary);
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--accent-primary) 5%, var(--bg-tertiary) 100%);
+  border-top-right-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255, 107, 157, 0.1) 0%, rgba(244, 114, 182, 0.05) 100%);
+  pointer-events: none;
 }
 
 .app-logo {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  transition: all var(--transition-fast);
+}
+
+.app-logo.clickable {
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+}
+
+.app-logo.clickable:hover {
+  background: rgba(255, 107, 157, 0.2);
+  transform: scale(1.05);
 }
 
 .logo-icon {
@@ -48,12 +78,14 @@
 }
 
 .app-name {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
   color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   transition: opacity var(--transition-normal);
+  text-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
+  font-family: 'Comic Neue', var(--font-family-sans);
 }
 
 .sidebar.collapsed .app-name {
@@ -62,17 +94,20 @@
 }
 
 .sidebar-toggle {
-  padding: var(--spacing-xs);
+  padding: var(--spacing-sm);
   color: var(--text-secondary);
-  background: transparent;
-  border-radius: var(--radius-sm);
+  background: rgba(255, 107, 157, 0.1);
+  border-radius: var(--radius-lg);
   transition: all var(--transition-fast);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
+  border: 2px solid transparent;
 }
 
 .sidebar-toggle:hover {
-  color: var(--text-primary);
-  background: var(--bg-primary);
+  color: var(--accent-primary);
+  background: rgba(255, 107, 157, 0.2);
+  border-color: var(--accent-primary);
+  transform: scale(1.05);
 }
 
 /* Navigation */
@@ -84,7 +119,7 @@
 }
 
 .nav-section {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 
 .nav-section-title {
@@ -107,7 +142,7 @@
 .nav-items {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: 2px;
   padding: 0 var(--spacing-sm);
 }
 
@@ -116,37 +151,46 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
   color: var(--text-secondary);
   background: transparent;
-  border-radius: var(--radius-md);
+  border-radius: var(--spacing-lg);
   transition: all var(--transition-fast);
   text-align: left;
   width: 100%;
   position: relative;
   overflow: hidden;
+  margin: 2px 0;
+  border: 2px solid transparent;
 }
 
 .nav-item:hover {
   color: var(--text-primary);
-  background: var(--bg-primary);
-  transform: translateX(2px);
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(244, 114, 182, 0.1) 100%);
+  transform: translateX(2px) scale(1.01);
+  border-color: rgba(255, 107, 157, 0.3);
+  box-shadow: 0 2px 8px rgba(255, 107, 157, 0.2);
 }
 
 .nav-item.active {
   color: var(--accent-primary);
-  background: rgba(0, 120, 212, 0.1);
-  border: 1px solid rgba(0, 120, 212, 0.2);
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.2) 0%, rgba(244, 114, 182, 0.15) 100%);
+  border-color: var(--accent-primary);
+  box-shadow: 0 3px 12px rgba(255, 107, 157, 0.3);
 }
 
 .nav-item.active::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   bottom: 0;
-  width: 3px;
+  width: 4px;
+  height: 50%;
   background: var(--accent-primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  box-shadow: 0 0 8px var(--accent-primary);
 }
 
 .nav-icon {
@@ -157,6 +201,15 @@
   justify-content: center;
   width: 24px;
   height: 24px;
+}
+
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+  padding: var(--spacing-sm);
+}
+
+.sidebar.collapsed .nav-icon {
+  margin: 0;
 }
 
 .nav-content {
@@ -237,22 +290,25 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-md);
-  margin: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-md);
   color: var(--accent-primary);
-  background: rgba(0, 120, 212, 0.1);
-  border: 1px solid rgba(0, 120, 212, 0.2);
-  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(244, 114, 182, 0.1) 100%);
+  border: 2px solid var(--accent-primary);
+  border-radius: var(--radius-xl);
   transition: all var(--transition-fast);
   text-align: left;
   width: calc(100% - var(--spacing-md) * 2);
-  font-weight: 500;
+  font-weight: 600;
+  font-family: 'Comic Neue', var(--font-family-sans);
+  box-shadow: 0 4px 16px rgba(255, 107, 157, 0.2);
 }
 
 .new-chat-button:hover {
-  background: rgba(0, 120, 212, 0.15);
-  border-color: rgba(0, 120, 212, 0.3);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.25) 0%, rgba(244, 114, 182, 0.2) 100%);
+  border-color: var(--accent-hover);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(255, 107, 157, 0.3);
 }
 
 .new-chat-icon {
@@ -263,8 +319,9 @@
 /* Sidebar Footer */
 .sidebar-footer {
   padding: var(--spacing-md);
-  border-top: 1px solid var(--border-primary);
-  background: var(--bg-tertiary);
+  border-top: 1px solid rgba(255, 107, 157, 0.1); /* Subtle pink border */
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(255, 107, 157, 0.02) 100%); /* Match sidebar gradient */
+  border-bottom-right-radius: var(--radius-xl); /* Match sidebar corner */
 }
 
 .quick-actions {

@@ -1,0 +1,80 @@
+/**
+ * Custom Window Controls Styles
+ * 
+ * Styles for the custom minimize, maximize, and close buttons
+ */
+
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+  height: 40px;
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+
+.window-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  font-size: 0;
+  outline: none;
+}
+
+.window-control:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.window-control:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.window-control.minimize:hover {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
+}
+
+.window-control.maximize:hover {
+  background: rgba(40, 167, 69, 0.15);
+  color: #28a745;
+}
+
+.window-control.close:hover {
+  background: rgba(220, 53, 69, 0.15);
+  color: #dc3545;
+}
+
+.window-control.close:hover {
+  background: #e81123;
+  color: white;
+}
+
+.window-control svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.5;
+}
+
+/* Ensure buttons work with the title bar */
+@media (max-width: 768px) {
+  .window-controls {
+    height: 35px;
+  }
+  
+  .window-control {
+    width: 40px;
+    height: 35px;
+  }
+}

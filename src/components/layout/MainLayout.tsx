@@ -8,14 +8,15 @@
 import React from 'react';
 import { Sidebar } from './Sidebar';
 import { StatusBar } from './StatusBar';
+import { WindowControls } from './WindowControls';
 import { AppPage } from '../../App';
-import { OllamaConnectionStatus } from '../../services/ollama';
+import { ConnectionStatus } from '../../types/global.types';
 import './MainLayout.css';
 
 export interface MainLayoutProps {
   currentPage: AppPage;
   sidebarCollapsed: boolean;
-  connectionStatus: OllamaConnectionStatus;
+  connectionStatus: ConnectionStatus;
   onPageChange: (page: AppPage) => void;
   onSidebarToggle: () => void;
   children: React.ReactNode;
@@ -31,6 +32,9 @@ export function MainLayout({
 }: MainLayoutProps): JSX.Element {
   return (
     <div className={`main-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+      {/* Custom Window Controls */}
+      <WindowControls />
+      
       {/* Sidebar Navigation */}
       <Sidebar
         currentPage={currentPage}
