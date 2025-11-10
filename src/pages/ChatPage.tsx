@@ -36,7 +36,6 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
     loadModels,
     currentModel,
     setCurrentModel,
-    isGenerating,
   } = useOllama();
 
   const { activeChat, switchChat, createNewChat, deleteChat, refreshChats } = useChat();
@@ -89,7 +88,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isGenerating || !currentModel) return;
+    if (!input.trim() || isGeneratingResponse || !currentModel) return;
 
     const userInput = input;
     setInput('');
@@ -393,7 +392,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           <select
             value={currentModel}
             onChange={(e) => setCurrentModel(e.target.value)}
-            disabled={isGenerating}
+            disabled={isGeneratingResponse}
             style={{
               padding: '8px 12px',
               borderRadius: '8px',
@@ -415,7 +414,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           {/* Clear Chat */}
           <button
             onClick={handleClearMessages}
-            disabled={messages.length === 0 || isGenerating}
+            disabled={messages.length === 0 || isGeneratingResponse}
             style={{
               padding: '8px 12px',
               borderRadius: '8px',
@@ -563,7 +562,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={currentModel ? "Type your message..." : "Select a model first..."}
-            disabled={!currentModel || isGenerating}
+            disabled={!currentModel || isGeneratingResponse}
             style={{
               flex: 1,
               padding: '12px 16px',
@@ -576,14 +575,14 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           />
           <button
             type="submit"
-            disabled={!input.trim() || !currentModel || isGenerating}
+            disabled={!input.trim() || !currentModel || isGeneratingResponse}
             style={{
               padding: '12px 24px',
               borderRadius: '12px',
               border: 'none',
-              background: !input.trim() || !currentModel || isGenerating ? 'var(--border)' : 'var(--pink)',
+              background: !input.trim() || !currentModel || isGeneratingResponse ? 'var(--border)' : 'var(--pink)',
               color: 'white',
-              cursor: !input.trim() || !currentModel || isGenerating ? 'not-allowed' : 'pointer',
+              cursor: !input.trim() || !currentModel || isGeneratingResponse ? 'not-allowed' : 'pointer',
               fontSize: '14px',
               fontWeight: '600',
               display: 'flex',
@@ -592,7 +591,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
             }}
           >
             <Send size={16} />
-            {isGenerating ? 'Sending...' : 'Send'}
+            {isGeneratingResponse ? 'Sending...' : 'Send'}
           </button>
         </form>
       </div>
