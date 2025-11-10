@@ -23,6 +23,7 @@ export interface AppState {
   currentPage: AppPage;
   sidebarCollapsed: boolean;
   currentTheme: string;
+  hardwareAcceleration: boolean;
 }
 
 function App(): JSX.Element {
@@ -31,6 +32,7 @@ function App(): JSX.Element {
     currentPage: 'chat',
     sidebarCollapsed: false,
     currentTheme: 'dark',
+    hardwareAcceleration: true,
   });
 
   // Chat state for cross-component communication
@@ -54,6 +56,11 @@ function App(): JSX.Element {
     setAppState(prev => ({ ...prev, currentTheme: theme }));
   };
 
+  // Hardware acceleration handler
+  const handleHardwareAccelerationChange = (enabled: boolean): void => {
+    setAppState(prev => ({ ...prev, hardwareAcceleration: enabled }));
+  };
+
   // Chat handlers
   const handleNewChat = (): void => {
     setActiveChatId(null);
@@ -69,7 +76,12 @@ function App(): JSX.Element {
       case 'chat':
         return <ChatPage activeChatId={activeChatId} onChatChange={setActiveChatId} />;
       case 'settings':
-        return <SettingsPage onThemeChange={handleThemeChange} />;
+        return (
+          <SettingsPage 
+            onThemeChange={handleThemeChange} 
+            onHardwareAccelerationChange={handleHardwareAccelerationChange}
+          />
+        );
       case 'models':
         return <ModelLibraryPage />;
       case 'image-gen':
@@ -89,6 +101,7 @@ function App(): JSX.Element {
             currentPage={appState.currentPage}
             sidebarCollapsed={appState.sidebarCollapsed}
             connectionStatus={connectionStatus}
+            hardwareAcceleration={appState.hardwareAcceleration}
             onPageChange={handlePageChange}
             onSidebarToggle={handleSidebarToggle}
             onNewChat={handleNewChat}

@@ -12,6 +12,7 @@ import './SettingsPage.css';
 
 export interface SettingsPageProps {
   onThemeChange: (theme: string) => void;
+  onHardwareAccelerationChange: (enabled: boolean) => void;
 }
 
 interface Settings {
@@ -20,6 +21,7 @@ interface Settings {
   modelPath: string;
   autoSave: boolean;
   streamResponses: boolean;
+  hardwareAcceleration: boolean;
   maxTokens: number;
   temperature: number;
   topP: number;
@@ -33,6 +35,7 @@ const defaultSettings: Settings = {
   modelPath: '',
   autoSave: true,
   streamResponses: true,
+  hardwareAcceleration: true,
   maxTokens: 2048,
   temperature: 0.7,
   topP: 0.9,
@@ -40,7 +43,7 @@ const defaultSettings: Settings = {
   repeatPenalty: 1.1,
 };
 
-export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element {
+export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: SettingsPageProps): JSX.Element {
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const [activeTab, setActiveTab] = useState<string>('general');
   const [isSaving, setIsSaving] = useState(false);
@@ -68,6 +71,10 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
     // Handle special cases
     if (key === 'theme') {
       onThemeChange(value as string);
+    }
+    
+    if (key === 'hardwareAcceleration') {
+      onHardwareAccelerationChange(value as boolean);
     }
     
     // Save model path to electron store
@@ -251,6 +258,21 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
                 </label>
                 <p className="setting-description">
                   Show AI responses in real-time as they're generated
+                </p>
+              </div>
+
+              <div className="setting-group">
+                <label className="setting-label">
+                  <input
+                    type="checkbox"
+                    checked={settings.hardwareAcceleration}
+                    onChange={(e) => updateSetting('hardwareAcceleration', e.target.checked)}
+                    className="setting-checkbox"
+                  />
+                  Hardware Acceleration
+                </label>
+                <p className="setting-description">
+                  Enable GPU acceleration for smoother animations and effects (recommended)
                 </p>
               </div>
             </div>

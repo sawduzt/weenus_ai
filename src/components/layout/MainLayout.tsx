@@ -17,6 +17,7 @@ export interface MainLayoutProps {
   currentPage: AppPage;
   sidebarCollapsed: boolean;
   connectionStatus: ConnectionStatus;
+  hardwareAcceleration?: boolean;
   onPageChange: (page: AppPage) => void;
   onSidebarToggle: () => void;
   onNewChat?: () => void;
@@ -29,6 +30,7 @@ export function MainLayout({
   currentPage,
   sidebarCollapsed,
   connectionStatus,
+  hardwareAcceleration = true,
   onPageChange,
   onSidebarToggle,
   onNewChat,
@@ -55,7 +57,9 @@ export function MainLayout({
       {/* Main Content Area */}
       <div className="main-content">
         {/* Content */}
-        <div className="content-area">
+        <div 
+          className={`content-area ${hardwareAcceleration ? 'hw-accelerated' : ''}`}
+        >
           {children}
         </div>
 
