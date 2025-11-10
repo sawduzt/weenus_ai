@@ -13,6 +13,7 @@ import { ModelLibraryPage } from './pages/ModelLibraryPage';
 import { ImageGenerationPage } from './pages/ImageGenerationPage';
 import { VideoGenerationPage } from './pages/VideoGenerationPage';
 import { ThemeProvider } from './components/theme/ThemeProvider';
+import { ToastProvider } from './components/ui/ToastProvider';
 import { useOllama } from './hooks/useOllama';
 import './styles/global.css';
 
@@ -70,17 +71,19 @@ function App(): JSX.Element {
 
   return (
     <ThemeProvider theme={appState.currentTheme}>
-      <div className="app">
-        <MainLayout
-          currentPage={appState.currentPage}
-          sidebarCollapsed={appState.sidebarCollapsed}
-          connectionStatus={connectionStatus}
-          onPageChange={handlePageChange}
-          onSidebarToggle={handleSidebarToggle}
-        >
-          {renderCurrentPage()}
-        </MainLayout>
-      </div>
+      <ToastProvider>
+        <div className="app">
+          <MainLayout
+            currentPage={appState.currentPage}
+            sidebarCollapsed={appState.sidebarCollapsed}
+            connectionStatus={connectionStatus}
+            onPageChange={handlePageChange}
+            onSidebarToggle={handleSidebarToggle}
+          >
+            {renderCurrentPage()}
+          </MainLayout>
+        </div>
+      </ToastProvider>
     </ThemeProvider>
   );
 }

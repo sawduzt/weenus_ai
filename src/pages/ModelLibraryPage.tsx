@@ -7,10 +7,12 @@
 import { useState, useEffect } from 'react';
 import { Package, HardDrive, Calendar, RefreshCw, Bot } from 'lucide-react';
 import { useOllama } from '../hooks/useOllama';
+import { useToast } from '../components/ui/ToastProvider';
 import './ModelLibraryPage.css';
 
 export function ModelLibraryPage(): JSX.Element {
   const [isStartingOllama, setIsStartingOllama] = useState(false);
+  const toast = useToast();
   
   const {
     isConnected,
@@ -32,7 +34,7 @@ export function ModelLibraryPage(): JSX.Element {
 
   const handleStartOllama = async () => {
     if (!window.electronAPI?.ollama) {
-      alert('Please start Ollama manually with: ollama serve');
+      toast.warning('Desktop App Required', 'Please start Ollama manually with: ollama serve');
       return;
     }
 
@@ -41,9 +43,7 @@ export function ModelLibraryPage(): JSX.Element {
       const result = await window.electronAPI.ollama.start();
       
       if (!result.success) {
-        // Show detailed error message
-        let errorMsg = 'Failed to start Ollama.\n\n';
-        errorMsg += result.error || 'Unknown error';
+        let errorMsg = result.error || 'Unknown error';
         if (result.details) {
           errorMsg += '\n\nDetails: ' + result.details;
         }
@@ -55,20 +55,23 @@ export function ModelLibraryPage(): JSX.Element {
         errorMsg += '2. Restart this app after installing\n';
         errorMsg += '3. Or start manually with: ollama serve';
         
-        alert(errorMsg);
+        toast.error('Failed to Start Ollama', errorMsg);
         setIsStartingOllama(false);
         return;
       }
 
       console.log('Ollama started successfully:', result.path, 'PID:', result.pid);
+      toast.success('Ollama Started', 'Loading models...');
 
       await new Promise(resolve => setTimeout(resolve, 4000));
       await checkConnection();
       if (isConnected) {
         await loadModels();
+        toast.success('Connected!', 'Models loaded successfully');
       }
     } catch (error) {
       console.error('Error starting Ollama:', error);
+      toast.error('Start Failed', 'Please start Ollama manually');
     } finally {
       setIsStartingOllama(false);
     }

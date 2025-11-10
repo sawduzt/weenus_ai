@@ -7,6 +7,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Trash2, User, Bot, RefreshCw } from 'lucide-react';
 import { useOllama } from '../hooks/useOllama';
+import { useToast } from '../components/ui/ToastProvider';
 import './ChatPage.css';
 
 export function ChatPage(): JSX.Element {
@@ -15,6 +16,7 @@ export function ChatPage(): JSX.Element {
   const [isCheckingConnection, setIsCheckingConnection] = useState(true);
   const [isStartingOllama, setIsStartingOllama] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const toast = useToast();
 
   const {
     isConnected,
@@ -81,7 +83,7 @@ export function ChatPage(): JSX.Element {
 
   const handleStartOllama = async () => {
     if (!window.electronAPI?.ollama) {
-      alert('Ollama start feature is only available in the desktop app. Please start Ollama manually.');
+      toast.warning('Desktop App Required', 'Please start Ollama manually with: ollama serve');
       return;
     }
 
@@ -91,8 +93,7 @@ export function ChatPage(): JSX.Element {
       
       if (!result.success) {
         // Show detailed error message
-        let errorMsg = 'Failed to start Ollama.\n\n';
-        errorMsg += result.error || 'Unknown error';
+        let errorMsg = result.error || 'Unknown error';
         if (result.details) {
           errorMsg += '\n\nDetails: ' + result.details;
         }
@@ -104,12 +105,13 @@ export function ChatPage(): JSX.Element {
         errorMsg += '2. Restart this app after installing\n';
         errorMsg += '3. Or start manually with: ollama serve';
         
-        alert(errorMsg);
+        toast.error('Failed to Start Ollama', errorMsg);
         setIsStartingOllama(false);
         return;
       }
 
       console.log('Ollama started successfully:', result.path, 'PID:', result.pid);
+      toast.success('Ollama Started', 'Service is starting up...');
 
       // Wait 4 seconds for Ollama to fully start up
       await new Promise(resolve => setTimeout(resolve, 4000));
@@ -122,6 +124,7 @@ export function ChatPage(): JSX.Element {
         
         if (isConnected) {
           await loadModels();
+          toast.success('Connected!', 'Ollama is ready to use');
           return; // Success!
         }
         
@@ -132,10 +135,10 @@ export function ChatPage(): JSX.Element {
       }
       
       // If we get here, connection failed after retries
-      alert('Ollama started but connection check failed. It may need more time to initialize. Try "Check Connection" in a few seconds.');
+      toast.warning('Connection Timeout', 'Ollama started but needs more time. Try "Check Connection" in a few seconds.');
     } catch (error) {
       console.error('Error starting Ollama:', error);
-      alert('Failed to start Ollama. Please start it manually with: ollama serve');
+      toast.error('Start Failed', 'Please start Ollama manually with: ollama serve');
     } finally {
       setIsStartingOllama(false);
     }

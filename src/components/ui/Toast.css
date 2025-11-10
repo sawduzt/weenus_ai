@@ -1,0 +1,208 @@
+/**
+ * Toast Notification Styles
+ * 
+ * Cute pink-themed toast notifications for displaying messages
+ * without intrusive Windows alerts.
+ */
+
+.toast-container {
+  position: fixed;
+  top: var(--spacing-xl);
+  right: var(--spacing-xl);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  pointer-events: none;
+  max-width: 400px;
+}
+
+.toast {
+  pointer-events: auto;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-md) var(--spacing-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 
+              0 0 0 1px rgba(255, 107, 157, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  min-width: 320px;
+  max-width: 400px;
+  animation: slideInRight 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border: 2px solid transparent;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.toast::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--toast-color) 0%, var(--toast-color-light) 100%);
+  opacity: 0.8;
+}
+
+.toast.exiting {
+  animation: slideOutRight 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.toast:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4),
+              0 0 0 2px rgba(255, 107, 157, 0.3);
+}
+
+/* Toast variants */
+.toast.success {
+  --toast-color: #7dd3fc;
+  --toast-color-light: #93c5fd;
+  border-color: rgba(125, 211, 252, 0.2);
+}
+
+.toast.error {
+  --toast-color: #f472b6;
+  --toast-color-light: #fb7185;
+  border-color: rgba(244, 114, 182, 0.2);
+}
+
+.toast.warning {
+  --toast-color: #fbbf24;
+  --toast-color-light: #fcd34d;
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
+.toast.info {
+  --toast-color: #a78bfa;
+  --toast-color-light: #c4b5fd;
+  border-color: rgba(167, 139, 250, 0.2);
+}
+
+/* Toast icon */
+.toast-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--toast-color) 0%, var(--toast-color-light) 100%);
+  color: white;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Toast content */
+.toast-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.toast-title {
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  line-height: 1.4;
+  font-family: 'Quicksand', var(--font-family-sans);
+}
+
+.toast-message {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Close button */
+.toast-close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+  padding: 0;
+}
+
+.toast-close:hover {
+  background: rgba(255, 107, 157, 0.15);
+  color: var(--accent-primary);
+  transform: rotate(90deg);
+}
+
+/* Progress bar for auto-dismiss */
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--toast-color) 0%, var(--toast-color-light) 100%);
+  opacity: 0.5;
+  transition: width linear;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
+
+/* Animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .toast-container {
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    max-width: none;
+  }
+
+  .toast {
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+  
+  .toast.exiting {
+    animation: none;
+    opacity: 0;
+  }
+}

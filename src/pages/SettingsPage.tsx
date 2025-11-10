@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from 'react';
 import { FolderOpen, Save } from 'lucide-react';
+import { useToast } from '../components/ui/ToastProvider';
 import './SettingsPage.css';
 
 export interface SettingsPageProps {
@@ -43,6 +44,7 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const [activeTab, setActiveTab] = useState<string>('general');
   const [isSaving, setIsSaving] = useState(false);
+  const toast = useToast();
 
   // Load settings from electron store on mount
   useEffect(() => {
@@ -76,7 +78,7 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
 
   const handleSelectModelPath = async (): Promise<void> => {
     if (!window.electronAPI?.fileSystem) {
-      alert('File system access is only available in the desktop app.');
+      toast.warning('Desktop App Required', 'File system access is only available in the desktop app.');
       return;
     }
 
@@ -89,16 +91,17 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
 
       if (!result.canceled && result.filePaths.length > 0) {
         updateSetting('modelPath', result.filePaths[0]);
+        toast.success('Path Selected', 'Model path updated successfully');
       }
     } catch (error) {
       console.error('Error selecting model path:', error);
-      alert('Failed to open directory picker.');
+      toast.error('Selection Failed', 'Failed to open directory picker.');
     }
   };
 
   const handleSaveSettings = async (): Promise<void> => {
     if (!window.electronAPI?.ollama) {
-      alert('Settings save with Ollama restart is only available in the desktop app.');
+      toast.warning('Desktop App Required', 'Settings save with Ollama restart is only available in the desktop app.');
       return;
     }
 
@@ -114,13 +117,13 @@ export function SettingsPage({ onThemeChange }: SettingsPageProps): JSX.Element 
       const result = await window.electronAPI.ollama.restart(settings.modelPath || undefined);
       
       if (result.success) {
-        alert('Settings saved successfully! Ollama has been restarted with the new model path.');
+        toast.success('Settings Saved!', 'Ollama has been restarted with the new model path.');
       } else {
-        alert(`Settings saved, but failed to restart Ollama:\n\n${result.error || 'Unknown error'}\n\nPlease restart Ollama manually.`);
+        toast.warning('Partial Success', `Settings saved, but failed to restart Ollama:\n${result.error || 'Unknown error'}\n\nPlease restart Ollama manually.`);
       }
     } catch (error) {
       console.error('Error saving settings:', error);
-      alert('Failed to save settings and restart Ollama.');
+      toast.error('Save Failed', 'Failed to save settings and restart Ollama.');
     } finally {
       setIsSaving(false);
     }
