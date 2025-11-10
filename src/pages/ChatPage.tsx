@@ -10,7 +10,12 @@ import { useOllama } from '../hooks/useOllama';
 import { useToast } from '../components/ui/ToastProvider';
 import './ChatPage.css';
 
-export function ChatPage(): JSX.Element {
+export interface ChatPageProps {
+  activeChatId: string | null;
+  onChatChange: (chatId: string | null) => void;
+}
+
+export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Element {
   const [input, setInput] = useState('');
   const [streamingResponse, setStreamingResponse] = useState('');
   const [isCheckingConnection, setIsCheckingConnection] = useState(true);

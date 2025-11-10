@@ -258,15 +258,17 @@
 
 .chat-history-item {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
   color: var(--text-secondary);
   background: transparent;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   transition: all var(--transition-fast);
   text-align: left;
   width: 100%;
+  position: relative;
 }
 
 .chat-history-item:hover {
@@ -274,11 +276,37 @@
   background: var(--bg-primary);
 }
 
+.chat-history-item.active {
+  color: var(--accent-primary);
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.15) 0%, rgba(244, 114, 182, 0.1) 100%);
+  border: 1px solid rgba(255, 107, 157, 0.2);
+}
+
 .chat-title {
+  flex: 1;
   font-size: var(--font-size-sm);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.chat-delete {
+  flex-shrink: 0;
+  padding: 4px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  color: var(--text-muted);
+  background: transparent;
+  border-radius: var(--radius-sm);
+}
+
+.chat-history-item:hover .chat-delete {
+  opacity: 1;
+}
+
+.chat-delete:hover {
+  color: var(--error);
+  background: rgba(244, 114, 182, 0.1);
 }
 
 .chat-timestamp {

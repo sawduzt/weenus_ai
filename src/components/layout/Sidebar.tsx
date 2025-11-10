@@ -5,7 +5,7 @@
  * Includes chat history, quick actions, and main navigation items.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   MessageCircle, 
   Image, 
@@ -17,9 +17,12 @@ import {
   Zap,
   HelpCircle,
   Rabbit,
+  Search,
+  Trash2,
   type LucideIcon
 } from 'lucide-react';
 import { AppPage } from '../../App';
+import { useChat } from '../../hooks/useChat';
 import './Sidebar.css';
 
 export interface SidebarProps {
@@ -27,6 +30,9 @@ export interface SidebarProps {
   collapsed: boolean;
   onPageChange: (page: AppPage) => void;
   onToggle: () => void;
+  onNewChat?: () => void;
+  onSelectChat?: (chatId: string) => void;
+  activeChatId?: string | null;
 }
 
 interface NavigationItem {
@@ -74,12 +80,20 @@ export function Sidebar({
   collapsed,
   onPageChange,
   onToggle,
+  onNewChat,
+  onSelectChat,
+  activeChatId,
 }: SidebarProps): JSX.Element {
-  const [chatHistory] = useState([
-    { id: '1', title: 'Getting started with AI', timestamp: new Date() },
-    { id: '2', title: 'Image generation tips', timestamp: new Date() },
-    { id: '3', title: 'Model comparison', timestamp: new Date() },
-  ]);
+  const { groupedChats, searchQuery, setSearchQuery, searchResults, deleteChat } = useChat();
+
+  const handleDeleteChat = async (chatId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (confirm('Delete this chat? This cannot be undone.')) {
+      await deleteChat(chatId);
+    }
+  };
+
+  const chatsToDisplay = searchQuery ? searchResults : Array.from(groupedChats.entries());
 
   return (
     <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
@@ -136,20 +150,108 @@ export function Sidebar({
         {/* Chat History Section */}
         {!collapsed && currentPage === 'chat' && (
           <div className="nav-section chat-history">
-            <h3 className="nav-section-title">Recent Chats</h3>
-            <ul className="chat-history-list">
-              {chatHistory.map((chat) => (
-                <li key={chat.id}>
-                  <button className="chat-history-item">
-                    <span className="chat-title">{chat.title}</span>
-                    <span className="chat-timestamp">
-                      {chat.timestamp.toLocaleDateString()}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <button className="new-chat-button">
+            {/* Search Bar */}
+            <div style={{ padding: 'var(--spacing-sm)', borderBottom: '1px solid var(--border-primary)' }}>
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <Search size={14} style={{ position: 'absolute', left: '8px', color: 'var(--text-muted)' }} />
+                <input
+                  type="text"
+                  placeholder="Search chats..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '6px 6px 6px 28px',
+                    background: 'var(--bg-tertiary)',
+                    border: '1px solid var(--border-primary)',
+                    borderRadius: 'var(--radius-md)',
+                    color: 'var(--text-primary)',
+                    fontSize: '12px',
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Chat Groups */}
+            <div style={{ flex: 1, overflowY: 'auto', maxHeight: 'calc(100vh - 400px)' }}>
+              {searchQuery ? (
+                // Search Results
+                <ul className="chat-history-list">
+                  {searchResults.map((chat) => (
+                    <li key={chat.id}>
+                      <button
+                        className={`chat-history-item ${activeChatId === chat.id ? 'active' : ''}`}
+                        onClick={() => onSelectChat?.(chat.id)}
+                      >
+                        <span className="chat-title">{chat.title}</span>
+                        <button
+                          className="chat-delete"
+                          onClick={(e) => handleDeleteChat(chat.id, e)}
+                          title="Delete chat"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </button>
+                    </li>
+                  ))}
+                  {searchResults.length === 0 && (
+                    <li style={{ padding: 'var(--spacing-md)', textAlign: 'center', color: 'var(--text-muted)', fontSize: '12px' }}>
+                      No chats found
+                    </li>
+                  )}
+                </ul>
+              ) : (
+                // Grouped by Date
+                <>
+                  {Array.from(groupedChats.entries()).map(([group, chats]) => (
+                    <div key={group} style={{ marginBottom: 'var(--spacing-md)' }}>
+                      <h4 style={{
+                        padding: 'var(--spacing-xs) var(--spacing-sm)',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        color: 'var(--text-muted)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                      }}>
+                        {group}
+                      </h4>
+                      <ul className="chat-history-list">
+                        {chats.map((chat) => (
+                          <li key={chat.id}>
+                            <button
+                              className={`chat-history-item ${activeChatId === chat.id ? 'active' : ''}`}
+                              onClick={() => onSelectChat?.(chat.id)}
+                            >
+                              <span className="chat-title">{chat.title}</span>
+                              <button
+                                className="chat-delete"
+                                onClick={(e) => handleDeleteChat(chat.id, e)}
+                                title="Delete chat"
+                              >
+                                <Trash2 size={12} />
+                              </button>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                  {groupedChats.size === 0 && (
+                    <div style={{
+                      padding: 'var(--spacing-lg)',
+                      textAlign: 'center',
+                      color: 'var(--text-muted)',
+                      fontSize: '12px',
+                    }}>
+                      No chats yet. Start a new conversation!
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            {/* New Chat Button */}
+            <button className="new-chat-button" onClick={onNewChat}>
               <Plus size={16} className="new-chat-icon" />
               New Chat
             </button>

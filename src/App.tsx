@@ -33,6 +33,9 @@ function App(): JSX.Element {
     currentTheme: 'dark',
   });
 
+  // Chat state for cross-component communication
+  const [activeChatId, setActiveChatId] = useState<string | null>(null);
+
   // Get Ollama connection status
   const { connectionStatus } = useOllama();
 
@@ -51,11 +54,20 @@ function App(): JSX.Element {
     setAppState(prev => ({ ...prev, currentTheme: theme }));
   };
 
+  // Chat handlers
+  const handleNewChat = (): void => {
+    setActiveChatId(null);
+  };
+
+  const handleSelectChat = (chatId: string): void => {
+    setActiveChatId(chatId);
+  };
+
   // Render current page
   const renderCurrentPage = (): JSX.Element => {
     switch (appState.currentPage) {
       case 'chat':
-        return <ChatPage />;
+        return <ChatPage activeChatId={activeChatId} onChatChange={setActiveChatId} />;
       case 'settings':
         return <SettingsPage onThemeChange={handleThemeChange} />;
       case 'models':
@@ -65,7 +77,7 @@ function App(): JSX.Element {
       case 'video-gen':
         return <VideoGenerationPage />;
       default:
-        return <ChatPage />;
+        return <ChatPage activeChatId={activeChatId} onChatChange={setActiveChatId} />;
     }
   };
 
@@ -79,6 +91,9 @@ function App(): JSX.Element {
             connectionStatus={connectionStatus}
             onPageChange={handlePageChange}
             onSidebarToggle={handleSidebarToggle}
+            onNewChat={handleNewChat}
+            onSelectChat={handleSelectChat}
+            activeChatId={activeChatId}
           >
             {renderCurrentPage()}
           </MainLayout>

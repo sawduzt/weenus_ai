@@ -19,6 +19,9 @@ export interface MainLayoutProps {
   connectionStatus: ConnectionStatus;
   onPageChange: (page: AppPage) => void;
   onSidebarToggle: () => void;
+  onNewChat?: () => void;
+  onSelectChat?: (chatId: string) => void;
+  activeChatId?: string | null;
   children: React.ReactNode;
 }
 
@@ -28,6 +31,9 @@ export function MainLayout({
   connectionStatus,
   onPageChange,
   onSidebarToggle,
+  onNewChat,
+  onSelectChat,
+  activeChatId,
   children,
 }: MainLayoutProps): JSX.Element {
   return (
@@ -41,6 +47,9 @@ export function MainLayout({
         collapsed={sidebarCollapsed}
         onPageChange={onPageChange}
         onToggle={onSidebarToggle}
+        onNewChat={onNewChat}
+        onSelectChat={onSelectChat}
+        activeChatId={activeChatId}
       />
 
       {/* Main Content Area */}
