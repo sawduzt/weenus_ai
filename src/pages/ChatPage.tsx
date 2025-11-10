@@ -447,7 +447,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           )}
         </div>
         
-        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingRight: '100px' }}>Powered by Ollama</p>
+        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingRight: '140px' }}>Powered by Ollama</p>
         
         <WindowControls />
       </div>
