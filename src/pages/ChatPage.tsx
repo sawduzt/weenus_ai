@@ -9,6 +9,7 @@ import { Send, User, Bot, RefreshCw, MessageCircle, Lightbulb } from 'lucide-rea
 import { useOllama } from '../hooks/useOllama';
 import { useChat } from '../hooks/useChat';
 import { useToast } from '../components/ui/ToastProvider';
+import { WindowControls } from '../components/layout/WindowControls';
 import { chatService } from '../services/chat';
 import type { ChatMessage } from '../types/chat.types';
 import './ChatPage.css';
@@ -398,7 +399,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   // Main chat interface
   return (
     <div className="chat-page">
-      <div className="page-header" style={{ padding: '8px 2px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="page-header" style={{ padding: '8px 2px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
         <div style={{ flex: 1, paddingLeft: '10px' }}>
           {isEditingTitle ? (
             <input
@@ -446,7 +447,9 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           )}
         </div>
         
-        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingRight: '10px' }}>Powered by Ollama</p>
+        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingRight: '100px' }}>Powered by Ollama</p>
+        
+        <WindowControls />
       </div>
 
       {/* Messages Area */}

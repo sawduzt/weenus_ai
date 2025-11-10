@@ -8,7 +8,6 @@
 import React from 'react';
 import { Sidebar } from './Sidebar';
 import { StatusBar } from './StatusBar';
-import { WindowControls } from './WindowControls';
 import { AppPage } from '../../App';
 import { ConnectionStatus } from '../../types/global.types';
 import './MainLayout.css';
@@ -40,9 +39,6 @@ export function MainLayout({
 }: MainLayoutProps): JSX.Element {
   return (
     <div className={`main-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
-      {/* Custom Window Controls */}
-      <WindowControls />
-      
       {/* Sidebar Navigation */}
       <Sidebar
         currentPage={currentPage}
