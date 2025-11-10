@@ -84,7 +84,21 @@ export function Sidebar({
   onSelectChat,
   activeChatId,
 }: SidebarProps): JSX.Element {
-  const { groupedChats, searchQuery, setSearchQuery, searchResults, deleteChat } = useChat();
+  const { groupedChats, searchQuery, setSearchQuery, searchResults, deleteChat, refreshChats } = useChat();
+
+  // Refresh chats periodically to catch updates from ChatPage
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      refreshChats();
+    }, 1000); // Refresh every second
+
+    return () => clearInterval(interval);
+  }, [refreshChats]);
+
+  const handleNewChat = async () => {
+    // Call the parent's onNewChat to clear activeChatId
+    onNewChat?.();
+  };
 
   const handleDeleteChat = async (chatId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -249,7 +263,7 @@ export function Sidebar({
             </div>
 
             {/* New Chat Button */}
-            <button className="new-chat-button" onClick={onNewChat}>
+            <button className="new-chat-button" onClick={handleNewChat}>
               <Plus size={16} className="new-chat-icon" />
               New Chat
             </button>

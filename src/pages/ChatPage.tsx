@@ -379,10 +379,13 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   // Main chat interface
   return (
     <div className="chat-page">
-      <div className="page-header">
+      <div className="page-header" style={{ padding: '12px 24px' }}>
         <div>
-          <h1><Bot size={24} style={{ display: 'inline', marginRight: '8px' }} />AI Chat</h1>
-          <p>Powered by Ollama</p>
+          <h1 style={{ fontSize: '18px', margin: '0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Bot size={20} />
+            AI Chat
+          </h1>
+          <p style={{ margin: '2px 0 0 0', fontSize: '12px' }}>Powered by Ollama</p>
         </div>
         
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
@@ -512,7 +515,6 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
                   fontSize: '14px',
                   fontStyle: 'italic',
                 }}>
-                  <span className="loading-spinner">⠋</span>
                   {loadingMessage}...
                 </div>
               </div>
