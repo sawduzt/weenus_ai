@@ -1,172 +1,342 @@
-# 🧠 Weenus AI Desktop App - Development Plan
+````markdown# 🧠 Weenus AI Desktop App - Development Plan
+
+# 🧠 Weenus AI - Development Plan & Progress
 
 > *A comprehensive, phased approach to building a sleek, modern AI frontend application*
 
-## 📋 Project Overview
+> **For comprehensive project architecture, design details, and full status see:** `COMPREHENSIVE_PROJ_STATUS.md`  
 
-**Weenus** is an ambitious desktop AI application designed to provide a beautiful, intuitive interface for local AI interactions. The app will feature chat capabilities, media generation (images and videos), and comprehensive model management - all wrapped in a stunning, modern GUI with Windows Mica effects and customizable themes.
+> **This file tracks development phases and day-to-day progress.**## 📋 Project Overview
 
-### 🎯 Core Vision
+
+
+**Current Status**: Phase 4 (Chat Implementation) - ACTIVE  **Weenus** is an ambitious desktop AI application designed to provide a beautiful, intuitive interface for local AI interactions. The app will feature chat capabilities, media generation (images and videos), and comprehensive model management - all wrapped in a stunning, modern GUI with Windows Mica effects and customizable themes.
+
+**Overall Completion**: ~65% (Foundation + UI Complete, Core Features In Progress)  
+
+**Last Updated**: November 10, 2025### 🎯 Core Vision
+
 - **Simplicity**: Easy-to-use interface that doesn't sacrifice functionality
-- **Beauty**: Sleek, modern design with subtle animations and effects
+
+---- **Beauty**: Sleek, modern design with subtle animations and effects
+
 - **Power**: Full-featured AI capabilities with granular control
-- **Flexibility**: Customizable themes, parameters, and workflows
 
----
+## 📊 Phase Completion Status- **Flexibility**: Customizable themes, parameters, and workflows
 
-## 🚀 Development Phases
 
-### **Phase 1: Project Foundation & Setup** ⚙️
+
+### ✅ Phase 1: Foundation & Setup (COMPLETED)---
+
+- Technology stack: Electron + React + TypeScript
+
+- Project structure with organized directories## 🚀 Development Phases
+
+- Development environment (ESLint, Prettier, Git)
+
+- Build system with Vite### **Phase 1: Project Foundation & Setup** ⚙️
+
 **Duration**: 1-2 weeks
 
-#### 1.1 Technology Stack Selection
-- **Frontend Framework**: Electron + React/Vue.js (for cross-platform desktop)
-- **UI Library**: Material-UI or Ant Design with custom theming
-- **State Management**: Redux Toolkit or Zustand
-- **Styling**: CSS-in-JS (styled-components) + CSS modules
+### ✅ Phase 2: Core Infrastructure (COMPLETED)
+
+- Ollama API client (`services/ollama.ts`)#### 1.1 Technology Stack Selection
+
+- React hooks for state management- **Frontend Framework**: Electron + React/Vue.js (for cross-platform desktop)
+
+- Base UI framework (Layout, Sidebar, StatusBar)- **UI Library**: Material-UI or Ant Design with custom theming
+
+- Theme system and routing- **State Management**: Redux Toolkit or Zustand
+
+- Electron main process- **Styling**: CSS-in-JS (styled-components) + CSS modules
+
 - **Build Tools**: Vite + TypeScript
-- **Testing**: Jest + React Testing Library
 
-#### 1.2 Project Structure Setup
-```
-weenus-ai/
-├── src/
-│   ├── components/          # Reusable UI components
+### ✅ Phase 3: UI Polish & Branding (COMPLETED)- **Testing**: Jest + React Testing Library
+
+- Custom window controls
+
+- Professional icon system (Lucide React)#### 1.2 Project Structure Setup
+
+- Pink bunny aesthetic```
+
+- System fonts (removed web fonts)weenus-ai/
+
+- Toast notifications├── src/
+
+- Performance optimization (removed expensive CSS)│   ├── components/          # Reusable UI components
+
 │   ├── pages/              # Main application pages
-│   ├── services/           # API and external service integrations
-│   ├── store/              # State management
-│   ├── utils/              # Helper functions
-│   ├── types/              # TypeScript type definitions
-│   └── assets/             # Images, icons, fonts
-├── docs/                   # Documentation
-├── tests/                  # Test files
-└── build/                  # Build outputs
-```
 
-#### 1.3 Development Environment
+### 🔄 Phase 4: Chat Implementation (60% COMPLETE)│   ├── services/           # API and external service integrations
+
+│   ├── store/              # State management
+
+#### ✅ Completed│   ├── utils/              # Helper functions
+
+- Multi-chat system with persistence│   ├── types/              # TypeScript type definitions
+
+- AI-generated chat titles  │   └── assets/             # Images, icons, fonts
+
+- Date-grouped organization├── docs/                   # Documentation
+
+- Full-text search├── tests/                  # Test files
+
+- Message streaming from Ollama└── build/                  # Build outputs
+
+- Chat deletion with confirmation```
+
+- Model selection
+
+- Connection status#### 1.3 Development Environment
+
 - Git repository initialization (local version control)
-- Code formatting (Prettier) and linting (ESLint)
-- Pre-commit hooks for code quality
-- Development and production build configurations
+
+#### 🔄 In Progress- Code formatting (Prettier) and linting (ESLint)
+
+- Parameter controls (UI done, API wiring TODO)- Pre-commit hooks for code quality
+
+- Message formatting- Development and production build configurations
+
 - Local documentation server setup
 
----
+#### ⏳ TODO
 
-### **Phase 2: Core Infrastructure** 🏗️
+- Model download/install---
+
+- Message export
+
+- File upload### **Phase 2: Core Infrastructure** 🏗️
+
 **Duration**: 2-3 weeks
 
-#### 2.1 Ollama Integration
-- Ollama API client implementation
-- Model discovery and management
-- Connection status monitoring
+### ⏳ Phase 5+: Media Generation & Advanced (Planned)
+
+- Image generation interface#### 2.1 Ollama Integration
+
+- Video generation interface- Ollama API client implementation
+
+- Statistics dashboard- Model discovery and management
+
+- Plugin system- Connection status monitoring
+
 - Error handling and reconnection logic
 
+---
+
 #### 2.2 Base UI Framework
-- Main window layout structure
+
+## 🚀 Latest Work (November 10, 2025)- Main window layout structure
+
 - Navigation system implementation
-- Theme system foundation
-- Windows Mica effect integration
-- Responsive design framework
 
-#### 2.3 State Management Architecture
+### Performance Crisis & Fix ⚡- Theme system foundation
+
+**Problem**: App felt choppy, low FPS interactions  - Windows Mica effect integration
+
+**Root Cause**: Expensive backdrop-filter effects (blur 10-60px) on multiple elements  - Responsive design framework
+
+**Solution**: Removed all backdrop-filters, kept simple shadows and gradients  
+
+**Result**: 60fps stable, smooth interactions restored ✅#### 2.3 State Management Architecture
+
 - Global state structure design
-- Chat management state
-- Model management state
-- Settings and preferences state
-- Persistence layer implementation
+
+### UI Polish Complete 🎨- Chat management state
+
+- Window controls moved to chat header- Model management state
+
+- Chat window bottom corners now rounded- Settings and preferences state
+
+- "Powered by Ollama" repositioned- Persistence layer implementation
+
+- Visual polish complete
 
 ---
 
-### **Phase 3: Chat Interface Development** 💬
-**Duration**: 3-4 weeks
+### Chat System Working 💬
 
-#### 3.1 Chat UI Components
+- Messages display immediately### **Phase 3: Chat Interface Development** 💬
+
+- AI responses streaming properly**Duration**: 3-4 weeks
+
+- Loading indicators with fun messages
+
+- Chat persistence working#### 3.1 Chat UI Components
+
 - Message bubble components (user/AI)
-- Chat input box with rich formatting
+
+---- Chat input box with rich formatting
+
 - Chat history sidebar
-- Message threading and organization
 
-#### 3.2 Core Chat Functionality
-- Real-time message streaming
-- Message persistence
-- Chat session management
-- Export/import chat functionality
+## 📁 Project Structure- Message threading and organization
 
-#### 3.3 Advanced Chat Features
-- File upload integration
-- Message search and filtering
-- Chat templates and quick actions
-- Markdown rendering for AI responses
 
----
 
-### **Phase 4: Model Management System** 🤖
-**Duration**: 2-3 weeks
+```#### 3.2 Core Chat Functionality
 
-#### 4.1 Model Discovery & Selection
-- Available models detection
-- Model picker dropdown interface
-- Model information display (size, capabilities, etc.)
-- Custom model folder path configuration
+src/- Real-time message streaming
+
+├── services/- Message persistence
+
+│   ├── chat.ts              # Chat CRUD, search, persistence- Chat session management
+
+│   └── ollama.ts            # Ollama API client- Export/import chat functionality
+
+├── hooks/
+
+│   ├── useChat.ts           # Chat state management#### 3.3 Advanced Chat Features
+
+│   └── useOllama.ts         # Ollama connection state- File upload integration
+
+├── components/- Message search and filtering
+
+│   ├── layout/              # MainLayout, Sidebar, StatusBar- Chat templates and quick actions
+
+│   ├── theme/               # Theme provider- Markdown rendering for AI responses
+
+│   └── ui/                  # Toast, ToggleSwitch
+
+├── pages/---
+
+│   ├── ChatPage.tsx         # Main chat interface ✅
+
+│   ├── SettingsPage.tsx     # Application settings### **Phase 4: Model Management System** 🤖
+
+│   ├── ModelLibraryPage.tsx # Model discovery**Duration**: 2-3 weeks
+
+│   ├── ImageGenerationPage.tsx
+
+│   └── VideoGenerationPage.tsx#### 4.1 Model Discovery & Selection
+
+├── types/- Available models detection
+
+│   ├── chat.types.ts        # ChatMessage, ChatSession- Model picker dropdown interface
+
+│   └── global.types.ts      # Global app types- Model information display (size, capabilities, etc.)
+
+└── App.tsx                  # Main app component- Custom model folder path configuration
+
+```
 
 #### 4.2 Parameter Management
-- Per-model parameter customization
+
+---- Per-model parameter customization
+
 - Parameter presets and profiles
-- Real-time parameter adjustment
+
+## 🎯 Next Priorities- Real-time parameter adjustment
+
 - Parameter validation and constraints
 
-#### 4.3 Model Download & Management
-- Ollama model downloader integration
-- Hugging Face model browser
-- Download progress tracking
+### This Week
+
+- [ ] Wire parameter controls to Ollama API#### 4.3 Model Download & Management
+
+- [ ] Implement markdown rendering for responses- Ollama model downloader integration
+
+- [ ] Add model download/delete functionality- Hugging Face model browser
+
+- [ ] Test with various Ollama models- Download progress tracking
+
 - Model deletion and cleanup
 
----
+### This Month
 
-### **Phase 5: Media Generation Features** 🎨
-**Duration**: 4-5 weeks
+- [ ] Message export (JSON/Markdown)---
 
-#### 5.1 Image Generation Module
-- Image generation interface design
-- Model picker for image models
-- Parameter controls (dimensions, style, etc.)
-- Generated image gallery and management
+- [ ] File upload integration
 
-#### 5.2 Video Generation Module
+- [ ] Keyboard shortcuts (Ctrl+K for search)### **Phase 5: Media Generation Features** 🎨
+
+- [ ] Advanced error handling**Duration**: 4-5 weeks
+
+
+
+### Next Quarter#### 5.1 Image Generation Module
+
+- [ ] Media generation features- Image generation interface design
+
+- [ ] Statistics dashboard- Model picker for image models
+
+- [ ] Plugin system- Parameter controls (dimensions, style, etc.)
+
+- [ ] Testing suite expansion- Generated image gallery and management
+
+
+
+---#### 5.2 Video Generation Module
+
 - Video generation interface
-- Video model integration
+
+## 📝 Key Changes This Session- Video model integration
+
 - Progress tracking for long operations
-- Video preview and management
 
-#### 5.3 Media Management
-- Generated content organization
-- Export and sharing capabilities
-- Batch operations
-- Metadata tracking
+```- Video preview and management
 
----
+✅ Removed expensive backdrop-filter effects for performance
 
-### **Phase 6: Advanced Features** ⚡
+✅ Added rounded corners to chat window bottom#### 5.3 Media Management
+
+✅ Repositioned window controls to chat header- Generated content organization
+
+✅ Adjusted "Powered by Ollama" spacing- Export and sharing capabilities
+
+✅ Created COMPREHENSIVE_PROJ_STATUS.md for full project overview- Batch operations
+
+```- Metadata tracking
+
+
+
+------
+
+
+
+## 🔗 Related Documentation### **Phase 6: Advanced Features** ⚡
+
 **Duration**: 3-4 weeks
 
-#### 6.1 AI Statistics & Monitoring
-- GPU usage monitoring
+- **COMPREHENSIVE_PROJ_STATUS.md** - Full architecture, design language, tech stack
+
+- **CHAT_SYSTEM.md** - Multi-chat system technical details#### 6.1 AI Statistics & Monitoring
+
+- **CHAT_ENHANCEMENT_COMPLETE.md** - UI/UX features list- GPU usage monitoring
+
 - VRAM usage tracking
-- Tokens per second measurement
+
+---- Tokens per second measurement
+
 - Time to first token analytics
-- Performance graphs and visualizations
 
-#### 6.2 Widget System
-- Toggleable feature widgets
-- Custom widget development framework
-- Widget layout management
-- Widget state persistence
+## 💡 Development Philosophy- Performance graphs and visualizations
 
-#### 6.3 Network Features
+
+
+1. **Local-First**: All data stays on user's machine#### 6.2 Widget System
+
+2. **User-Centered**: Beautiful UI makes power accessible- Toggleable feature widgets
+
+3. **Performance-First**: Smooth 60fps interactions- Custom widget development framework
+
+4. **Type-Safe**: TypeScript strict mode- Widget layout management
+
+5. **Simple Code**: Readable over clever- Widget state persistence
+
+
+
+---#### 6.3 Network Features
+
 - Local network web interface
-- Remote access capabilities
+
+**Latest Commit**: Performance optimization - removed backdrop-filters- Remote access capabilities
+
 - Multi-device synchronization
-- Security and authentication
+
+*This is a living document. Full details in COMPREHENSIVE_PROJ_STATUS.md*- Security and authentication
+
+````
 
 ---
 
@@ -311,9 +481,67 @@ weenus-ai/
 
 ---
 
-*This plan serves as a living document and will be updated as development progresses. Each phase includes buffer time for unexpected challenges and iterative improvements.*
+## 📝 Development Changelog (continued)
 
-**Next Steps**: ✅ **Phase 1, 2 & 3 COMPLETE!** 🎉 **UI Polish Phase Finished (Nov 10, 2025)** Ready to begin Phase 4 chat functionality implementation with enhanced user experience features.
+**The following is migrated from CHAT_ENHANCEMENT_COMPLETE.md:**
+
+### ✅ Enhanced User Experience Features (Phase 4 - Complete)
+- **Ollama Launch Button**: "Start Ollama Service" when service not running, with connection checking and professional error messaging
+- **Live Model Switcher**: CPU icon with dropdown for model selection, showing model sizes during chat
+- **Quick Parameter Controls**: Collapsible parameter panel with sliders for Temperature, Max Tokens, and Top-P
+- **Professional Icon System**: All UI elements use Lucide React icons (no emojis)
+- **Model Management Enhancement**: Improved search, statistics display with visual indicators
+
+### Technical Implementation
+- **Electron IPC**: Added `ollama-launch` and `ollama-check` handlers
+- **Type Definitions**: Extended ElectronAPI with ollama methods
+- **Component Architecture**: Parameter state management with React hooks, dynamic collapsible UI panels
+- **CSS Improvements**: Custom slider styling, keyframe animations, professional spacing
+
+**The following is migrated from CHAT_SYSTEM.md:**
+
+### ✅ Multi-Chat System Architecture
+
+**Type Definitions:**
+- `ChatMessage`: User/assistant messages with timestamps and model info
+- `ChatSession`: Individual chat with title, model, messages array, and metadata
+- `ChatStorage`: Top-level storage structure with chats and active chat ID
+- `ChatGroup`: Date-grouped chat sessions
+
+**Service Layer (`src/services/chat.ts`):**
+- `getAllChats()` - Retrieve all chat sessions
+- `createChat(model)` - Create new chat with auto-generated title
+- `addMessage(chatId, message)` - Add message to chat
+- `deleteChat(chatId)` - Delete a chat session
+- `generateTitle(messages, model)` - Generate AI title from first exchange
+- `searchChats(query)` - Full-text search across titles and messages
+- `groupChatsByDate(chats)` - Group chats by Today/Yesterday/Week/Month/Older
+
+**React Hook (`src/hooks/useChat.ts`):**
+- State management: chats, activeChat, searchQuery, searchResults
+- Functions: createNewChat, switchChat, deleteChat, setSearchQuery
+- Auto-loads chats on mount, debounced search (300ms), manages active chat state
+
+**AI Title Generation:**
+After first message exchange, the system automatically generates a concise 2-5 word title using Ollama by sending both user and AI messages to the model for context-aware naming.
+
+**Data Persistence:**
+All chats stored via electron-store at:
+- Windows: `%APPDATA%/weenus-ai/config.json`
+- macOS: `~/Library/Application Support/weenus-ai/config.json`
+- Linux: `~/.config/weenus-ai/config.json`
+
+**Search Functionality:**
+Full-text search across chat titles and message content with real-time filtering and 300ms debounce for performance.
+
+**UI Integration:**
+- Sidebar shows date-grouped chats with active highlight (pink gradient)
+- New Chat button with Plus icon
+- Search bar with live filtering
+- Delete button with confirmation (hover to reveal)
+- Chat items show title and auto-deletion
+
+---
 
 ## 📊 Development Progress
 
