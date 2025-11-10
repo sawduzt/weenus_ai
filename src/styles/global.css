@@ -199,23 +199,17 @@ input, textarea, select {
     radial-gradient(circle at 80% 80%, rgba(244, 114, 182, 0.12) 0%, transparent 50%),
     radial-gradient(circle at 40% 40%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
     radial-gradient(circle at 60% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
 }
 
 /* Glass Morphism Effect */
 .glass {
   background: var(--bg-glass);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--border-primary);
 }
 
 /* Mica Effect */
 .mica {
   background: var(--bg-mica);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
   border: 1px solid var(--border-primary);
 }
 
