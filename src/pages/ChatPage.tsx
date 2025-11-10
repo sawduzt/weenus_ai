@@ -398,7 +398,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   // Main chat interface
   return (
     <div className="chat-page">
-      <div className="page-header" style={{ padding: '12px 24px' }}>
+      <div className="page-header" style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ flex: 1 }}>
           {isEditingTitle ? (
             <input
@@ -444,8 +444,9 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
               {activeChat?.title || 'AI Chat'}
             </h1>
           )}
-          <p style={{ margin: '2px 0 0 0', fontSize: '12px' }}>Powered by Ollama</p>
         </div>
+        
+        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)' }}>Powered by Ollama</p>
       </div>
 
       {/* Messages Area */}
@@ -567,7 +568,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
 
       {/* Input Area */}
       <div style={{
-        padding: '16px 32px 32px 32px',
+        padding: '16px 16px 24px 16px',
         display: 'flex',
         flexDirection: 'column',
         gap: '12px',
@@ -636,15 +637,16 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
         }}>
           <div 
             style={{
-              padding: '10px 16px',
+              padding: '8px 12px',
               borderRadius: '12px',
               border: '2px solid var(--border-primary)',
               background: 'transparent',
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
               transition: 'all 0.2s ease',
               cursor: 'pointer',
+              minWidth: 'auto',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = 'var(--accent-primary)';
@@ -655,7 +657,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
               e.currentTarget.style.background = 'transparent';
             }}
           >
-            <Bot size={18} style={{ color: 'var(--accent-primary)' }} />
+            <Bot size={16} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
             <select
               value={currentModel}
               onChange={(e) => setCurrentModel(e.target.value)}
@@ -666,9 +668,11 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
                 border: 'none',
                 background: 'transparent',
                 color: 'var(--text-primary)',
-                fontSize: '14px',
+                fontSize: '13px',
                 cursor: 'pointer',
                 outline: 'none',
+                minWidth: '120px',
+                maxWidth: '200px',
               }}
             >
               <option value="" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>

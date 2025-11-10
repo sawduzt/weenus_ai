@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { AppPage } from '../../App';
 import { useChat } from '../../hooks/useChat';
+import { useToast } from '../ui/ToastProvider';
 import './Sidebar.css';
 
 export interface SidebarProps {
@@ -85,6 +86,7 @@ export function Sidebar({
   activeChatId,
 }: SidebarProps): JSX.Element {
   const { groupedChats, searchQuery, setSearchQuery, searchResults, deleteChat, refreshChats } = useChat();
+  const toast = useToast();
 
   // Refresh chats periodically to catch updates from ChatPage
   React.useEffect(() => {
@@ -102,9 +104,8 @@ export function Sidebar({
 
   const handleDeleteChat = async (chatId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (confirm('Delete this chat? This cannot be undone.')) {
-      await deleteChat(chatId);
-    }
+    await deleteChat(chatId);
+    toast.success('Chat Deleted', 'The chat has been removed');
   };
 
   return (
