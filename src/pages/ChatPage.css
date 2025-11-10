@@ -222,8 +222,10 @@ select.model-selector option {
   padding: 8px;
 }
 
+select.model-selector option:checked,
 select.model-selector option:hover {
-  background: var(--bg-tertiary);
+  background: var(--accent-primary);
+  color: white;
 }
 
 select.model-selector:focus {

@@ -25,6 +25,8 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   const [isStartingOllama, setIsStartingOllama] = useState(false);
   const [isGeneratingResponse, setIsGeneratingResponse] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editedTitle, setEditedTitle] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const toast = useToast();
   const isFirstMessage = useRef(false);
@@ -88,6 +90,31 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, streamingResponse]);
+
+  // Handle title editing
+  const handleTitleClick = () => {
+    if (activeChat) {
+      setEditedTitle(activeChat.title);
+      setIsEditingTitle(true);
+    }
+  };
+
+  const handleTitleSubmit = async () => {
+    if (activeChatId && editedTitle.trim() && editedTitle !== activeChat?.title) {
+      await chatService.updateChat(activeChatId, { title: editedTitle.trim() });
+      await refreshChats();
+      toast.success('Chat Renamed', `Chat renamed to "${editedTitle.trim()}"`);
+    }
+    setIsEditingTitle(false);
+  };
+
+  const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleTitleSubmit();
+    } else if (e.key === 'Escape') {
+      setIsEditingTitle(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -372,43 +399,53 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   return (
     <div className="chat-page">
       <div className="page-header" style={{ padding: '12px 24px' }}>
-        <div>
-          <h1 style={{ fontSize: '18px', margin: '0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Bot size={20} />
-            AI Chat
-          </h1>
+        <div style={{ flex: 1 }}>
+          {isEditingTitle ? (
+            <input
+              type="text"
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              onBlur={handleTitleSubmit}
+              onKeyDown={handleTitleKeyDown}
+              autoFocus
+              style={{
+                fontSize: '18px',
+                margin: '0',
+                padding: '4px 8px',
+                background: 'var(--bg-tertiary)',
+                border: '2px solid var(--accent-primary)',
+                borderRadius: '8px',
+                color: 'var(--text-primary)',
+                fontWeight: '600',
+                width: '100%',
+                maxWidth: '400px',
+              }}
+            />
+          ) : (
+            <h1 
+              onClick={handleTitleClick}
+              style={{ 
+                fontSize: '18px', 
+                margin: '0', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                cursor: activeChat ? 'pointer' : 'default',
+                transition: 'color 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                if (activeChat) e.currentTarget.style.color = 'var(--accent-primary)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--text-primary)';
+              }}
+            >
+              <Bot size={20} />
+              {activeChat?.title || 'AI Chat'}
+            </h1>
+          )}
           <p style={{ margin: '2px 0 0 0', fontSize: '12px' }}>Powered by Ollama</p>
         </div>
-        
-        {/* Model Selector */}
-        <select
-          value={currentModel}
-          onChange={(e) => setCurrentModel(e.target.value)}
-          disabled={isGeneratingResponse}
-          className="model-selector"
-          style={{
-            padding: '8px 12px',
-            borderRadius: '8px',
-            border: '1px solid var(--border-primary)',
-            background: 'var(--bg-secondary)',
-            color: 'var(--text-primary)',
-            fontSize: '14px',
-            cursor: 'pointer',
-          }}
-        >
-          <option value="" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
-            Select a model...
-          </option>
-          {models.map((model) => (
-            <option 
-              key={model.name} 
-              value={model.name}
-              style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
-            >
-              {model.name}
-            </option>
-          ))}
-        </select>
       </div>
 
       {/* Messages Area */}
@@ -530,9 +567,12 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
 
       {/* Input Area */}
       <div style={{
-        padding: '24px',
-        borderTop: '1px solid var(--border)',
+        padding: '16px 32px 32px 32px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
       }}>
+        {/* Message Input Bar */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '12px' }}>
           <input
             type="text"
@@ -542,22 +582,25 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
             disabled={!currentModel || isGeneratingResponse}
             style={{
               flex: 1,
-              padding: '12px 16px',
-              borderRadius: '12px',
-              border: '1px solid var(--border)',
-              background: 'var(--surface)',
-              color: 'var(--text)',
+              padding: '14px 18px',
+              borderRadius: '16px',
+              border: '2px solid var(--border-primary)',
+              background: 'transparent',
+              color: 'var(--text-primary)',
               fontSize: '14px',
+              transition: 'all 0.2s ease',
             }}
+            onFocus={(e) => e.target.style.borderColor = 'var(--accent-primary)'}
+            onBlur={(e) => e.target.style.borderColor = 'var(--border-primary)'}
           />
           <button
             type="submit"
             disabled={!input.trim() || !currentModel || isGeneratingResponse}
             style={{
-              padding: '12px 24px',
-              borderRadius: '12px',
+              padding: '14px 28px',
+              borderRadius: '16px',
               border: 'none',
-              background: !input.trim() || !currentModel || isGeneratingResponse ? 'var(--border)' : 'var(--pink)',
+              background: !input.trim() || !currentModel || isGeneratingResponse ? 'var(--border-primary)' : 'var(--accent-primary)',
               color: 'white',
               cursor: !input.trim() || !currentModel || isGeneratingResponse ? 'not-allowed' : 'pointer',
               fontSize: '14px',
@@ -565,12 +608,93 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (!(!input.trim() || !currentModel || isGeneratingResponse)) {
+                e.currentTarget.style.background = 'var(--accent-hover)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!(!input.trim() || !currentModel || isGeneratingResponse)) {
+                e.currentTarget.style.background = 'var(--accent-primary)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }
             }}
           >
             <Send size={16} />
             {isGeneratingResponse ? 'Sending...' : 'Send'}
           </button>
         </form>
+
+        {/* Tool Bar - Model Selector and Future Tools */}
+        <div style={{
+          display: 'flex',
+          gap: '12px',
+          alignItems: 'center',
+        }}>
+          <div 
+            style={{
+              padding: '10px 16px',
+              borderRadius: '12px',
+              border: '2px solid var(--border-primary)',
+              background: 'transparent',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--accent-primary)';
+              e.currentTarget.style.background = 'rgba(255, 107, 157, 0.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-primary)';
+              e.currentTarget.style.background = 'transparent';
+            }}
+          >
+            <Bot size={18} style={{ color: 'var(--accent-primary)' }} />
+            <select
+              value={currentModel}
+              onChange={(e) => setCurrentModel(e.target.value)}
+              disabled={isGeneratingResponse}
+              className="model-selector"
+              style={{
+                padding: '0',
+                border: 'none',
+                background: 'transparent',
+                color: 'var(--text-primary)',
+                fontSize: '14px',
+                cursor: 'pointer',
+                outline: 'none',
+              }}
+            >
+              <option value="" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+                Select a model...
+              </option>
+              {models.map((model) => (
+                <option 
+                  key={model.name} 
+                  value={model.name}
+                  style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
+                >
+                  {model.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          {/* Placeholder for future tools */}
+          <div style={{ 
+            fontSize: '12px', 
+            color: 'var(--text-muted)',
+            fontStyle: 'italic' 
+          }}>
+            More tools coming soon...
+          </div>
+        </div>
       </div>
     </div>
   );
