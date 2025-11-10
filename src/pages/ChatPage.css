@@ -486,3 +486,22 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Loading Spinner Animation */
+.loading-spinner {
+  display: inline-block;
+  animation: spin 1s steps(8) infinite;
+  font-size: 16px;
+}
+
+@keyframes spin {
+  0% { content: '⠋'; }
+  12.5% { content: '⠙'; }
+  25% { content: '⠹'; }
+  37.5% { content: '⠸'; }
+  50% { content: '⠼'; }
+  62.5% { content: '⠴'; }
+  75% { content: '⠦'; }
+  87.5% { content: '⠧'; }
+  100% { content: '⠇'; }
+}

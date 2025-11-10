@@ -23,6 +23,8 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   const [streamingResponse, setStreamingResponse] = useState('');
   const [isCheckingConnection, setIsCheckingConnection] = useState(true);
   const [isStartingOllama, setIsStartingOllama] = useState(false);
+  const [isGeneratingResponse, setIsGeneratingResponse] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const toast = useToast();
   const isFirstMessage = useRef(false);
@@ -37,10 +39,24 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
     isGenerating,
   } = useOllama();
 
-  const { activeChat, switchChat, createNewChat, deleteChat } = useChat();
+  const { activeChat, switchChat, createNewChat, deleteChat, refreshChats } = useChat();
 
   // Get messages from active chat or empty array
   const messages = activeChat?.messages || [];
+
+  // Loading messages for AI responses
+  const loadingMessages = [
+    'crunching numbers',
+    'gearing up',
+    'chewing hay',
+    'thinking deeply',
+    'pondering existence',
+    'consulting the stars',
+    'brewing thoughts',
+    'summoning wisdom',
+    'processing vibes',
+    'doing bunny math',
+  ];
 
   // Sync active chat when prop changes
   useEffect(() => {
@@ -79,6 +95,11 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
     setInput('');
     setStreamingResponse('');
 
+    // Pick random loading message
+    const randomLoadingMsg = loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+    setLoadingMessage(randomLoadingMsg);
+    setIsGeneratingResponse(true);
+
     try {
       // Create new chat if none active
       let chatId = activeChatId;
@@ -100,15 +121,24 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
 
       // Add user message to chat
       await chatService.addMessage(chatId, userMessage);
+      
+      // Refresh chat to show user message immediately
+      await refreshChats();
 
-      // Generate AI response
+      // Build conversation context from existing messages
+      const conversationMessages = [
+        ...messages.map(msg => ({ role: msg.role, content: msg.content })),
+        { role: 'user' as const, content: userInput }
+      ];
+
+      // Generate AI response using /api/chat endpoint
       let fullResponse = '';
-      const response = await fetch('http://localhost:11434/api/generate', {
+      const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: currentModel,
-          prompt: userInput,
+          messages: conversationMessages,
           stream: true,
         }),
       });
@@ -119,23 +149,29 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
+      let buffer = '';
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value);
-        const lines = chunk.split('\n').filter(line => line.trim());
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        
+        // Keep the last incomplete line in the buffer
+        buffer = lines.pop() || '';
 
         for (const line of lines) {
-          try {
-            const json = JSON.parse(line);
-            if (json.response) {
-              fullResponse += json.response;
-              setStreamingResponse(fullResponse);
+          if (line.trim()) {
+            try {
+              const json = JSON.parse(line);
+              if (json.message?.content) {
+                fullResponse += json.message.content;
+                setStreamingResponse(fullResponse);
+              }
+            } catch (e) {
+              console.error('Error parsing chunk:', e);
             }
-          } catch (e) {
-            console.error('Error parsing chunk:', e);
           }
         }
       }
@@ -151,11 +187,15 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
 
       // Add assistant message to chat
       await chatService.addMessage(chatId, assistantMessage);
+      
+      // Refresh chat to show assistant message
+      await refreshChats();
 
       // Generate title if this was the first message
       if (isFirstMessage.current) {
         isFirstMessage.current = false;
         await chatService.generateTitle(chatId, userInput, currentModel);
+        await refreshChats(); // Refresh again to show updated title
       }
 
       setStreamingResponse('');
@@ -163,6 +203,9 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
       console.error('Chat error:', error);
       toast.error('Chat Error', 'Failed to send message. Please try again.');
       setStreamingResponse('');
+    } finally {
+      setIsGeneratingResponse(false);
+      setLoadingMessage('');
     }
   };
 
@@ -438,6 +481,42 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
                 </div>
               </div>
             ))}
+
+            {/* Loading Indicator */}
+            {isGeneratingResponse && !streamingResponse && (
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+                padding: '16px',
+                borderRadius: '12px',
+                background: 'var(--background)',
+                border: '1px solid var(--pink)',
+                opacity: 0.8,
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  color: 'var(--pink)',
+                }}>
+                  <Bot size={16} />{currentModel || 'AI'}
+                </div>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '8px',
+                  color: 'var(--text-secondary)',
+                  fontSize: '14px',
+                  fontStyle: 'italic',
+                }}>
+                  <span className="loading-spinner">⠋</span>
+                  {loadingMessage}...
+                </div>
+              </div>
+            )}
 
             {/* Streaming Response */}
             {streamingResponse && (
