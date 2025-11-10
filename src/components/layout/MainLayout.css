@@ -40,8 +40,10 @@
   position: relative;
   min-height: 0; /* Allow flex shrinking */
   border-radius: 0;
-  margin: 0;
+  margin: var(--spacing-md) var(--spacing-md) var(--spacing-sm) var(--spacing-md); /* Top, right, bottom, left padding */
   box-shadow: inset 0 2px 8px rgba(255, 107, 157, 0.1);
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
 }
 
 /* Content Area Glass Effect */
