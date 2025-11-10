@@ -113,7 +113,6 @@
   color: var(--text-primary);
   line-height: 1.4;
 }
-}
 
 .toast-message {
   font-size: var(--font-size-sm);

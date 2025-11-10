@@ -86,7 +86,6 @@
   transition: opacity var(--transition-normal);
   text-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
 }
-}
 
 .sidebar.collapsed .app-name {
   opacity: 0;
