@@ -398,8 +398,8 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   // Main chat interface
   return (
     <div className="chat-page">
-      <div className="page-header" style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ flex: 1 }}>
+      <div className="page-header" style={{ padding: '8px 2px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ flex: 1, paddingLeft: '10px' }}>
           {isEditingTitle ? (
             <input
               type="text"
@@ -446,7 +446,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           )}
         </div>
         
-        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)' }}>Powered by Ollama</p>
+        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingRight: '10px' }}>Powered by Ollama</p>
       </div>
 
       {/* Messages Area */}
@@ -568,10 +568,10 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
 
       {/* Input Area */}
       <div style={{
-        padding: '16px 16px 24px 16px',
+        padding: '12px 16px 12px 16px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '12px',
+        gap: '10px',
       }}>
         {/* Message Input Bar */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '12px' }}>
