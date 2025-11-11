@@ -83,6 +83,7 @@ class WeenusAI {
       show: false,
       autoHideMenuBar: true,
       frame: false, // Remove default window frame entirely
+      icon: join(__dirname, '../../src/assets/icons/icon.png'),
       webPreferences: {
         preload: join(__dirname, './preload/index.js'),
         sandbox: false,
