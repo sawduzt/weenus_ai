@@ -1,24 +1,22 @@
 # 🚀 Getting Started with Weenus AI
 
-> **Welcome to Weenus AI!** A beautiful, modern desktop application for AI interactions, image generation, and model management.
+> **Welcome to Weenus AI!** A beautiful, modern desktop application for chatting with local AI models, powered by Ollama.
 
 ## 📋 What is Weenus AI?
 
 Weenus AI is a desktop application that provides:
-- **💬 AI Chat Interface**: Conversation with local AI models through Ollama
-- **🎨 Image Generation**: Create images using AI models
-- **🎬 Video Generation**: Generate videos with AI assistance
-- **🤖 Model Management**: Download, manage, and configure AI models
-- **⚙️ Settings**: Customize your AI experience
+- **💬 AI Chat Interface**: Real-time conversations with local AI models through Ollama with per-model parameter customization
+- **🤖 Model Management**: View and manage your installed Ollama models
+- **⚙️ Settings**: Customize AI parameters (temperature, response length, creativity) per model
+- **🎨 Beautiful Design**: Cute, modern interface with pink bunny theme and smooth animations
 
 ## 🎨 Beautiful Design
 
 Weenus AI features a cute, modern interface with:
-- **Pink Theme**: Friendly, approachable design with professional polish
-- **Custom Window Controls**: Native desktop feel with minimize, maximize, close
-- **Responsive Sidebar**: Collapsible navigation with professional vector icons
-- **Windows Mica Effects**: Modern transparency and blur effects
-- **Smooth Animations**: Delightful micro-interactions throughout
+- **Pink Bunny Theme**: Friendly, approachable design with professional polish
+- **Custom Window Controls**: Frameless desktop window with minimize, maximize, close buttons
+- **Collapsible Sidebar**: Clean navigation with cute Weenus-themed descriptions
+- **Smooth Animations**: Delightful micro-interactions and transitions throughout
 
 ## 🏃‍♂️ Quick Start
 
@@ -27,128 +25,107 @@ Weenus AI features a cute, modern interface with:
 2. **AI Model**: Download at least one model (e.g., `ollama pull llama2`)
 
 ### First Launch
-1. **Start Ollama**: Ensure Ollama is running on your system
-2. **Launch Weenus AI**: Double-click the application icon
-3. **Connection Check**: The status bar will show connection status
+1. **Start Ollama**: Ensure Ollama is running on your system (`ollama serve`)
+2. **Launch Weenus AI**: Double-click the application icon (bunny emoji 🐰)
+3. **Connection Check**: The app will attempt to connect to Ollama automatically
    - 🟢 **Connected**: Ready to chat with AI models
-   - 🔴 **Disconnected**: Check Ollama installation and startup
+   - 🔴 **Disconnected**: Click "Start Ollama" button or check your installation
 
 ### Basic Navigation
-- **Chat Page**: Start conversations with AI models
-- **Image Generation**: Create AI-generated images
-- **Video Generation**: Generate video content
-- **Model Library**: Manage your downloaded models
-- **Settings**: Configure application preferences
+- **Chat**: Talk to your Weenus - main chat interface
+- **Model Library**: Your Weenus collection - view installed models
+- **Settings**: Personalize Your Weenus - configure app and model parameters
 
 ## 🎯 Key Features
 
 ### Chat Interface
-- Real-time streaming responses
-- Message history and persistence
-- File upload support (coming soon)
-- Multiple conversation management
+- **Real-time Streaming**: Watch AI responses appear as they're generated
+- **Model Selection**: Choose which AI model to chat with
+- **Parameter Adjustment**: Quick tweak parameters for each conversation
+- **Message History**: All messages are saved and persistent
+- **Loading Messages**: Fun "Weenus is thinking" messages while waiting for responses
+
+### Model Parameters
+**Configure per-model settings for fine-grained control:**
+- **Temperature** (0.0-2.0): How creative/random the AI is
+  - Low (0.1): Predictable, focused responses
+  - High (1.8): Creative, varied responses
+- **Top P** (0.0-1.0): Diversity of word choices
+- **Top K** (1-100): How many candidate words to consider
+- **Repeat Penalty** (0.5-2.0): Avoid repetitive responses
+- **Max Tokens** (100-8192): Maximum response length in tokens
+
+**How to customize:**
+1. Go to **Settings > Parameters**
+2. Select a model from dropdown
+3. Adjust sliders to your preference
+4. Click **Save** to persist settings
+5. Settings apply automatically to all future chats with that model
 
 ### Sidebar Navigation
-- **Expanded**: Full navigation with labels and descriptions
-- **Collapsed**: Compact mode with icon-only navigation
-- **AI Icon**: Click the sparkly logo when collapsed to expand
+- **Expanded**: Full labels with cute Weenus descriptions
+- **Collapsed**: Icon-only compact mode
+- **Toggle**: Click the bunny icon to expand/collapse
 
 ### Window Controls
 - **Minimize**: Reduce to taskbar
-- **Maximize**: Full screen toggle
+- **Maximize**: Toggle full screen
 - **Close**: Exit application
-- **Draggable**: Click and drag the header area to move window
+- **Draggable**: Click and drag the header to move window
 
-### Status Bar
-- **Connection Status**: Real-time Ollama connection monitoring
-- **System Info**: Performance metrics and resource usage
-- **Version Info**: Application version and build information
+## 🧪 Testing Parameters (Advanced)
 
-## 🎨 Customization
+Want to verify your parameter settings are working? Try this:
 
-### Theme Options
-- **Dark Mode**: Default purple-tinted dark theme with pink accents
-- **Light Mode**: Cream backgrounds with consistent pink accents
-- **System**: Automatically match your OS theme preference
-
-### Sidebar Behavior
-- **Auto-collapse**: Sidebar can be set to collapse automatically
-- **Persistent**: Remember expanded/collapsed state between sessions
-- **Responsive**: Automatically adapts to window size
-
-## 🔧 Settings Configuration
-
-### Ollama Connection
-- **API URL**: Configure custom Ollama server (default: localhost:11434)
-- **Timeout**: Adjust connection timeout settings
-- **Retry Logic**: Configure automatic reconnection attempts
-
-### Performance
-- **GPU Acceleration**: Enable/disable GPU usage
-- **Memory Limits**: Set memory usage boundaries
-- **Request Concurrency**: Control simultaneous requests
-
-### Interface
-- **Font Size**: Adjust text size for readability
-- **Animation Speed**: Control transition and animation timing
-- **Compact Mode**: Toggle condensed interface elements
+1. Set **Temperature to 0.1**, Save, ask "Count to 10" → Should be identical each time
+2. Set **Temperature to 1.8**, Save, ask same question → Should vary wildly each time
+3. Set **Max Tokens to 50**, Save, ask a long question → Response cuts off early
+4. Set **Max Tokens to 2000**, Save, ask same question → Full response appears
 
 ## 🆘 Troubleshooting
 
 ### Connection Issues
-- **Ollama Not Running**: Start Ollama service (`ollama serve`)
-- **Port Conflicts**: Check if port 11434 is available
-- **Firewall**: Ensure local connections are allowed
+- **"Ollama Not Running"**: Start Ollama manually with `ollama serve` in terminal
+- **"No models available"**: Download a model with `ollama pull llama2`
+- **Port Conflicts**: Check if port 11434 is available (default Ollama port)
 
-### Performance Issues
-- **High Memory Usage**: Close unused models or reduce concurrency
-- **Slow Responses**: Check model size and system resources
-- **GPU Issues**: Disable GPU acceleration in settings if problematic
+### Chat Issues
+- **Streaming Stops**: Refresh connection or switch models
+- **Slow Responses**: Check system resources (CPU/RAM) and model size
+- **Parameters Not Changing Results**: Make sure parameters are saved (green Save button)
 
-### Interface Issues
-- **Window Controls Not Working**: Restart application (known issue being investigated)
-- **Sidebar Stuck**: Click the AI logo or use keyboard shortcut
-- **Theme Problems**: Reset to default theme in settings
+### Performance
+- **High Memory**: Smaller models like `mistral` use less RAM than `llama2`
+- **Fast GPU**: Enable GPU acceleration in Ollama settings
+- **Slow Chat**: Check if Ollama is running smoothly (monitor terminal output)
 
-## 🎓 Tips & Tricks
+## 💡 Tips & Tricks
 
 ### Productivity Tips
-- **Keyboard Shortcuts**: Learn common shortcuts for faster navigation
-- **Model Switching**: Quickly switch between models for different tasks
-- **Chat Organization**: Use descriptive names for chat sessions
+- **Quick Parameter Tweaks**: Use per-chat parameter selector to adjust mid-conversation
+- **Model Switching**: Switch between models to compare responses on same question
+- **Temperature Experiments**: Low temp for facts, high temp for creative writing
 
-### Performance Tips
-- **Model Management**: Keep only needed models downloaded
-- **Resource Monitoring**: Watch system usage in status bar
-- **Batch Operations**: Process multiple requests efficiently
+### Best Practices
+- **Save Parameters**: Save your favorite setups in Settings for consistency
+- **Monitor Resources**: Watch system usage if running large models
+- **Multiple Models**: Keep smaller models for quick responses, large ones for quality
 
 ## 🔮 Coming Soon
 
 ### Planned Features
-- **File Upload**: Attach documents and images to chats
-- **Voice Input**: Speak to AI models directly
+- **Model Download**: Download new models directly from Ollama registry or Hugging Face
+- **More Bunny Theme**: Additional cute Weenus-themed messaging and UI elements
+- **Chat Management**: Better organization and search of past conversations
 - **Export Options**: Save conversations in various formats
-- **Plugin System**: Extend functionality with custom plugins
-- **Collaborative Features**: Share models and conversations
-
-### UI Improvements
-- **More Themes**: Additional color schemes and customization options
-- **Advanced Layouts**: Customizable workspace arrangements
-- **Accessibility**: Enhanced screen reader and keyboard navigation
 
 ## 📞 Support
 
 ### Getting Help
-- **Documentation**: Check the docs folder for technical details
-- **Issue Tracking**: Report bugs through the issue tracker
-- **Community**: Join discussions with other users
-
-### Providing Feedback
-Your feedback helps improve Weenus AI! Let us know about:
-- **Feature Requests**: What would make your workflow better?
-- **Bug Reports**: Any issues or unexpected behavior?
-- **UI Feedback**: How can we improve the interface?
+- **Ollama Docs**: https://ollama.ai for model information and help
+- **Issue Tracker**: Report bugs through the issue tracker
+- **Settings Reset**: Clear app data by deleting the Weenus AI config folder
 
 ---
 
-*Enjoy using Weenus AI! We hope it enhances your AI interaction experience.* ✨
+*Enjoy chatting with your Weenus AI! Have fun exploring what local AI can do.* ✨

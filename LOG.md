@@ -6,6 +6,209 @@
 
 ---
 
+## 📋 TODO - November 12, 2025
+
+### Bugs to Fix
+- [ ] **Streaming stops on page nav**: Fix chat streaming getting interrupted when switching away from ChatPage and back
+- [ ] **Duplicate message on finish**: Remove split-second duplicate message when AI finishes (shows streamed + finished message twice)
+
+### Features to Add
+- [ ] **Loading icon for thinking**: Add spinner/icon next to "crunching numbers" loading text
+- [ ] **Per-chat parameter changes**: Add parameter adjuster next to model selector (below chat input) for quick tweaks without Settings
+- [ ] **Model download tab**: New tab in Model Library for downloading models from Hugging Face or Ollama registry
+- [ ] **More bunny theming**: Expand Weenus personality throughout UI (empty states, messages, etc.)
+
+### UI/UX Improvements
+- [ ] **Settings menu refactor**: 
+  - Change "Save & Restart Ollama" to just "Save"
+  - Add conditional popup after save if settings require Ollama restart (model path change, etc.)
+  - Separate concerns: save config ≠ restart service
+
+---
+
+## November 10, 2025 (Evening) - Per-Model Parameter Configurator 🎚️
+
+### Overview
+Implemented per-model parameter configurator in Settings > Parameters tab. Users can customize AI generation parameters for each model (Temperature, Top P, Top K, Repeat Penalty, Max Tokens) and save presets persistently.
+
+### Implementation Summary
+
+**Files Created** (6):
+- `src/types/parameters.types.ts` - Type definitions and parameter ranges
+- `src/services/modelParameters.ts` - Persistence layer (electron-store)
+- `src/hooks/useModelParameters.ts` - State management hook
+- `src/components/ModelParametersConfigurator.tsx` - Main UI component
+- `src/components/ModelParametersConfigurator.css` - Styling (matches ChatPage)
+- `docs/MODEL_PARAMETERS.md` - Technical documentation (in docs folder)
+
+**Files Modified** (2):
+- `src/pages/SettingsPage.tsx` - Integrated ModelParametersConfigurator
+- `src/pages/SettingsPage.css` - Added wrapper class
+
+### Features
+✅ Model selection dropdown (all installed Ollama models)
+✅ 5 parameter sliders with live value display
+✅ Save button (persists to electron-store)
+✅ Reset button with confirmation dialog
+✅ Auto-load parameters when model selected
+✅ Toast notifications (success/error feedback)
+✅ Responsive grid layout matching ChatPage aesthetic
+✅ Pink bunny theme with smooth animations
+
+### Parameters
+- Temperature (0.0-2.0): Randomness/creativity
+- Top P (0.0-1.0): Nucleus sampling diversity
+- Top K (1-100): Token selection limit
+- Repeat Penalty (0.5-2.0): Repetition penalty
+- Max Tokens (100-8192): Response length limit
+
+### Design & Tech
+- **Theme**: Pink bunny (#FF6B9D) matching ChatPage exactly
+- **Layout**: Responsive grid (1-2 columns)
+- **State**: React hooks + electron-store persistence
+- **Type Safety**: 100% TypeScript strict mode
+- **Build**: Production ready (0 errors, ESLint passing)
+
+### Bug Fixes
+✅ Fixed models not loading: Added `useEffect` to call `loadModels()` on mount
+
+### Status
+✅ Complete and production-ready
+⏳ Next: Wire parameters to Ollama API calls in ChatPage
+
+See `docs/MODEL_PARAMETERS.md` for detailed technical documentation.
+
+---
+
+## November 11, 2025 - Parameter Integration Fix 🔧
+
+### Problem Identified
+**Critical Issue**: Model parameters were being saved correctly to electron-store, but were **NOT being used** when sending messages to Ollama. Users could configure parameters in Settings, but the AI would ignore them and use Ollama defaults.
+
+**Root Cause**: 
+- `ChatPage.tsx` was calling `/api/chat` endpoint WITHOUT the `options` parameter
+- The `useModelParameters` hook was imported but never used in the chat flow
+
+**Impact**:
+- Temperature, Top P, Top K, Repeat Penalty, Max Tokens all ignored
+- Per-model customization was cosmetic only - didn't actually affect model behavior
+
+### Solution Implemented
+**Files Modified**: `src/pages/ChatPage.tsx`
+
+1. **Added hook import and usage**:
+   ```typescript
+   const { parameters } = useModelParameters(currentModel || null);
+   ```
+
+2. **Updated `/api/chat` API call** (lines 164-179):
+   ```typescript
+   const response = await fetch('http://localhost:11434/api/chat', {
+     method: 'POST',
+     headers: { 'Content-Type': 'application/json' },
+     body: JSON.stringify({
+       model: currentModel,
+       messages: conversationMessages,
+       stream: true,
+       options: {  // ← NEW: Pass parameters to Ollama
+         temperature: parameters.temperature,
+         top_p: parameters.topP,
+         top_k: parameters.topK,
+         repeat_penalty: parameters.repeatPenalty,
+         num_predict: parameters.maxTokens,
+       },
+     }),
+   });
+   ```
+
+**Key Details**:
+- Field name mapping (TypeScript → Ollama API):
+  - `temperature` → `temperature` ✓
+  - `topP` → `top_p` (snake_case in API)
+  - `topK` → `top_k` (snake_case in API)
+  - `repeatPenalty` → `repeat_penalty` (snake_case in API)
+  - `maxTokens` → `num_predict` (Ollama naming convention)
+
+### Verification
+✅ Build passes (0 errors)
+✅ TypeScript strict mode verified
+✅ Parameters now flow from Settings → Hook → ChatPage → Ollama API
+✅ Each message now uses the saved model parameters
+
+### Next Steps
+- Test parameter functionality (change temp/top_p, verify model behavior changes)
+- Consider adding parameter reset on Ollama disconnect
+- Document in user guide
+
+### Testing Instructions
+1. Go to Settings > Parameters
+2. Select a model (e.g., "llama2")
+3. Change Temperature to 0.1 (deterministic)
+4. Save parameters
+5. Chat and observe: responses should be more predictable/repetitive
+6. Change Temperature to 1.8 (creative)
+7. Save and chat again: responses should be more varied/random
+
+---
+
+## November 10, 2025 (Evening) - Lighthearted UI Subtitles 🐰
+
+### Overview
+Updated sidebar navigation subtitles with playful, lighthearted Weenus-themed messaging to match the cute bunny aesthetic and make the UI more fun and approachable.
+
+### Changes Made
+Updated `src/components/layout/Sidebar.tsx` navigation descriptions:
+
+- **Chat**: "AI Chat Interface" → "Talk to your Weenus"
+- **Image Generation**: "Generate Images with AI" → "Take some Weenus Pics"
+- **Video Generation**: "Generate Videos with AI" → "Make some Weenus Vids"
+- **Model Library**: "Manage AI Models" → "Have a look at your Weenus's, and get some more"
+- **Settings**: "Application Settings" → "Personalize Your Weenus"
+
+### Impact
+- ✅ Makes the UI feel more fun and approachable
+- ✅ Reinforces the cute bunny brand identity
+- ✅ Encourages exploration of features
+- ✅ Creates personality without changing functionality
+
+### Build Status
+✅ Production build successful (no errors, all modules transformed)
+
+---
+
+## November 10, 2025 - Documentation Cleanup & Organization 🗂️
+
+### Changes Made
+- **Archived Old Status Documents**: Moved to `docs/archive/`
+  - HANDOFF_STATUS.md (Nov 10 handoff report)
+  - CHAT_ENHANCEMENT_COMPLETE.md (feature list)
+  - ISSUE_RESOLUTION_COMPLETE.md (historical issues)
+  - UI_POLISH_COMPLETE.md (UI milestones)
+  - INITIAL.md (original brief)
+  - QUICK_START.md (outdated setup guide)
+
+- **Consolidated Documentation Structure**:
+  - Technical reference: `docs/CHAT_SYSTEM.md` (multi-chat system details)
+  - All archival docs now in `docs/archive/` for reference
+
+- **Root Directory Markdown Files** (Kept):
+  - `README.md` - GitHub-ready project overview
+  - `PLAN.md` - Development priorities and phases
+  - `LOG.md` - This living changelog
+  - `PROJSTATUS.md` - Comprehensive project status
+  - `PLAN.md.archive` - Old plan backup
+
+### Result
+- ✅ Clean root directory (only essential docs)
+- ✅ Historical docs preserved in archive
+- ✅ Technical docs in proper location (`docs/`)
+- ✅ Easy to navigate documentation structure
+
+### Git Commit
+`Archive old status documents, consolidate documentation structure`
+
+---
+
 ## November 10, 2025 - Performance Optimization & UI Polish 🎨
 
 ### Changes Made

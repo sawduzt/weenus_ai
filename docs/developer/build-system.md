@@ -81,6 +81,7 @@ import { chatSlice } from '@/store/chatSlice'
 - **Base Path**: Relative paths for Electron file:// protocol
 - **No Browser Opening**: Prevents browser launch during development
 - **Environment Variables**: Secure environment variable handling
+- **Icon Support**: Cross-platform icon configuration (`.ico`, `.icns`, `.png`)
 
 ## 🎨 Styling Configuration
 
@@ -224,3 +225,32 @@ graph LR
 ---
 
 *This build documentation is updated when configuration changes are made. Last updated: November 2025*
+
+## 📅 Recent Updates (November 11, 2025)
+
+### ✅ Build System Status
+- **Vite Production Build**: ✅ Successfully compiling (0 errors, 1383 modules)
+- **Electron TypeScript**: ✅ Compiling without errors
+- **Icon Configuration**: ✅ Properly referenced in `electron/main.ts` with path `../../src/assets/icons/icon.png`
+- **Bundle Optimization**: ✅ CSS minified (49KB gzip), JS split across vendor/ui/router/redux chunks
+
+### 🔄 Parameter Integration Build
+The critical parameter wiring fix (integrating `useModelParameters` into ChatPage API calls) compiled successfully:
+- Added `useModelParameters` import and hook usage
+- Updated `/api/chat` fetch to include `options` with all 5 parameters
+- Field name mapping verified:
+  - `temperature` → `temperature`
+  - `topP` → `top_p`
+  - `topK` → `top_k`
+  - `repeatPenalty` → `repeat_penalty`
+  - `maxTokens` → `num_predict`
+
+### 📊 Build Output Summary
+```
+✓ 1383 modules transformed
+build/renderer/index.html              1.46 kB │ gzip:  0.71 kB
+build/renderer/assets/index-*.css     49.11 kB │ gzip:  8.19 kB (styling)
+build/renderer/assets/index-*.js      55.03 kB │ gzip: 14.61 kB (main app)
+build/renderer/assets/vendor-*.js    140.92 kB │ gzip: 45.30 kB (dependencies)
+✓ built in 4.12s
+```

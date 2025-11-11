@@ -43,9 +43,10 @@ The heart of the application containing all TypeScript/React source code.
 #### `src/components/`
 Reusable UI components organized by category.
 - **Purpose**: Promote code reuse and maintain UI consistency
-- **Layout**: MainLayout, Sidebar, StatusBar, WindowControls
-- **UI**: Button, Modal, ChatMessage, ModelSelector
+- **Layout**: MainLayout, Sidebar, StatusBar, WindowControls, ThemeProvider
+- **UI**: Toast/ToastProvider, ToggleSwitch
 - **Naming**: PascalCase (e.g., `ChatMessage.tsx`)
+- **Special**: ModelParametersConfigurator for per-model parameter UI
 
 #### `src/styles/`
 Global CSS, theme definitions, and design system.
@@ -62,7 +63,10 @@ Main application views and page-level components.
 #### `src/services/`
 External service integrations and API clients.
 - **Purpose**: Abstraction layer for external dependencies
-- **Examples**: OllamaService, HuggingFaceAPI, FileSystem
+- **Examples**: 
+  - `chat.ts` - Chat service (persistence and chat management)
+  - `ollama.ts` - Ollama API client (model fetching, connection checks)
+  - `modelParameters.ts` - Per-model parameter storage and management
 - **Pattern**: Service classes with clear interfaces
 
 #### `src/store/`
@@ -80,7 +84,10 @@ Helper functions, utilities, and shared logic.
 #### `src/types/`
 TypeScript type definitions and interfaces.
 - **Purpose**: Type safety and code documentation
-- **Structure**: Domain-specific type files
+- **Files**: 
+  - `chat.types.ts` - Chat session, message, and storage types
+  - `global.types.ts` - App-wide type definitions
+  - `parameters.types.ts` - Model parameters and ranges
 - **Naming**: Descriptive names with `.types.ts` suffix
 
 #### `src/assets/`
@@ -168,7 +175,36 @@ Every major component and service is documented as it's created.
 
 *This structure document is updated as the project evolves. Last updated: November 2025*
 
-## 📅 Recent Changes (November 9, 2025) - COMPLETE PROJECT IMPLEMENTATION
+## 📅 Recent Changes (November 10-11, 2025) - Per-Model Parameters & Bug Fixes
+
+### ✅ Model Parameters System (COMPLETE)
+- **`src/types/parameters.types.ts`**: Type definitions and ranges for 5 parameters
+- **`src/services/modelParameters.ts`**: Persistence layer with electron-store
+- **`src/hooks/useModelParameters.ts`**: React state management hook
+- **`src/components/ModelParametersConfigurator.tsx`**: Settings UI component
+- **Integration**: Fixed! Parameters now properly passed to Ollama `/api/chat` endpoint
+- **Testing**: Verified temperature changes produce expected behavior changes
+
+### ✅ Chat System (FULLY FUNCTIONAL)
+- **`src/services/chat.ts`**: Chat persistence, message management, title generation
+- **`src/pages/ChatPage.tsx`**: Main chat interface with streaming, model selection
+- **Features**: Message history, persistent storage, cute loading messages
+- **Parameters**: Now integrated into API calls with correct field name mappings
+
+### ✅ UI Enhancements
+- **App Icon**: Custom bunny rabbit icon in Windows taskbar/macOS dock
+- **Weenus Theming**: Playful sidebar descriptions ("Talk to your Weenus", etc.)
+- **Window Controls**: Custom frameless window controls
+- **Pink Theme**: #FF6B9D primary color throughout
+
+### 📋 Outstanding TODO (November 12)
+- [ ] Fix streaming interruption on ChatPage navigation
+- [ ] Remove duplicate message flash on completion
+- [ ] Add spinner to loading messages
+- [ ] Per-chat parameter quick-adjust selector
+- [ ] Model download tab (Ollama registry)
+- [ ] Settings refactor (separate save from restart)
+- [ ] Additional bunny theming throughout
 
 ### 🚀 MAJOR MILESTONE: Full Application Foundation Built in Single Session
 

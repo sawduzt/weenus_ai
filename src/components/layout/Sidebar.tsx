@@ -48,31 +48,31 @@ const navigationItems: NavigationItem[] = [
     id: 'chat',
     label: 'Chat',
     icon: MessageCircle,
-    description: 'AI Chat Interface',
+    description: 'Talk to your Weenus',
   },
   {
     id: 'image-gen',
     label: 'Image Generation',
     icon: Image,
-    description: 'Generate Images with AI',
+    description: 'Take some Weenus Pics',
   },
   {
     id: 'video-gen',
     label: 'Video Generation',
     icon: Video,
-    description: 'Generate Videos with AI',
+    description: 'Make some Weenus Vids',
   },
   {
     id: 'models',
     label: 'Model Library',
     icon: Bot,
-    description: 'Manage AI Models',
+    description: 'Your Weenus collection',
   },
   {
     id: 'settings',
     label: 'Settings',
     icon: Settings,
-    description: 'Application Settings',
+    description: 'Personalize Your Weenus',
   },
 ];
 

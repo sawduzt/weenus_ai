@@ -95,6 +95,10 @@
   /* Reduced padding and use min-height for full container */
 }
 
+.settings-panel.parameters-panel-wrapper {
+  padding: 0;
+}
+
 .settings-panel h2 {
   margin: 0 0 var(--spacing-lg) 0;
   color: var(--text-primary);

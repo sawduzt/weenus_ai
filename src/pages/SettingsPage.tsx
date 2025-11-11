@@ -8,6 +8,7 @@
 import { useState, useEffect } from 'react';
 import { FolderOpen, Save, Settings as SettingsIcon, Bot, Sliders, Wrench, Download, Upload, RotateCcw } from 'lucide-react';
 import { useToast } from '../components/ui/ToastProvider';
+import { ModelParametersConfigurator } from '../components/ModelParametersConfigurator';
 import './SettingsPage.css';
 
 export interface SettingsPageProps {
@@ -339,98 +340,8 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
 
           {/* Parameter Settings */}
           {activeTab === 'parameters' && (
-            <div className="settings-panel">
-              <h2>Model Parameters</h2>
-              
-              <div className="setting-group">
-                <label className="setting-label">
-                  Max Tokens: {settings.maxTokens}
-                  <input
-                    type="range"
-                    min="100"
-                    max="8192"
-                    step="100"
-                    value={settings.maxTokens}
-                    onChange={(e) => updateSetting('maxTokens', parseInt(e.target.value))}
-                    className="setting-slider"
-                  />
-                </label>
-                <p className="setting-description">
-                  Maximum number of tokens to generate
-                </p>
-              </div>
-
-              <div className="setting-group">
-                <label className="setting-label">
-                  Temperature: {settings.temperature}
-                  <input
-                    type="range"
-                    min="0"
-                    max="2"
-                    step="0.1"
-                    value={settings.temperature}
-                    onChange={(e) => updateSetting('temperature', parseFloat(e.target.value))}
-                    className="setting-slider"
-                  />
-                </label>
-                <p className="setting-description">
-                  Controls randomness in responses (0.0 = deterministic, 2.0 = very creative)
-                </p>
-              </div>
-
-              <div className="setting-group">
-                <label className="setting-label">
-                  Top P: {settings.topP}
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.05"
-                    value={settings.topP}
-                    onChange={(e) => updateSetting('topP', parseFloat(e.target.value))}
-                    className="setting-slider"
-                  />
-                </label>
-                <p className="setting-description">
-                  Nucleus sampling parameter (lower = more focused)
-                </p>
-              </div>
-
-              <div className="setting-group">
-                <label className="setting-label">
-                  Top K: {settings.topK}
-                  <input
-                    type="range"
-                    min="1"
-                    max="100"
-                    step="1"
-                    value={settings.topK}
-                    onChange={(e) => updateSetting('topK', parseInt(e.target.value))}
-                    className="setting-slider"
-                  />
-                </label>
-                <p className="setting-description">
-                  Limits token selection to top K choices
-                </p>
-              </div>
-
-              <div className="setting-group">
-                <label className="setting-label">
-                  Repeat Penalty: {settings.repeatPenalty}
-                  <input
-                    type="range"
-                    min="0.5"
-                    max="2"
-                    step="0.1"
-                    value={settings.repeatPenalty}
-                    onChange={(e) => updateSetting('repeatPenalty', parseFloat(e.target.value))}
-                    className="setting-slider"
-                  />
-                </label>
-                <p className="setting-description">
-                  Penalty for repeating tokens (1.0 = no penalty)
-                </p>
-              </div>
+            <div className="settings-panel parameters-panel-wrapper">
+              <ModelParametersConfigurator />
             </div>
           )}
 

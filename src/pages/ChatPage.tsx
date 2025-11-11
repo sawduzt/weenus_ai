@@ -8,6 +8,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Send, User, Bot, RefreshCw, MessageCircle, Lightbulb } from 'lucide-react';
 import { useOllama } from '../hooks/useOllama';
 import { useChat } from '../hooks/useChat';
+import { useModelParameters } from '../hooks/useModelParameters';
 import { useToast } from '../components/ui/ToastProvider';
 import { WindowControls } from '../components/layout/WindowControls';
 import { chatService } from '../services/chat';
@@ -42,6 +43,9 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   } = useOllama();
 
   const { activeChat, switchChat, createNewChat, refreshChats } = useChat();
+  
+  // Load model parameters for the currently selected model
+  const { parameters } = useModelParameters(currentModel || null);
 
   // Get messages from active chat or empty array
   const messages = activeChat?.messages || [];
@@ -161,7 +165,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
         { role: 'user' as const, content: userInput }
       ];
 
-      // Generate AI response using /api/chat endpoint
+      // Generate AI response using /api/chat endpoint with model parameters
       let fullResponse = '';
       const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
@@ -170,6 +174,13 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           model: currentModel,
           messages: conversationMessages,
           stream: true,
+          options: {
+            temperature: parameters.temperature,
+            top_p: parameters.topP,
+            top_k: parameters.topK,
+            repeat_penalty: parameters.repeatPenalty,
+            num_predict: parameters.maxTokens,
+          },
         }),
       });
 
