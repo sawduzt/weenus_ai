@@ -86,6 +86,7 @@ function App(): JSX.Element {
           <SettingsPage 
             onThemeChange={handleThemeChange} 
             onHardwareAccelerationChange={handleHardwareAccelerationChange}
+            onShowOnboarding={() => setOnboardingOpen(true)}
           />
         );
       case 'models':

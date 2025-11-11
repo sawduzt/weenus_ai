@@ -10,12 +10,12 @@ import { FolderOpen, Save, Settings as SettingsIcon, Bot, Sliders, Wrench, Downl
 import { useToast } from '../components/ui/ToastProvider';
 import { ToggleSwitch } from '../components/ui/ToggleSwitch';
 import { ModelParametersConfigurator } from '../components/ModelParametersConfigurator';
-import { useOnboarding } from '../hooks/useOnboarding';
 import './SettingsPage.css';
 
 export interface SettingsPageProps {
   onThemeChange: (theme: string) => void;
   onHardwareAccelerationChange: (enabled: boolean) => void;
+  onShowOnboarding?: () => void;
 }
 
 interface Settings {
@@ -46,14 +46,13 @@ const defaultSettings: Settings = {
   repeatPenalty: 1.1,
 };
 
-export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: SettingsPageProps): JSX.Element {
+export function SettingsPage({ onThemeChange, onHardwareAccelerationChange, onShowOnboarding }: SettingsPageProps): JSX.Element {
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const [activeTab, setActiveTab] = useState<string>('general');
   const [isSaving, setIsSaving] = useState(false);
   const [showRestartPrompt, setShowRestartPrompt] = useState(false);
   const [prevModelPath, setPrevModelPath] = useState<string>('');
   const toast = useToast();
-  const { showOnboarding } = useOnboarding();
 
   // Load settings from electron store on mount
   useEffect(() => {
@@ -288,7 +287,7 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
 
               <div className="setting-group">
                 <button
-                  onClick={() => showOnboarding()}
+                  onClick={() => onShowOnboarding?.()}
                   style={{
                     padding: '12px 16px',
                     display: 'flex',
