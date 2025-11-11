@@ -1,126 +1,249 @@
-# 🧠 Weenus AI
+# Weenus AI 🐰# 🧠 Weenus AI
 
-> *A sleek, modern desktop AI application featuring chat, image generation, and comprehensive model management*
 
-<div align="center">
 
-![Weenus AI Logo](src/assets/images/logo.png)
+A cute, lightweight desktop app for chatting with local AI models via Ollama. Built with TypeScript, Electron, and React.> *A sleek, modern desktop AI application featuring chat, image generation, and comprehensive model management*
+
+
+
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](package.json)<div align="center">
+
+[![License](https://img.shields.io/badge/license-GNU%20AGPLv3-green.svg)](LICENSE)
+
+[![TypeScript](https://img.shields.io/badge/typescript-5.2.2-blue.svg)](https://www.typescriptlang.org/)![Weenus AI Logo](src/assets/images/logo.png)
+
+[![Electron](https://img.shields.io/badge/electron-27.0.0-purple.svg)](https://www.electronjs.org/)
 
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](package.json)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/typescript-5.2.2-blue.svg)](https://www.typescriptlang.org/)
-[![Electron](https://img.shields.io/badge/electron-27.0.0-purple.svg)](https://www.electronjs.org/)
-[![React](https://img.shields.io/badge/react-18.2.0-cyan.svg)](https://reactjs.org/)
 
-*Beautiful • Powerful • Simple*
+## What it does[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+[![TypeScript](https://img.shields.io/badge/typescript-5.2.2-blue.svg)](https://www.typescriptlang.org/)
+
+- 💬 **Chat with local AI**: Stream responses from Ollama in real-time[![Electron](https://img.shields.io/badge/electron-27.0.0-purple.svg)](https://www.electronjs.org/)
+
+- 🤖 **Model switching**: Use any Ollama model you've downloaded[![React](https://img.shields.io/badge/react-18.2.0-cyan.svg)](https://reactjs.org/)
+
+- ⚙️ **Per-model settings**: Fine-tune temperature, response length, creativity for each model
+
+- 💾 **Chat history**: All conversations are saved automatically*Beautiful • Powerful • Simple*
+
+- 🐰 **Cute UI**: Dark theme with pink accents and a bunny icon
 
 </div>
 
+## Status
+
 ## 🚀 Development Status
 
-**Current Status: Ollama Integration Complete - Fully Functional Chat!** 
+**Working** (November 11, 2025):
 
-### ✅ **MILESTONE: Complete Ollama Integration (November 10, 2025)**
+- ✅ Streaming chat with Ollama**Current Status: Ollama Integration Complete - Fully Functional Chat!** 
 
-**🎯 Phase 1, 2, 3 & 4 - COMPLETE**
-- ✅ **Project Foundation**: Complete TypeScript + Electron + React setup
-- ✅ **Code Quality**: ESLint, Prettier, comprehensive linting configured  
+- ✅ Model selection and switching
+
+- ✅ Per-model parameter configuration (temperature, top-p, top-k, repeat penalty, max tokens)### ✅ **MILESTONE: Complete Ollama Integration (November 10, 2025)**
+
+- ✅ Custom window controls (minimize, maximize, close)
+
+- ✅ Settings panel with Ollama path config**🎯 Phase 1, 2, 3 & 4 - COMPLETE**
+
+- ✅ Message persistence with electron-store- ✅ **Project Foundation**: Complete TypeScript + Electron + React setup
+
+- ✅ Cute bunny theme throughout- ✅ **Code Quality**: ESLint, Prettier, comprehensive linting configured  
+
 - ✅ **Ollama Integration**: Full API client with connection monitoring, auto-start, auto-restart
-- ✅ **React Hooks**: `useOllama` for connection, models, and streaming chat
-- ✅ **UI Framework**: Modern layout with Windows Mica effects and pink theme
-- ✅ **Theming System**: Cute pink theme with light/dark variants, green connection indicator
-- ✅ **Professional Icons**: Complete Lucide React vector icon system (bunny logo!)
-- ✅ **Custom Window Controls**: Minimize, maximize, close buttons (fully functional)
+
+**In progress**:- ✅ **React Hooks**: `useOllama` for connection, models, and streaming chat
+
+- 🔄 Fix streaming interruption when navigating pages- ✅ **UI Framework**: Modern layout with Windows Mica effects and pink theme
+
+- 🔄 Add loading spinner animations- ✅ **Theming System**: Cute pink theme with light/dark variants, green connection indicator
+
+- 🔄 Quick parameter tweaks during chat- ✅ **Professional Icons**: Complete Lucide React vector icon system (bunny logo!)
+
+- 🔄 Model download feature from Ollama registry- ✅ **Custom Window Controls**: Minimize, maximize, close buttons (fully functional)
+
 - ✅ **Navigation**: Responsive sidebar with enhanced collapse/expand UX
-- ✅ **Application Pages**: Chat, Settings, Model Library, Image Gen, Video Gen
+
+## Getting started- ✅ **Application Pages**: Chat, Settings, Model Library, Image Gen, Video Gen
+
 - ✅ **Frameless Design**: Custom title bar with draggable regions
-- ✅ **Enhanced Spacing**: Proper padding and rounded corners throughout
-- ✅ **UI Polish Complete**: No emojis, consistent iconography, rounded chat interface
-- ✅ **Chat Interface**: Real-time streaming chat with message bubbles, model selector, clear button
-- ✅ **Model Library**: Display installed models with metadata (name, size, modified date)
+
+### Prerequisites- ✅ **Enhanced Spacing**: Proper padding and rounded corners throughout
+
+- Node.js 18+- ✅ **UI Polish Complete**: No emojis, consistent iconography, rounded chat interface
+
+- Ollama (get it from [ollama.ai](https://ollama.ai))- ✅ **Chat Interface**: Real-time streaming chat with message bubbles, model selector, clear button
+
+- At least one AI model installed (`ollama pull llama2`, etc.)- ✅ **Model Library**: Display installed models with metadata (name, size, modified date)
+
 - ✅ **Auto-Start Ollama**: One-click button to launch Ollama service automatically
-- ✅ **Connection Status**: Real-time connection indicator in status bar (red/green)
+
+### Install & Run- ✅ **Connection Status**: Real-time connection indicator in status bar (red/green)
+
 - ✅ **Settings**: Model path configuration with folder picker and auto-restart
 
-### 🎉 **Working Features**
-- 💬 **Streaming Chat**: Real-time responses from Ollama models
+```bash
+
+# Install dependencies### 🎉 **Working Features**
+
+npm install- 💬 **Streaming Chat**: Real-time responses from Ollama models
+
 - 🤖 **Model Selection**: Switch between installed models on-the-fly
-- 📦 **Model Library**: View all installed models with details
-- 🟢 **Connection Monitor**: Live status indicator showing Ollama connection
+
+# Start dev environment (Vite + Electron)- 📦 **Model Library**: View all installed models with details
+
+npm run dev- 🟢 **Connection Monitor**: Live status indicator showing Ollama connection
+
 - ▶️ **Auto-Start**: Click "Start Ollama" to launch service automatically
-- 📁 **Custom Model Path**: Configure where models are stored
-- 🔄 **Auto-Restart**: Save settings and restart Ollama with new configuration
-- 🗑️ **Clear Chat**: Reset conversation history
 
-### 📅 **Next Phase (Ready to Begin)**
-- **Phase 5**: Chat History Persistence (save/load conversations)
-- **Phase 6**: Media Generation Features (Image/Video)  
-- **Phase 7**: Advanced Features (Statistics, Widgets)
+# Build for production- 📁 **Custom Model Path**: Configure where models are stored
+
+npm run build- 🔄 **Auto-Restart**: Save settings and restart Ollama with new configuration
+
+```- 🗑️ **Clear Chat**: Reset conversation history
+
+
+
+The app will:### 📅 **Next Phase (Ready to Begin)**
+
+1. Try to connect to Ollama on `localhost:11434`- **Phase 5**: Chat History Persistence (save/load conversations)
+
+2. Load your installed models- **Phase 6**: Media Generation Features (Image/Video)  
+
+3. Let you start chatting- **Phase 7**: Advanced Features (Statistics, Widgets)
+
 - **Phase 8**: Polish & Enhancement
-- **Phase 9**: Testing & Documentation
 
----
+If Ollama isn't running, there's a "Start Ollama" button in the app.- **Phase 9**: Testing & Documentation
 
-### 🎯 Core Capabilities
+
+
+## Features explained---
+
+
+
+### Per-model parameters### 🎯 Core Capabilities
+
 - **💬 Advanced Chat Interface**: Seamless conversations with local AI models
-- **🖼️ Image Generation**: Create stunning visuals with AI-powered tools
-- **🎥 Video Generation**: Generate videos with cutting-edge AI models
-- **🤖 Model Management**: Download, configure, and switch between AI models effortlessly
-- **📊 Real-time Statistics**: Monitor GPU usage, VRAM, tokens/second, and performance metrics
-- **🎨 Beautiful UI**: Modern design with Windows Mica effects, rounded corners, and customizable themes
-- **🐰 Bunny Logo**: Cute rabbit icon replacing generic sparkles for unique branding
 
-### 🚀 Advanced Features
+Go to Settings → Parameters to customize each model:- **🖼️ Image Generation**: Create stunning visuals with AI-powered tools
+
+- **Temperature** (0.0-2.0): How creative/random responses are- **🎥 Video Generation**: Generate videos with cutting-edge AI models
+
+- **Top P** (0.0-1.0): Diversity in word choice- **🤖 Model Management**: Download, configure, and switch between AI models effortlessly
+
+- **Top K** (1-100): How many candidate words to consider- **📊 Real-time Statistics**: Monitor GPU usage, VRAM, tokens/second, and performance metrics
+
+- **Repeat Penalty** (0.5-2.0): Avoid repetitive responses- **🎨 Beautiful UI**: Modern design with Windows Mica effects, rounded corners, and customizable themes
+
+- **Max Tokens** (100-8192): Maximum response length- **🐰 Bunny Logo**: Cute rabbit icon replacing generic sparkles for unique branding
+
+
+
+Settings are saved and used for every chat with that model.### 🚀 Advanced Features
+
 - **📁 File Upload Support**: Chat with documents, images, and other files
-- **💾 Persistent Chat History**: Never lose your conversations
+
+### Window controls- **💾 Persistent Chat History**: Never lose your conversations
+
 - **⚙️ Per-Model Parameters**: Fine-tune settings for each AI model
-- **🔌 Widget System**: Customizable, toggleable UI components
+
+Custom minimize/maximize/close buttons in the title bar. Click and drag the header to move the window.- **🔌 Widget System**: Customizable, toggleable UI components
+
 - **🌐 Network Access**: Optional web interface for multi-device access
-- **🎭 Theme Customization**: Multiple themes with custom theme creation
+
+### Model library- **🎭 Theme Customization**: Multiple themes with custom theme creation
+
 - **⌨️ Keyboard Shortcuts**: Efficient workflow with hotkeys
+
+View all your installed Ollama models with metadata. Download more models directly from the Ollama CLI.
 
 ## 🖥️ Screenshots
 
+## Architecture
+
 *Screenshots will be added as the application develops*
 
-## 📋 Requirements
+- **Electron**: Desktop app framework with custom window chrome
 
-### System Requirements
-- **OS**: Windows 10/11, macOS 10.15+, or Linux (Ubuntu 18.04+)
-- **RAM**: 8GB minimum, 16GB recommended
+- **React 18**: UI components and state management## 📋 Requirements
+
+- **TypeScript**: Full type safety, strict mode
+
+- **Vite**: Fast builds and hot reload development### System Requirements
+
+- **electron-store**: Simple JSON storage for settings and chat history- **OS**: Windows 10/11, macOS 10.15+, or Linux (Ubuntu 18.04+)
+
+- **Lucide React**: Professional vector icons- **RAM**: 8GB minimum, 16GB recommended
+
 - **Storage**: 2GB for application, additional space for AI models
-- **GPU**: Optional but recommended for enhanced performance
 
-### Dependencies
-- **Node.js**: 18.0.0 or later
-- **npm**: 9.0.0 or later
-- **Ollama**: For AI model backend (automatically detected)
+## Development- **GPU**: Optional but recommended for enhanced performance
 
-## 🚀 Quick Start
+
+
+```bash### Dependencies
+
+npm run dev          # Start with hot reload- **Node.js**: 18.0.0 or later
+
+npm run build        # Production build- **npm**: 9.0.0 or later
+
+npm run lint         # Check code quality- **Ollama**: For AI model backend (automatically detected)
+
+npm run format       # Format with Prettier
+
+npm run test         # Run tests## 🚀 Quick Start
+
+```
 
 ### 1. Clone and Install
-```bash
+
+## Documentation```bash
+
 # Clone the repository
-git clone <repository-url>
-cd weenus-ai
 
-# Install dependencies
+- **[User Guide](docs/user/GETTING_STARTED.md)**: How to use the appgit clone <repository-url>
+
+- **[Project Structure](docs/developer/project-structure.md)**: Code organizationcd weenus-ai
+
+- **[Build System](docs/developer/build-system.md)**: TypeScript & Vite setup
+
+- **[Dependencies](docs/developer/dependencies.md)**: Why we use each package# Install dependencies
+
 npm install
-```
 
-### 2. Start Development
-```bash
-# Start the development environment
-npm run dev
-```
+## What's next```
 
-This will:
+
+
+- Model marketplace (download from Hugging Face, Ollama registry)### 2. Start Development
+
+- Improved error handling and reconnection logic```bash
+
+- More themes and customization options# Start the development environment
+
+- Keyboard shortcutsnpm run dev
+
+- Export conversations```
+
+
+
+## LicenseThis will:
+
 - Launch the Vite development server
-- Start Electron with hot reload
+
+GNU Affero General Public License v3.0 - see [LICENSE](LICENSE) file- Start Electron with hot reload
+
 - Open the Weenus AI application
 
+## Built by
+
 ### 3. First Time Setup
-1. **Install Ollama**: Download from [ollama.ai](https://ollama.ai) if not already installed
+
+Sawduzt, November 20251. **Install Ollama**: Download from [ollama.ai](https://ollama.ai) if not already installed
+
 2. **Start App**: Click "Start Ollama" button in the app, or manually run `ollama serve`
 3. **Download Models**: Use Ollama CLI to pull models:
    ```bash

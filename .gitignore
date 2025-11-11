@@ -169,4 +169,4 @@ docs/.doctrees/
 *.backup
 
 # Electron builder output
-dist_electron
+dist_electronAGENT_CONTEXT.md
