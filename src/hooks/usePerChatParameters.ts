@@ -26,7 +26,7 @@ export function usePerChatParameters(chatId: string | null, currentModel: string
     }
 
     const loadParameters = async () => {
-      const overrides = chatParametersService.getChatParameters(chatId);
+      const overrides = await chatParametersService.getChatParameters(chatId);
 
       if (overrides) {
         const { lastModified, ...params } = overrides;
@@ -50,13 +50,13 @@ export function usePerChatParameters(chatId: string | null, currentModel: string
   }, [chatId, currentModel]);
 
   // Save chat parameter overrides
-  const saveChatParameters = useCallback((parameters: ModelParameters) => {
+  const saveChatParameters = useCallback(async (parameters: ModelParameters) => {
     if (!chatId) {
       console.warn('Cannot save parameters: no active chat');
       return;
     }
 
-    chatParametersService.setChatParameters(chatId, parameters);
+    await chatParametersService.setChatParameters(chatId, parameters);
     setChatParameterOverrides({
       ...parameters,
       lastModified: Date.now(),
@@ -72,7 +72,7 @@ export function usePerChatParameters(chatId: string | null, currentModel: string
       return;
     }
 
-    chatParametersService.clearChatParameters(chatId);
+    await chatParametersService.clearChatParameters(chatId);
     setChatParameterOverrides(null);
     setHasOverrides(false);
 

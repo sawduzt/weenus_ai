@@ -5,7 +5,7 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, User, Bot, RefreshCw, MessageCircle, Lightbulb, Loader, Sliders } from 'lucide-react';
+import { Send, User, Bot, RefreshCw, MessageCircle, Lightbulb, Loader } from 'lucide-react';
 import { useOllama } from '../hooks/useOllama';
 import { useChat } from '../hooks/useChat';
 import { usePerChatParameters } from '../hooks/usePerChatParameters';
@@ -30,14 +30,6 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editedTitle, setEditedTitle] = useState('');
   const [streamingResponse, setStreamingResponse] = useState('');
-  const [showParameterPanel, setShowParameterPanel] = useState(false);
-  const [chatParameters, setChatParameters] = useState({
-    temperature: 0.7,
-    topP: 0.9,
-    topK: 40,
-    repeatPenalty: 1.1,
-    maxTokens: 2048,
-  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const toast = useToast();
   const isFirstMessage = useRef(false);
@@ -800,169 +792,19 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
               ))}
             </select>
           </div>
+
+          {/* Per-Chat Parameter Adjuster */}
+          {currentModel && (
+            <PerChatParameterAdjuster
+              parameters={effectiveParameters}
+              hasOverrides={hasOverrides}
+              onSave={saveChatParameters}
+              onReset={resetToModelDefaults}
+              isExpanded={false}
+            />
+          )}
           
-          {/* Parameter Adjuster Toggle */}
-          <button
-            onClick={() => setShowParameterPanel(!showParameterPanel)}
-            style={{
-              padding: '8px 12px',
-              borderRadius: '12px',
-              border: '2px solid var(--border-primary)',
-              background: showParameterPanel ? 'rgba(255, 107, 157, 0.1)' : 'transparent',
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              fontSize: '13px',
-              fontWeight: '500',
-              transition: 'all 0.2s ease',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--accent-primary)';
-              e.currentTarget.style.background = 'rgba(255, 107, 157, 0.05)';
-            }}
-            onMouseLeave={(e) => {
-              if (!showParameterPanel) {
-                e.currentTarget.style.borderColor = 'var(--border-primary)';
-                e.currentTarget.style.background = 'transparent';
-              }
-            }}
-          >
-            <Sliders size={16} />
-            Parameters
-          </button>
         </div>
-
-        {/* Parameter Adjustment Panel */}
-        {showParameterPanel && (
-          <div style={{
-            padding: '12px 16px',
-            borderRadius: '12px',
-            border: '2px solid var(--border-primary)',
-            background: 'rgba(255, 107, 157, 0.02)',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(5, 1fr)',
-            gap: '12px',
-            animation: 'slideDown 0.2s ease',
-            alignItems: 'end',
-          }}>
-            {/* Temperature Slider */}
-            <div>
-              <label style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
-                Temperature: {chatParameters.temperature.toFixed(2)}
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="2"
-                step="0.1"
-                value={chatParameters.temperature}
-                onChange={(e) => setChatParameters(prev => ({ ...prev, temperature: parseFloat(e.target.value) }))}
-                style={{
-                  width: '100%',
-                  cursor: 'pointer',
-                  marginTop: '6px',
-                }}
-              />
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
-                Creativity
-              </p>
-            </div>
-
-            {/* Top-P Slider */}
-            <div>
-              <label style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
-                Top-P: {chatParameters.topP.toFixed(2)}
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={chatParameters.topP}
-                onChange={(e) => setChatParameters(prev => ({ ...prev, topP: parseFloat(e.target.value) }))}
-                style={{
-                  width: '100%',
-                  cursor: 'pointer',
-                  marginTop: '6px',
-                }}
-              />
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
-                Diversity
-              </p>
-            </div>
-
-            {/* Top-K Slider */}
-            <div>
-              <label style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
-                Top-K: {chatParameters.topK}
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                step="1"
-                value={chatParameters.topK}
-                onChange={(e) => setChatParameters(prev => ({ ...prev, topK: parseInt(e.target.value) }))}
-                style={{
-                  width: '100%',
-                  cursor: 'pointer',
-                  marginTop: '6px',
-                }}
-              />
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
-                Top candidates
-              </p>
-            </div>
-
-            {/* Repeat Penalty Slider */}
-            <div>
-              <label style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
-                Repeat Penalty: {chatParameters.repeatPenalty.toFixed(2)}
-              </label>
-              <input
-                type="range"
-                min="0.5"
-                max="2"
-                step="0.1"
-                value={chatParameters.repeatPenalty}
-                onChange={(e) => setChatParameters(prev => ({ ...prev, repeatPenalty: parseFloat(e.target.value) }))}
-                style={{
-                  width: '100%',
-                  cursor: 'pointer',
-                  marginTop: '6px',
-                }}
-              />
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
-                Avoid repetition
-              </p>
-            </div>
-
-            {/* Max Tokens Slider */}
-            <div>
-              <label style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
-                Max Tokens: {chatParameters.maxTokens}
-              </label>
-              <input
-                type="range"
-                min="100"
-                max="4096"
-                step="100"
-                value={chatParameters.maxTokens}
-                onChange={(e) => setChatParameters(prev => ({ ...prev, maxTokens: parseInt(e.target.value) }))}
-                style={{
-                  width: '100%',
-                  cursor: 'pointer',
-                  marginTop: '6px',
-                }}
-              />
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
-                Response length
-              </p>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

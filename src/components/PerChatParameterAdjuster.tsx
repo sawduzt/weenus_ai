@@ -14,8 +14,8 @@ import './PerChatParameterAdjuster.css';
 export interface PerChatParameterAdjusterProps {
   parameters: ModelParameters;
   hasOverrides: boolean;
-  onSave: (parameters: ModelParameters) => void;
-  onReset: () => void;
+  onSave: (parameters: ModelParameters) => Promise<void>;
+  onReset: () => Promise<void>;
   isExpanded?: boolean;
 }
 
@@ -45,17 +45,17 @@ export function PerChatParameterAdjuster({
     }));
   };
 
-  const handleSave = (): void => {
+  const handleSave = async (): Promise<void> => {
     setIsSaving(true);
-    setTimeout(() => {
-      onSave(localParams);
+    try {
+      await onSave(localParams);
+    } finally {
       setIsSaving(false);
-    }, 300);
+    }
   };
 
-  const handleReset = (): void => {
-    onReset();
-    setLocalParams(parameters);
+  const handleReset = async (): Promise<void> => {
+    await onReset();
   };
 
   return (
