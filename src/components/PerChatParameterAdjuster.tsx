@@ -92,11 +92,11 @@ export function PerChatParameterAdjuster({
             onChange={(e) => setSelectedParam(e.target.value as ParameterKey)}
             className="param-selector"
           >
-            <option value="temperature">Temperature</option>
-            <option value="topP">Top-P</option>
-            <option value="topK">Top-K</option>
-            <option value="repeatPenalty">Repeat Penalty</option>
-            <option value="maxTokens">Max Tokens</option>
+            <option value="temperature" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>Temperature</option>
+            <option value="topP" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>Top-P</option>
+            <option value="topK" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>Top-K</option>
+            <option value="repeatPenalty" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>Repeat Penalty</option>
+            <option value="maxTokens" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>Max Tokens</option>
           </select>
 
           {/* Value Display */}
