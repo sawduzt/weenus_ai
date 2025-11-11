@@ -66,7 +66,7 @@ function App(): JSX.Element {
     setActiveChatId(null);
   };
 
-  const handleSelectChat = (chatId: string): void => {
+  const handleSelectChat = (chatId: string | null): void => {
     setActiveChatId(chatId);
   };
 

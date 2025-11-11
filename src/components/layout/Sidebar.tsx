@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { AppPage } from '../../App';
 import { useChat } from '../../hooks/useChat';
+import { chatService } from '../../services/chat';
 import { useToast } from '../ui/ToastProvider';
 import './Sidebar.css';
 
@@ -32,7 +33,7 @@ export interface SidebarProps {
   onPageChange: (page: AppPage) => void;
   onToggle: () => void;
   onNewChat?: () => void;
-  onSelectChat?: (chatId: string) => void;
+  onSelectChat?: (chatId: string | null) => void;
   activeChatId?: string | null;
 }
 
@@ -104,8 +105,16 @@ export function Sidebar({
 
   const handleDeleteChat = async (chatId: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    const wasActive = chatId === activeChatId;
     await deleteChat(chatId);
     toast.success('Chat Deleted', 'The chat has been removed');
+    
+    // If we deleted the active chat, notify parent to refresh
+    if (wasActive && onSelectChat) {
+      // Get the new active chat ID from storage
+      const newActiveId = await chatService.getActiveChatId();
+      onSelectChat(newActiveId);
+    }
   };
 
   return (

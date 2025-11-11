@@ -4,14 +4,12 @@
  */
 
 .per-chat-parameter-adjuster {
-  flex: 1;
-  min-width: 150px;
   position: relative;
 }
 
 /* Toggle Button - Matches model selector style */
 .param-toggle-button {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
@@ -23,7 +21,6 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  width: 100%;
 }
 
 .param-toggle-button:hover {
@@ -42,10 +39,15 @@
   margin-left: auto;
 }
 
+.default-badge {
+  background: rgba(128, 128, 128, 0.2);
+  color: var(--text-secondary);
+}
+
 /* Compact Panel */
 .param-panel {
   position: absolute;
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + 12px);
   left: 0;
   right: 0;
   display: flex;
@@ -55,7 +57,7 @@
   background: var(--bg-secondary);
   border: 2px solid var(--border-primary);
   border-radius: 12px;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.3), 0 -4px 12px rgba(0, 0, 0, 0.2);
   animation: slideUp 0.2s ease;
   z-index: 100;
 }

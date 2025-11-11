@@ -76,7 +76,11 @@ export function PerChatParameterAdjuster({
         className="param-toggle-button"
       >
         <span>Quick Parameters</span>
-        {hasOverrides && <span className="param-badge">Custom</span>}
+        {hasOverrides ? (
+          <span className="param-badge">Custom</span>
+        ) : (
+          <span className="param-badge default-badge">Default</span>
+        )}
       </button>
 
       {/* Compact Panel */}
