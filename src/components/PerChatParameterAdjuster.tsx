@@ -2,11 +2,11 @@
  * Per-Chat Parameter Adjuster Component
  * 
  * Quick parameter adjustment panel for individual chats.
- * Shows below the model selector with sliders for quick tweaks.
+ * Shows above the message bar with dropdown parameter selection.
  */
 
 import { useState, useEffect } from 'react';
-import { RotateCcw, ChevronDown, ChevronUp, Save } from 'lucide-react';
+import { RotateCcw, Save } from 'lucide-react';
 import type { ModelParameters } from '../types/parameters.types';
 import { PARAMETER_RANGES } from '../types/parameters.types';
 import './PerChatParameterAdjuster.css';
@@ -19,6 +19,8 @@ export interface PerChatParameterAdjusterProps {
   isExpanded?: boolean;
 }
 
+type ParameterKey = keyof ModelParameters;
+
 export function PerChatParameterAdjuster({
   parameters,
   hasOverrides,
@@ -29,19 +31,18 @@ export function PerChatParameterAdjuster({
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const [localParams, setLocalParams] = useState<ModelParameters>(parameters);
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedParam, setSelectedParam] = useState<ParameterKey>('temperature');
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   // Sync local params when prop changes
   useEffect(() => {
     setLocalParams(parameters);
   }, [parameters]);
 
-  const handleParameterChange = (
-    param: keyof ModelParameters,
-    value: number
-  ): void => {
+  const handleParameterChange = (value: number): void => {
     setLocalParams((prev) => ({
       ...prev,
-      [param]: value,
+      [selectedParam]: value,
     }));
   };
 
@@ -56,75 +57,92 @@ export function PerChatParameterAdjuster({
 
   const handleReset = async (): Promise<void> => {
     await onReset();
+    setShowResetConfirm(false);
   };
+
+  const handleResetClick = (): void => {
+    if (!hasOverrides) return;
+    setShowResetConfirm(true);
+  };
+
+  const paramRange = PARAMETER_RANGES[selectedParam];
+  const currentValue = localParams[selectedParam];
 
   return (
     <div className="per-chat-parameter-adjuster">
-      {/* Header / Toggle */}
+      {/* Toggle Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="adjuster-header"
+        className="param-toggle-button"
       >
-        <div className="adjuster-header-content">
-          <span className="adjuster-title">Quick Parameters</span>
-          {hasOverrides && <span className="override-badge">Custom</span>}
-        </div>
-        {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        <span>Quick Parameters</span>
+        {hasOverrides && <span className="param-badge">Custom</span>}
       </button>
 
-      {/* Expanded Content */}
+      {/* Compact Panel */}
       {isExpanded && (
-        <div className="adjuster-content">
-          {/* Parameter Sliders */}
-          <div className="parameters-grid">
-            {Object.entries(PARAMETER_RANGES).map(([key, range]) => {
-              const paramKey = key as keyof ModelParameters;
-              const value = localParams[paramKey];
+        <div className="param-panel">
+          {/* Parameter Selector */}
+          <select
+            value={selectedParam}
+            onChange={(e) => setSelectedParam(e.target.value as ParameterKey)}
+            className="param-selector"
+          >
+            <option value="temperature">Temperature</option>
+            <option value="topP">Top-P</option>
+            <option value="topK">Top-K</option>
+            <option value="repeatPenalty">Repeat Penalty</option>
+            <option value="maxTokens">Max Tokens</option>
+          </select>
 
-              return (
-                <div key={key} className="parameter-item">
-                  <div className="parameter-header">
-                    <label className="parameter-label">
-                      {range.label}
-                    </label>
-                    <span className="parameter-value">{parseFloat(value.toString()).toFixed(key === 'maxTokens' ? 0 : 2)}</span>
-                  </div>
-                  <input
-                    type="range"
-                    min={range.min}
-                    max={range.max}
-                    step={range.step}
-                    value={value}
-                    onChange={(e) =>
-                      handleParameterChange(paramKey, parseFloat(e.target.value))
-                    }
-                    className="parameter-slider"
-                  />
-                  <p className="parameter-hint">{range.hint}</p>
-                </div>
-              );
-            })}
+          {/* Value Display */}
+          <div className="param-value-display">
+            {parseFloat(currentValue.toString()).toFixed(selectedParam === 'topK' || selectedParam === 'maxTokens' ? 0 : 2)}
           </div>
 
+          {/* Slider */}
+          <input
+            type="range"
+            min={paramRange.min}
+            max={paramRange.max}
+            step={paramRange.step}
+            value={currentValue}
+            onChange={(e) => handleParameterChange(parseFloat(e.target.value))}
+            className="param-slider"
+          />
+
           {/* Action Buttons */}
-          <div className="adjuster-actions">
-            <button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="action-button save-button"
-            >
-              <Save size={12} />
-              {isSaving ? 'Saving...' : 'Save for This Chat'}
-            </button>
-            <button
-              onClick={handleReset}
-              disabled={!hasOverrides}
-              className="action-button reset-button"
-              title={hasOverrides ? 'Reset to model defaults' : 'No custom parameters to reset'}
-            >
-              <RotateCcw size={12} />
-              Reset to Defaults
-            </button>
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="param-action-button save-btn"
+            title="Save for this chat"
+          >
+            <Save size={12} />
+            {isSaving ? 'Saving...' : 'Save'}
+          </button>
+
+          <button
+            onClick={handleResetClick}
+            disabled={!hasOverrides}
+            className="param-action-button reset-btn"
+            title="Reset to defaults"
+          >
+            <RotateCcw size={12} />
+            Reset
+          </button>
+        </div>
+      )}
+
+      {/* Reset Confirmation Modal */}
+      {showResetConfirm && (
+        <div className="reset-confirm-overlay" onClick={() => setShowResetConfirm(false)}>
+          <div className="reset-confirm-dialog" onClick={(e) => e.stopPropagation()}>
+            <p>Reset this chat's parameters to model defaults?</p>
+            <div className="reset-confirm-buttons">
+              <button onClick={handleReset} className="confirm-yes">Yes, Reset</button>
+              <button onClick={() => setShowResetConfirm(false)} className="confirm-no">Cancel</button>
+            </div>
           </div>
         </div>
       )}
