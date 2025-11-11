@@ -1,12 +1,4 @@
 import { useState, useEffect } from 'react';
-import Store from 'electron-store';
-
-// Initialize electron-store for persistence
-const store = new Store({
-  defaults: {
-    hasSeenOnboarding: false,
-  },
-});
 
 interface UseOnboardingReturn {
   isOpen: boolean;
@@ -20,7 +12,7 @@ interface UseOnboardingReturn {
  * Hook to manage onboarding state
  * 
  * Tracks if user has seen onboarding and provides controls to show/hide it
- * Persists state using electron-store so it survives app restarts
+ * Persists state using electron-store via IPC
  */
 export function useOnboarding(): UseOnboardingReturn {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,25 +20,37 @@ export function useOnboarding(): UseOnboardingReturn {
 
   // Check if onboarding has been seen on mount
   useEffect(() => {
-    try {
-      const seen = store.get('hasSeenOnboarding') as boolean;
-      setHasSeenOnboarding(seen);
-      // Show onboarding if user hasn't seen it yet
-      if (!seen) {
+    const checkOnboardingState = async (): Promise<void> => {
+      try {
+        // Try to use electron IPC first
+        if (window.electronAPI && window.electronAPI.store) {
+          const seen = await window.electronAPI.store.get('hasSeenOnboarding');
+          setHasSeenOnboarding(seen || false);
+          if (!seen) {
+            setIsOpen(true);
+          }
+        } else {
+          // Fallback: assume first time if no electron API
+          console.warn('Electron API not available, showing onboarding');
+          setIsOpen(true);
+        }
+      } catch (error) {
+        console.error('Failed to read onboarding state:', error);
+        // If we can't read the store, assume first time
         setIsOpen(true);
       }
-    } catch (error) {
-      console.error('Failed to read onboarding state:', error);
-      // If we can't read the store, assume first time
-      setIsOpen(true);
-    }
+    };
+
+    checkOnboardingState();
   }, []);
 
   const handleClose = (): void => {
     setIsOpen(false);
     setHasSeenOnboarding(true);
     try {
-      store.set('hasSeenOnboarding', true);
+      if (window.electronAPI && window.electronAPI.store) {
+        window.electronAPI.store.set('hasSeenOnboarding', true);
+      }
     } catch (error) {
       console.error('Failed to save onboarding state:', error);
     }
@@ -56,7 +60,9 @@ export function useOnboarding(): UseOnboardingReturn {
     setHasSeenOnboarding(false);
     setIsOpen(true);
     try {
-      store.set('hasSeenOnboarding', false);
+      if (window.electronAPI && window.electronAPI.store) {
+        window.electronAPI.store.set('hasSeenOnboarding', false);
+      }
     } catch (error) {
       console.error('Failed to reset onboarding state:', error);
     }
