@@ -57,6 +57,7 @@
 .system-info {
   display: flex;
   gap: var(--spacing-lg);
+  margin-right: var(--spacing-xl);
 }
 
 .status-item {

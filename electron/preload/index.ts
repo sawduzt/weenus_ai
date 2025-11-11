@@ -12,6 +12,9 @@ const electronAPI = {
   fileSystem: {
     showOpenDialog: (options: any) => ipcRenderer.invoke('show-open-dialog', options),
     showSaveDialog: (options: any) => ipcRenderer.invoke('show-save-dialog', options),
+    saveFile: (targetDir: string, filename: string, data: ArrayBuffer) => 
+      ipcRenderer.invoke('save-file', targetDir, filename, data),
+    getDefaultModelPath: () => ipcRenderer.invoke('get-default-model-path'),
   },
 
   // Window operations

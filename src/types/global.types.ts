@@ -9,6 +9,8 @@ export interface ElectronAPI {
   fileSystem: {
     showOpenDialog: (options: any) => Promise<any>
     showSaveDialog: (options: any) => Promise<any>
+    saveFile: (targetDir: string, filename: string, data: ArrayBuffer) => Promise<string>
+    getDefaultModelPath: () => Promise<string>
   }
   window: {
     minimize: () => Promise<void>

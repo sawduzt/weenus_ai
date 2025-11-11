@@ -182,6 +182,42 @@ class WeenusAI {
       return result
     })
 
+    // Save file to filesystem
+    ipcMain.handle('save-file', async (_, targetDir: string, filename: string, data: ArrayBuffer) => {
+      const fs = await import('fs/promises')
+      const path = await import('path')
+      
+      try {
+        // Ensure target directory exists
+        await fs.mkdir(targetDir, { recursive: true })
+        
+        // Construct full file path
+        const filePath = path.join(targetDir, filename)
+        
+        // Write the file
+        await fs.writeFile(filePath, Buffer.from(data))
+        
+        return filePath
+      } catch (error) {
+        console.error('Error saving file:', error)
+        throw error
+      }
+    })
+
+    // Get default model path for Ollama
+    ipcMain.handle('get-default-model-path', async () => {
+      const os = await import('os')
+      const path = await import('path')
+      
+      const homeDir = os.homedir()
+      
+      if (process.platform === 'win32') {
+        return path.join(homeDir, '.ollama', 'models')
+      } else {
+        return path.join(homeDir, '.ollama', 'models')
+      }
+    })
+
     // Window operations
     ipcMain.handle('window-minimize', () => {
       this.mainWindow?.minimize()

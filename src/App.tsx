@@ -37,6 +37,7 @@ function App(): JSX.Element {
 
   // Chat state for cross-component communication
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
+  const [tokensPerSecond, setTokensPerSecond] = useState<number>(0);
 
   // Get Ollama connection status
   const { connectionStatus, checkConnection } = useOllama();
@@ -74,7 +75,7 @@ function App(): JSX.Element {
   const renderCurrentPage = (): JSX.Element => {
     switch (appState.currentPage) {
       case 'chat':
-        return <ChatPage activeChatId={activeChatId} onChatChange={setActiveChatId} />;
+        return <ChatPage activeChatId={activeChatId} onChatChange={setActiveChatId} onTokensPerSecond={setTokensPerSecond} />;
       case 'settings':
         return (
           <SettingsPage 
@@ -89,7 +90,7 @@ function App(): JSX.Element {
       case 'video-gen':
         return <VideoGenerationPage />;
       default:
-        return <ChatPage activeChatId={activeChatId} onChatChange={setActiveChatId} />;
+        return <ChatPage activeChatId={activeChatId} onChatChange={setActiveChatId} onTokensPerSecond={setTokensPerSecond} />;
     }
   };
 
@@ -108,6 +109,7 @@ function App(): JSX.Element {
             onSelectChat={handleSelectChat}
             activeChatId={activeChatId}
             onRefreshConnection={checkConnection}
+            tokensPerSecond={tokensPerSecond}
           >
             {renderCurrentPage()}
           </MainLayout>

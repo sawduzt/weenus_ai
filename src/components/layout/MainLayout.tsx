@@ -9,6 +9,7 @@ import React from 'react';
 import { Sidebar } from './Sidebar';
 import { StatusBar } from './StatusBar';
 import { WindowControls } from './WindowControls';
+import { useMetrics } from '../../hooks/useMetrics';
 import { AppPage } from '../../App';
 import { ConnectionStatus } from '../../types/global.types';
 import './MainLayout.css';
@@ -21,10 +22,11 @@ export interface MainLayoutProps {
   onPageChange: (page: AppPage) => void;
   onSidebarToggle: () => void;
   onNewChat?: () => void;
-  onSelectChat?: (chatId: string) => void;
+  onSelectChat?: (chatId: string | null) => void;
   activeChatId?: string | null;
   onRefreshConnection?: () => Promise<void>;
   children: React.ReactNode;
+  tokensPerSecond?: number;
 }
 
 export function MainLayout({
@@ -38,8 +40,11 @@ export function MainLayout({
   onSelectChat,
   activeChatId,
   onRefreshConnection,
+  tokensPerSecond = 0,
   children,
 }: MainLayoutProps): JSX.Element {
+  const metrics = useMetrics();
+
   return (
     <div className={`main-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       {/* Sidebar Navigation */}
@@ -68,7 +73,13 @@ export function MainLayout({
         </div>
 
         {/* Status Bar */}
-        <StatusBar connectionStatus={connectionStatus} onRefresh={onRefreshConnection} />
+        <StatusBar 
+          connectionStatus={connectionStatus} 
+          onRefresh={onRefreshConnection}
+          tokensPerSecond={tokensPerSecond}
+          memoryUsage={metrics.memoryUsage}
+          gpuUsage={metrics.gpuUsage}
+        />
       </div>
 
       {/* Windows Mica Effect Overlay */}

@@ -19,9 +19,10 @@ import './ChatPage.css';
 export interface ChatPageProps {
   activeChatId: string | null;
   onChatChange: (chatId: string | null) => void;
+  onTokensPerSecond?: (tokensPerSecond: number) => void;
 }
 
-export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Element {
+export function ChatPage({ activeChatId, onChatChange, onTokensPerSecond }: ChatPageProps): JSX.Element {
   const [input, setInput] = useState('');
   const [isCheckingConnection, setIsCheckingConnection] = useState(true);
   const [isStartingOllama, setIsStartingOllama] = useState(false);
@@ -210,6 +211,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = '';
+      let lastChatResponse: any = null;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -225,6 +227,8 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           if (line.trim()) {
             try {
               const json = JSON.parse(line);
+              // Store the last response to get metadata
+              lastChatResponse = json;
               if (json.message?.content) {
                 fullResponse += json.message.content;
                 streamingChatService.appendResponse(json.message.content);
@@ -234,6 +238,14 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
             }
           }
         }
+      }
+
+      // Update metrics with eval data from final response
+      if (lastChatResponse && lastChatResponse.eval_count && lastChatResponse.eval_duration && onTokensPerSecond) {
+        const seconds = lastChatResponse.eval_duration / 1e9;
+        const tokensPerSecond = lastChatResponse.eval_count / seconds;
+        const rounded = Math.round(tokensPerSecond * 100) / 100;
+        onTokensPerSecond(rounded);
       }
 
       // Create assistant message

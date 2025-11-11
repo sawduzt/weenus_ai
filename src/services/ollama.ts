@@ -52,6 +52,35 @@ export interface ChatResponse {
     content: string;
   };
   done: boolean;
+  eval_count?: number;
+  eval_duration?: number;
+  prompt_eval_count?: number;
+  prompt_eval_duration?: number;
+}
+
+export interface RunningModel {
+  name: string;
+  model: string;
+  size: number;
+  digest: string;
+  expires_at: string;
+  details?: {
+    format: string;
+    family: string;
+    parameter_size: string;
+    quantization_level: string;
+  };
+}
+
+export interface RunningProcesses {
+  models: RunningModel[];
+}
+
+export interface MetricsData {
+  tokensPerSecond: number;
+  memoryUsage: string;
+  gpuUsage: string;
+  runningModels: RunningModel[];
 }
 
 class OllamaService {
@@ -200,6 +229,80 @@ class OllamaService {
       console.error('Error in chat request:', error);
       throw error;
     }
+  }
+
+  /**
+   * Delete a model from Ollama
+   */
+  async deleteModel(modelName: string): Promise<{ success: boolean; error?: string }> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/delete`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: modelName,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to delete model: ${response.statusText} - ${errorText}`);
+      }
+
+      return { success: true };
+    } catch (error) {
+      console.error('Error deleting model:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  /**
+   * Get running processes from Ollama
+   * Returns information about models currently loaded in memory
+   */
+  async getRunningProcesses(): Promise<RunningProcesses> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/ps`, {
+        method: 'GET',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch running processes: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching running processes:', error);
+      return { models: [] };
+    }
+  }
+
+  /**
+   * Calculate tokens per second from chat response metadata
+   */
+  calculateTokensPerSecond(evalCount?: number, evalDuration?: number): number {
+    if (!evalCount || !evalDuration || evalDuration === 0) {
+      return 0;
+    }
+    // evalDuration is in nanoseconds, convert to seconds
+    const seconds = evalDuration / 1e9;
+    return evalCount / seconds;
+  }
+
+  /**
+   * Format memory usage in a human-readable way
+   */
+  formatMemory(bytes: number): string {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   }
 }
 

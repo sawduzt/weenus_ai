@@ -13,9 +13,18 @@ import './StatusBar.css';
 export interface StatusBarProps {
   connectionStatus: ConnectionStatus;
   onRefresh?: () => Promise<void>;
+  tokensPerSecond?: number;
+  memoryUsage?: string;
+  gpuUsage?: string;
 }
 
-export function StatusBar({ connectionStatus, onRefresh }: StatusBarProps): JSX.Element {
+export function StatusBar({ 
+  connectionStatus, 
+  onRefresh,
+  tokensPerSecond = 0,
+  memoryUsage = '--',
+  gpuUsage = '--',
+}: StatusBarProps): JSX.Element {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = async () => {
@@ -102,15 +111,15 @@ export function StatusBar({ connectionStatus, onRefresh }: StatusBarProps): JSX.
       <div className="status-section system-info">
         <span className="status-item">
           <span className="status-label">Memory:</span>
-          <span className="status-value">--</span>
+          <span className="status-value">{memoryUsage}</span>
         </span>
         <span className="status-item">
           <span className="status-label">GPU:</span>
-          <span className="status-value">--</span>
+          <span className="status-value">{gpuUsage}</span>
         </span>
         <span className="status-item">
           <span className="status-label">Tokens/s:</span>
-          <span className="status-value">--</span>
+          <span className="status-value">{tokensPerSecond > 0 ? tokensPerSecond.toFixed(2) : '--'}</span>
         </span>
       </div>
 
