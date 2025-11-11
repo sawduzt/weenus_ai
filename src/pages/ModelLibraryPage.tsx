@@ -153,24 +153,24 @@ export function ModelLibraryPage(): JSX.Element {
   return (
     <div className="model-library-page">
       <div className="page-header" style={{ padding: '8px 2px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
-        <div style={{ flex: 1, paddingLeft: '10px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div>
-            <h1 
-              style={{ 
-                fontSize: '18px', 
-                margin: '0', 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '8px',
-                fontWeight: '600',
-              }}
-            >
-              <Package size={20} />
-              Model Library
-            </h1>
-            <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--text-muted)' }}>{models.length} models installed</p>
-          </div>
-          
+        <div style={{ flex: 1, paddingLeft: '10px' }}>
+          <h1 
+            style={{ 
+              fontSize: '18px', 
+              margin: '0', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px',
+              fontWeight: '600',
+            }}
+          >
+            <Package size={20} />
+            Model Library
+          </h1>
+          <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--text-muted)' }}>{models.length} models installed</p>
+        </div>
+        
+        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingRight: '140px' }}>
           <button
             onClick={loadModels}
             disabled={isLoadingModels}
@@ -181,7 +181,7 @@ export function ModelLibraryPage(): JSX.Element {
               background: 'var(--surface)',
               color: 'var(--text)',
               cursor: isLoadingModels ? 'not-allowed' : 'pointer',
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
               fontSize: '14px',
@@ -190,7 +190,7 @@ export function ModelLibraryPage(): JSX.Element {
             <RefreshCw size={16} />
             Refresh
           </button>
-        </div>
+        </p>
       </div>
 
       <div style={{ padding: '24px' }}>

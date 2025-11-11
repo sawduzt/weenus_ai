@@ -191,24 +191,24 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
   return (
     <div className="settings-page">
       <div className="settings-header" style={{ padding: '8px 2px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
-        <div style={{ flex: 1, paddingLeft: '10px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div>
-            <h1 
-              style={{ 
-                fontSize: '18px', 
-                margin: '0', 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '8px',
-                fontWeight: '600',
-              }}
-            >
-              <SettingsIcon size={20} />
-              Settings
-            </h1>
-            <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--text-muted)' }}>Configure your Weenus AI experience</p>
-          </div>
-          
+        <div style={{ flex: 1, paddingLeft: '10px' }}>
+          <h1 
+            style={{ 
+              fontSize: '18px', 
+              margin: '0', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px',
+              fontWeight: '600',
+            }}
+          >
+            <SettingsIcon size={20} />
+            Settings
+          </h1>
+          <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--text-muted)' }}>Configure your Weenus AI experience</p>
+        </div>
+        
+        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingRight: '140px' }}>
           <button
             onClick={handleSaveSettings}
             disabled={isSaving}
@@ -230,7 +230,7 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
             <Save size={16} />
             {isSaving ? 'Saving...' : 'Save'}
           </button>
-        </div>
+        </p>
       </div>
 
       <div className="settings-content">
