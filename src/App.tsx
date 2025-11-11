@@ -14,7 +14,9 @@ import { ImageGenerationPage } from './pages/ImageGenerationPage';
 import { VideoGenerationPage } from './pages/VideoGenerationPage';
 import { ThemeProvider } from './components/theme/ThemeProvider';
 import { ToastProvider } from './components/ui/ToastProvider';
+import { Onboarding } from './components/Onboarding';
 import { useOllama } from './hooks/useOllama';
+import { useOnboarding } from './hooks/useOnboarding';
 import './styles/global.css';
 
 export type AppPage = 'chat' | 'settings' | 'models' | 'image-gen' | 'video-gen';
@@ -41,6 +43,9 @@ function App(): JSX.Element {
 
   // Get Ollama connection status
   const { connectionStatus, checkConnection } = useOllama();
+  
+  // Onboarding management
+  const { isOpen: onboardingOpen, setIsOpen: setOnboardingOpen } = useOnboarding();
 
   // Navigation handler
   const handlePageChange = (page: AppPage): void => {
@@ -113,6 +118,10 @@ function App(): JSX.Element {
           >
             {renderCurrentPage()}
           </MainLayout>
+          <Onboarding 
+            isOpen={onboardingOpen} 
+            onClose={() => setOnboardingOpen(false)}
+          />
         </div>
       </ToastProvider>
     </ThemeProvider>

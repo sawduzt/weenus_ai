@@ -6,10 +6,11 @@
  */
 
 import { useState, useEffect } from 'react';
-import { FolderOpen, Save, Settings as SettingsIcon, Bot, Sliders, Wrench, Download, Upload, RotateCcw } from 'lucide-react';
+import { FolderOpen, Save, Settings as SettingsIcon, Bot, Sliders, Wrench, Download, Upload, RotateCcw, HelpCircle } from 'lucide-react';
 import { useToast } from '../components/ui/ToastProvider';
 import { ToggleSwitch } from '../components/ui/ToggleSwitch';
 import { ModelParametersConfigurator } from '../components/ModelParametersConfigurator';
+import { useOnboarding } from '../hooks/useOnboarding';
 import './SettingsPage.css';
 
 export interface SettingsPageProps {
@@ -52,6 +53,7 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
   const [showRestartPrompt, setShowRestartPrompt] = useState(false);
   const [prevModelPath, setPrevModelPath] = useState<string>('');
   const toast = useToast();
+  const { showOnboarding } = useOnboarding();
 
   // Load settings from electron store on mount
   useEffect(() => {
@@ -282,6 +284,42 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
                   label="Hardware Acceleration"
                   description="Enable GPU acceleration for smoother animations and effects (recommended)"
                 />
+              </div>
+
+              <div className="setting-group">
+                <button
+                  onClick={() => showOnboarding()}
+                  style={{
+                    padding: '12px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(236, 72, 153, 0.05))',
+                    border: '1px solid rgba(236, 72, 153, 0.3)',
+                    borderRadius: '6px',
+                    color: 'var(--color-text-primary)',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    transition: 'all 0.2s ease',
+                    width: '100%',
+                    justifyContent: 'center',
+                  }}
+                  onMouseOver={(e) => {
+                    (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(236, 72, 153, 0.1))';
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(236, 72, 153, 0.5)';
+                  }}
+                  onMouseOut={(e) => {
+                    (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(236, 72, 153, 0.05))';
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(236, 72, 153, 0.3)';
+                  }}
+                >
+                  <HelpCircle size={16} />
+                  Replay Getting Started Tour
+                </button>
+                <p className="setting-description">
+                  Watch the interactive walkthrough again to learn how to use Weenus AI
+                </p>
               </div>
             </div>
           )}
