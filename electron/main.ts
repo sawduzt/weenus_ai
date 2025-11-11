@@ -83,7 +83,6 @@ class WeenusAI {
       show: false,
       autoHideMenuBar: true,
       frame: false, // Remove default window frame entirely
-      icon: join(__dirname, '../../src/assets/icons/icon.png'),
       webPreferences: {
         preload: join(__dirname, './preload/index.js'),
         sandbox: false,
@@ -148,10 +147,7 @@ class WeenusAI {
       // Production mode - load built files
       const htmlPath = join(__dirname, '../renderer/index.html')
       console.log('Production: Loading built file from:', htmlPath)
-      
-      // Make sure to set the correct working directory
-      process.chdir(join(__dirname, '../renderer'))
-      this.mainWindow.loadFile('index.html')
+      this.mainWindow.loadFile(htmlPath)
     }
   }
 
