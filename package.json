@@ -10,6 +10,8 @@
     "build": "npm run build:vite && npm run build:electron",
     "build:vite": "vite build",
     "build:electron": "tsc -p electron.tsconfig.json",
+    "dist": "npm run build && electron-builder",
+    "dist:nsis": "npm run build && electron-builder --win nsis",
     "start": "electron .",
     "preview": "vite preview",
     "test": "jest",
