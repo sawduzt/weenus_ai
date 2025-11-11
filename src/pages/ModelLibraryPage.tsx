@@ -167,10 +167,9 @@ export function ModelLibraryPage(): JSX.Element {
             <Package size={20} />
             Model Library
           </h1>
-          <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--text-muted)' }}>{models.length} models installed</p>
         </div>
         
-        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingRight: '140px' }}>
+        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)' }}>
           <button
             onClick={loadModels}
             disabled={isLoadingModels}
@@ -198,7 +197,7 @@ export function ModelLibraryPage(): JSX.Element {
           <div className="coming-soon">
             <div className="coming-soon-icon"><Package size={48} /></div>
             <h2>Weenus is Thinking...</h2>
-            <p>Loading your models 🐰</p>
+            <p>Loading your models</p>
           </div>
         ) : models.length === 0 ? (
           <div className="coming-soon">
@@ -215,69 +214,72 @@ export function ModelLibraryPage(): JSX.Element {
             </div>
           </div>
         ) : (
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-            gap: '16px',
-          }}>
-            {models.map((model) => (
-              <div
-                key={model.name}
-                style={{
-                  padding: '20px',
-                  borderRadius: '12px',
-                  background: 'var(--surface)',
-                  border: '1px solid var(--border)',
-                }}
-              >
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'start',
-                  marginBottom: '16px',
-                }}>
-                  <h3 style={{
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    color: 'var(--pink)',
-                    margin: 0,
+          <>
+            <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '16px' }}>{models.length} models installed</p>
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+              gap: '16px',
+            }}>
+              {models.map((model) => (
+                <div
+                  key={model.name}
+                  style={{
+                    padding: '20px',
+                    borderRadius: '12px',
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                  }}
+                >
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'start',
+                    marginBottom: '16px',
                   }}>
-                    {model.name}
-                  </h3>
-                  <span style={{
-                    fontSize: '12px',
-                    padding: '4px 8px',
-                    borderRadius: '6px',
-                    background: 'var(--background)',
+                    <h3 style={{
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      color: 'var(--pink)',
+                      margin: 0,
+                    }}>
+                      {model.name}
+                    </h3>
+                    <span style={{
+                      fontSize: '12px',
+                      padding: '4px 8px',
+                      borderRadius: '6px',
+                      background: 'var(--background)',
+                      color: 'var(--text-secondary)',
+                    }}>
+                      {formatFileSize(model.size)}
+                    </span>
+                  </div>
+
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px',
+                    fontSize: '14px',
                     color: 'var(--text-secondary)',
                   }}>
-                    {formatFileSize(model.size)}
-                  </span>
-                </div>
-
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '8px',
-                  fontSize: '14px',
-                  color: 'var(--text-secondary)',
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Package size={14} />
-                    <span>Format: {model.details.format}</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <HardDrive size={14} />
-                    <span>Parameters: {model.details.parameter_size}</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Calendar size={14} />
-                    <span>Modified: {formatDate(model.modified_at)}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Package size={14} />
+                      <span>Format: {model.details.format}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <HardDrive size={14} />
+                      <span>Parameters: {model.details.parameter_size}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Calendar size={14} />
+                      <span>Modified: {formatDate(model.modified_at)}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </div>

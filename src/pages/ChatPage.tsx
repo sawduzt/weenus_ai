@@ -514,7 +514,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           )}
         </div>
         
-        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)' }}>Powered by Ollama</p>
+        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingLeft: '10px' }}>Powered by Ollama</p>
       </div>
 
       {/* Messages Area */}

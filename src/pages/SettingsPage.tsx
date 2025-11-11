@@ -205,7 +205,6 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
             <SettingsIcon size={20} />
             Settings
           </h1>
-          <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--text-muted)' }}>Configure your Weenus AI experience</p>
         </div>
         
         <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingRight: '140px' }}>
