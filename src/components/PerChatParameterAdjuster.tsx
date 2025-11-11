@@ -69,7 +69,7 @@ export function PerChatParameterAdjuster({
           <span className="adjuster-title">Quick Parameters</span>
           {hasOverrides && <span className="override-badge">Custom</span>}
         </div>
-        {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+        {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
       </button>
 
       {/* Expanded Content */}
@@ -113,7 +113,7 @@ export function PerChatParameterAdjuster({
               disabled={isSaving}
               className="action-button save-button"
             >
-              <Save size={16} />
+              <Save size={12} />
               {isSaving ? 'Saving...' : 'Save for This Chat'}
             </button>
             <button
@@ -122,7 +122,7 @@ export function PerChatParameterAdjuster({
               className="action-button reset-button"
               title={hasOverrides ? 'Reset to model defaults' : 'No custom parameters to reset'}
             >
-              <RotateCcw size={16} />
+              <RotateCcw size={12} />
               Reset to Defaults
             </button>
           </div>
