@@ -103,11 +103,6 @@ class WeenusAI {
       if (is.dev) {
         this.mainWindow?.webContents.session.clearCache()
       }
-      
-      // Temporarily open DevTools in production for debugging
-      if (!is.dev || process.env.NODE_ENV === 'production') {
-        this.mainWindow?.webContents.openDevTools()
-      }
     })
 
     this.mainWindow.webContents.setWindowOpenHandler((details) => {

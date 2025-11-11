@@ -105,7 +105,8 @@
       "createStartMenuShortcut": true,
       "shortcutName": "Weenus AI",
       "uninstallerIcon": "src/assets/icons/icon.ico",
-      "installerHeaderIcon": "src/assets/icons/icon.ico"
+      "installerHeaderIcon": "src/assets/icons/icon.ico",
+      "deleteAppDataOnUninstall": true
     },
     "mac": {
       "target": "dmg"
