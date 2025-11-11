@@ -9,8 +9,8 @@
   align-items: center;
   gap: 1px;
   position: absolute;
-  top: 18px;
-  right: 24px;
+  top: 35px;
+  right: 20px;
   z-index: 1000;
   height: 40px;
   -webkit-app-region: no-drag;
