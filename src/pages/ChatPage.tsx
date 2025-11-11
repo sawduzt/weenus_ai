@@ -513,8 +513,6 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
             </h1>
           )}
         </div>
-        
-        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingLeft: '10px' }}>Powered by Ollama</p>
       </div>
 
       {/* Messages Area */}

@@ -206,30 +206,6 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
             Settings
           </h1>
         </div>
-        
-        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingRight: '140px' }}>
-          <button
-            onClick={handleSaveSettings}
-            disabled={isSaving}
-            className="setting-button"
-            style={{
-              padding: '10px 20px',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: isSaving ? 'var(--border)' : 'var(--pink)',
-              color: 'white',
-              fontWeight: '600',
-              fontSize: '14px',
-              cursor: isSaving ? 'not-allowed' : 'pointer',
-              border: 'none',
-              borderRadius: '6px',
-            }}
-          >
-            <Save size={16} />
-            {isSaving ? 'Saving...' : 'Save'}
-          </button>
-        </p>
       </div>
 
       <div className="settings-content">
@@ -245,6 +221,16 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
               <span className="tab-label">{tab.label}</span>
             </button>
           ))}
+          
+          {/* Save Button at Bottom */}
+          <button
+            onClick={handleSaveSettings}
+            disabled={isSaving}
+            className="settings-save-button"
+          >
+            <Save size={18} />
+            <span>{isSaving ? 'Saving...' : 'Save Settings'}</span>
+          </button>
         </div>
 
         {/* Settings Panels */}

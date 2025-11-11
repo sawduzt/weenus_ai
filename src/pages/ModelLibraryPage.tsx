@@ -168,28 +168,6 @@ export function ModelLibraryPage(): JSX.Element {
             Model Library
           </h1>
         </div>
-        
-        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)' }}>
-          <button
-            onClick={loadModels}
-            disabled={isLoadingModels}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '8px',
-              border: '1px solid var(--border)',
-              background: 'var(--surface)',
-              color: 'var(--text)',
-              cursor: isLoadingModels ? 'not-allowed' : 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontSize: '14px',
-            }}
-          >
-            <RefreshCw size={16} />
-            Refresh
-          </button>
-        </p>
       </div>
 
       <div style={{ padding: '24px' }}>
@@ -215,7 +193,28 @@ export function ModelLibraryPage(): JSX.Element {
           </div>
         ) : (
           <>
-            <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '16px' }}>{models.length} models installed</p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: '0' }}>{models.length} models installed</p>
+              <button
+                onClick={loadModels}
+                disabled={isLoadingModels}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  border: '1px solid var(--border)',
+                  background: 'var(--surface)',
+                  color: 'var(--text)',
+                  cursor: isLoadingModels ? 'not-allowed' : 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '14px',
+                }}
+              >
+                <RefreshCw size={16} />
+                Refresh
+              </button>
+            </div>
             <div style={{ 
               display: 'grid', 
               gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',

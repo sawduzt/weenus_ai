@@ -27,8 +27,6 @@ export function VideoGenerationPage(): JSX.Element {
             Video Generation
           </h1>
         </div>
-        
-        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingLeft: '10px' }}>Use Weenus to make videos</p>
       </div>
 
       <div className="coming-soon">

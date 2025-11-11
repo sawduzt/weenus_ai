@@ -27,8 +27,6 @@ export function ImageGenerationPage(): JSX.Element {
             Image Generation
           </h1>
         </div>
-        
-        <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingLeft: '10px' }}>Create pictures with your Weenus</p>
       </div>
 
       <div className="coming-soon">
