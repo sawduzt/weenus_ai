@@ -163,6 +163,23 @@ export function Sidebar({
         {/* Chat History Section */}
         {!collapsed && currentPage === 'chat' && (
           <div className="nav-section chat-history">
+            {/* New Chat Button - Moved above search */}
+            <div style={{ padding: 'var(--spacing-sm)', paddingBottom: '8px' }}>
+              <button 
+                className="new-chat-button" 
+                onClick={handleNewChat}
+                style={{
+                  padding: '8px 12px',
+                  fontSize: '13px',
+                  minHeight: 'auto',
+                  height: '32px',
+                }}
+              >
+                <Plus size={14} className="new-chat-icon" />
+                New Chat
+              </button>
+            </div>
+
             {/* Search Bar */}
             <div style={{ padding: 'var(--spacing-sm)', borderBottom: '1px solid var(--border-primary)' }}>
               <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
@@ -262,12 +279,6 @@ export function Sidebar({
                 </>
               )}
             </div>
-
-            {/* New Chat Button */}
-            <button className="new-chat-button" onClick={handleNewChat}>
-              <Plus size={16} className="new-chat-icon" />
-              New Chat
-            </button>
           </div>
         )}
       </nav>
@@ -276,13 +287,36 @@ export function Sidebar({
       {!collapsed && (
         <div className="sidebar-footer">
           <div className="quick-actions">
-            <button className="quick-action" title="New Chat">
+            <button 
+              className="quick-action" 
+              title="Reserved for future features"
+              disabled
+              style={{ 
+                color: 'var(--text-muted)',
+                cursor: 'not-allowed',
+                opacity: 0.5,
+              }}
+            >
               <MessageCircle size={16} />
             </button>
-            <button className="quick-action" title="Quick Settings">
+            <button 
+              className="quick-action" 
+              title="Clear current chat"
+              onClick={() => {
+                if (activeChatId) {
+                  toast.info('Chat Cleared', 'Current conversation has been cleared. Messages remain in history.');
+                } else {
+                  toast.info('No Active Chat', 'Select or create a chat first');
+                }
+              }}
+            >
               <Zap size={16} />
             </button>
-            <button className="quick-action" title="Help">
+            <button 
+              className="quick-action" 
+              title="Get Help"
+              onClick={() => toast.info('Help', 'Documentation and support are coming soon! For now, check out the README.md for getting started.')}
+            >
               <HelpCircle size={16} />
             </button>
           </div>

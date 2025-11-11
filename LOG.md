@@ -17,13 +17,23 @@
 - [ ] **Per-chat parameter changes**: Add parameter adjuster next to model selector (below chat input) for quick tweaks without Settings
 - [ ] **Model download tab**: New tab in Model Library for downloading models from Hugging Face or Ollama registry
 - [ ] **More bunny theming**: Expand Weenus personality throughout UI (empty states, messages, etc.)
+- [ ] **Button Functionality**: Add functionality to the 3 buttons at the bottom of the expanded sidebar
 
 ### UI/UX Improvements
 - [ ] **Settings menu refactor**: 
   - Change "Save & Restart Ollama" to just "Save"
   - Add conditional popup after save if settings require Ollama restart (model path change, etc.)
   - Separate concerns: save config ≠ restart service
+- [ ] **General design language tweaks**
+  - Change simple tick toggle boxes to smooth, nice looking 2 state toggle switches (notably in general settings)
+  - Make the whole UI more lively, with animations for things sliding in and out, such as the sidebar or new messages
+  - Try to mimic modern, neumorphism type ui, keep the pink themings
+  - Do not attempt to change UI layouts unless specified, ask before changing layout
 
+### EXTRA
+- [ ] **Updating Existing documentation**
+  - Update the existing documentation in the docs folder to better represent the current status of the project
+  - Remove unessecary detail or repeated mentions of things where possible
 ---
 
 ## November 10, 2025 (Evening) - Per-Model Parameter Configurator 🎚️

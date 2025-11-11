@@ -39,7 +39,7 @@ function App(): JSX.Element {
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
 
   // Get Ollama connection status
-  const { connectionStatus } = useOllama();
+  const { connectionStatus, checkConnection } = useOllama();
 
   // Navigation handler
   const handlePageChange = (page: AppPage): void => {
@@ -107,6 +107,7 @@ function App(): JSX.Element {
             onNewChat={handleNewChat}
             onSelectChat={handleSelectChat}
             activeChatId={activeChatId}
+            onRefreshConnection={checkConnection}
           >
             {renderCurrentPage()}
           </MainLayout>

@@ -152,10 +152,22 @@ export function ModelLibraryPage(): JSX.Element {
 
   return (
     <div className="model-library-page">
-      <div className="page-header">
-        <div>
-          <h1><Package size={24} style={{ display: 'inline', marginRight: '8px' }} />Model Library</h1>
-          <p>{models.length} models installed</p>
+      <div className="page-header" style={{ padding: '8px 2px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
+        <div style={{ flex: 1, paddingLeft: '10px' }}>
+          <h1 
+            style={{ 
+              fontSize: '18px', 
+              margin: '0', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px',
+              fontWeight: '600',
+            }}
+          >
+            <Package size={20} />
+            Model Library
+          </h1>
+          <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--text-muted)' }}>{models.length} models installed</p>
         </div>
         
         <button
@@ -183,13 +195,14 @@ export function ModelLibraryPage(): JSX.Element {
         {isLoadingModels ? (
           <div className="coming-soon">
             <div className="coming-soon-icon"><Package size={48} /></div>
-            <h2>Loading Models...</h2>
+            <h2>Weenus is Thinking...</h2>
+            <p>Loading your models 🐰</p>
           </div>
         ) : models.length === 0 ? (
           <div className="coming-soon">
             <div className="coming-soon-icon"><Package size={48} /></div>
-            <h2>No Models Found</h2>
-            <p>No models are currently installed</p>
+            <h2>No Models Installed</h2>
+            <p>Let's download a model to get started</p>
             <div style={{ marginTop: '24px', textAlign: 'left', maxWidth: '500px' }}>
               <h3 style={{ fontSize: '16px', marginBottom: '12px' }}>To install a model:</h3>
               <ol style={{ paddingLeft: '20px', lineHeight: '1.8' }}>

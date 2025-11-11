@@ -1,260 +1,762 @@
-<div align="center">
+# Weenus AI# Weenus AI# Weenus AI
 
-# 🐰 Weenus AI
 
-### A beautiful, local-first desktop app for AI chat
 
-Chat with AI models running on your machine. No cloud. No tracking. Just you and your AI.
+A beautiful, local-first desktop app for AI chat powered by Ollama.
+
+
+
+Chat with AI models running on your machine. No cloud. No tracking. Just you and your AI.A beautiful, local-first desktop app for AI chat powered by Ollama.A beautiful, local-first desktop app for AI chat powered by Ollama.
+
+
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue?logo=typescript)](https://www.typescriptlang.org/)
+
 [![Electron](https://img.shields.io/badge/Electron-27.0-purple?logo=electron)](https://www.electronjs.org/)
-[![React](https://img.shields.io/badge/React-18.2-cyan?logo=react)](https://reactjs.org/)
+
+[![React](https://img.shields.io/badge/React-18.2-cyan?logo=react)](https://reactjs.org/)Chat with AI models running on your machine. No cloud. No tracking. Just you and your AI.Chat with AI models running on your machine. No cloud. No tracking. Just you and your AI.
+
 [![License](https://img.shields.io/badge/License-AGPL%20v3-green.svg)](LICENSE)
 
-[Features](#-features) • [Getting Started](#-getting-started) • [Screenshots](#-screenshots) • [Development](#-development)
 
-</div>
+
+[Features](#features) | [Getting Started](#getting-started) | [Development](#development)
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue?logo=typescript)](https://www.typescriptlang.org/)[![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue?logo=typescript)](https://www.typescriptlang.org/)
 
 ---
 
-##  Features
+[![Electron](https://img.shields.io/badge/Electron-27.0-purple?logo=electron)](https://www.electronjs.org/)[![Electron](https://img.shields.io/badge/Electron-27.0-purple?logo=electron)](https://www.electronjs.org/)
 
-###  **Smart Chat Interface**
-- Real-time streaming responses from local AI models
+## Features
+
+[![React](https://img.shields.io/badge/React-18.2-cyan?logo=react)](https://reactjs.org/)[![React](https://img.shields.io/badge/React-18.2-cyan?logo=react)](https://reactjs.org/)
+
+### Smart Chat Interface
+
+- Real-time streaming responses from local AI models[![License](https://img.shields.io/badge/License-AGPL%20v3-green.svg)](LICENSE)[![License](https://img.shields.io/badge/License-AGPL%20v3-green.svg)](LICENSE)
+
 - Multiple chat sessions with auto-generated titles
-- Full chat history with search across all conversations
+
+- Full chat history with search across conversations
+
 - Beautiful message bubbles with smooth animations
 
-###  **Granular Control**
-- Per-model parameter configuration (Temperature, Top-P, Top-K, Repeat Penalty, Max Tokens)
+[Features](#features) | [Getting Started](#getting-started) | [Development](#development)[Features](#features) | [Getting Started](#getting-started) | [Development](#development) | [Documentation](#documentation)
+
+### Granular Control
+
+- Per-conversation parameter adjustment (Temperature, Top-P, Top-K, Repeat Penalty, Max Tokens)
+
 - Switch models mid-conversation
-- Save custom presets for each AI model
-- Live connection status monitoring
 
-###  **Beautiful Design**
-- Cute pink bunny theme with professional UI
+- Live connection status monitoring------
+
+- Parameter presets for each conversation
+
+
+
+### Beautiful Design
+
+- Clean, minimal interface with pink theme## Features## Features
+
 - Custom window controls (frameless design)
-- Smooth 60fps interactions
-- System font integration for native feel
 
-###  **Privacy First**
-- 100% local - all data stays on your machine
+- Smooth 60fps interactions
+
+- Professional and intuitive UI
+
+### Smart Chat Interface###  **Smart Chat Interface**
+
+### Privacy First
+
+- 100% local - all data stays on your machine- Real-time streaming responses from local AI models- Real-time streaming responses from local AI models
+
 - No cloud services, no tracking, no telemetry
-- Powered by [Ollama](https://ollama.ai) for local AI models
+
+- Powered by Ollama for local AI models- Multiple chat sessions with auto-generated titles- Multiple chat sessions with auto-generated titles
+
 - Your conversations belong to you
+
+- Full chat history with search across conversations- Full chat history with search across all conversations
 
 ---
 
-##  Getting Started
+- Beautiful message bubbles with smooth animations- Beautiful message bubbles with smooth animations
+
+## Getting Started
+
+
 
 ### Prerequisites
 
-1. **Node.js 18+** - [Download here](https://nodejs.org/)
-2. **Ollama** - [Get it from ollama.ai](https://ollama.ai)
-3. **At least one AI model** - Run `ollama pull llama2` to get started
+### Granular Control###  **Granular Control**
 
-### Installation
+- **Node.js 18+** - [Download here](https://nodejs.org/)
+
+- **Ollama** - [Get it from ollama.ai](https://ollama.ai)- Per-conversation parameter adjustment (Temperature, Top-P, Top-K, Repeat Penalty, Max Tokens)- Per-model parameter configuration (Temperature, Top-P, Top-K, Repeat Penalty, Max Tokens)
+
+- **At least one AI model** - Run `ollama pull llama2` to get started
+
+- Switch models mid-conversation- Switch models mid-conversation
+
+### Installation & Running
+
+- Live connection status monitoring- Save custom presets for each AI model
 
 ```bash
-# Clone the repository
+
+# Clone the repository- Parameter presets for each conversation- Live connection status monitoring
+
 git clone https://github.com/sawduzt/weenus-ai.git
+
 cd weenus-ai
 
-# Install dependencies
+
+
+# Install dependencies### Beautiful Design###  **Beautiful Design**
+
 npm install
 
-# Start the app
-npm run dev
+- Clean, minimal interface with pink theme- Cute pink bunny theme with professional UI
+
+# Start development environment
+
+npm run dev- Custom window controls (frameless design)- Custom window controls (frameless design)
+
 ```
 
+- Smooth 60fps interactions- Smooth 60fps interactions
+
 The app will automatically:
-1. Connect to Ollama (or show a "Start Ollama" button if it's not running)
+
+1. Connect to Ollama (or show a "Start Ollama" button if it's not running)- Professional and intuitive UI- System font integration for native feel
+
 2. Load your installed AI models
-3. Open a beautiful chat interface ready to use
 
-### First Time Setup
+3. Open the chat interface ready to use
 
-If Ollama isn't installed, the app will guide you through:
+
+
+### First Time Setup### Privacy First###  **Privacy First**
+
+
+
+If Ollama isn't installed:- 100% local - all data stays on your machine- 100% local - all data stays on your machine
+
 1. Download Ollama from [ollama.ai](https://ollama.ai)
-2. Install at least one model: `ollama pull llama2`
-3. Start chatting!
+
+2. Install at least one model: `ollama pull llama2`- No cloud services, no tracking, no telemetry- No cloud services, no tracking, no telemetry
+
+3. Start using Weenus AI
+
+- Powered by Ollama for local AI models- Powered by [Ollama](https://ollama.ai) for local AI models
 
 ---
 
-## 🖼️ Screenshots
+- Your conversations belong to you- Your conversations belong to you
 
-> *Coming soon - Screenshots will be added as development progresses*
+## Features Explained
+
+
+
+### Per-Conversation Parameters
+
+------
+
+In the chat interface, access parameters to adjust:
+
+- **Temperature** (0.0-2.0): Control creativity and randomness
+
+- **Top-P** (0.0-1.0): Diversity in word choice
+
+- **Top-K** (1-100): Number of candidate words to consider## Getting Started##  Getting Started
+
+- **Repeat Penalty** (0.5-2.0): Avoid repetitive responses
+
+- **Max Tokens** (100-4096): Maximum response length
+
+
+
+Changes apply only to the current conversation.### Prerequisites### Prerequisites
+
+
+
+### Chat History
+
+
+
+- Automatically organized by date- **Node.js 18+** - [Download here](https://nodejs.org/)1. **Node.js 18+** - [Download here](https://nodejs.org/)
+
+- Search across all conversations
+
+- Delete individual chats- **Ollama** - [Get it from ollama.ai](https://ollama.ai)2. **Ollama** - [Get it from ollama.ai](https://ollama.ai)
+
+- Full message preservation
+
+- **At least one AI model** - Run `ollama pull llama2` to get started3. **At least one AI model** - Run `ollama pull llama2` to get started
+
+### Model Management
+
+
+
+View all installed Ollama models with metadata (name, size, modified date). Download additional models from the Ollama CLI.
+
+### Installation & Running### Installation
 
 ---
 
-##  Current Status
 
-**Version:** 0.1.0 (Alpha)  
-**Last Updated:** November 11, 2025
 
-### What's Working 
+## Current Status
+
+```bash```bash
+
+**Version:** 0.1.0 (Alpha)
+
+**Last Updated:** November 2025# Clone the repository# Clone the repository
+
+
+
+### Working Featuresgit clone https://github.com/sawduzt/weenus-ai.gitgit clone https://github.com/sawduzt/weenus-ai.git
+
 - Real-time streaming chat with Ollama models
-- Multiple chat sessions with persistence
-- AI-generated chat titles
-- Model switching during conversations
-- Per-model parameter configuration
-- Custom window controls (minimize/maximize/close)
-- Connection status monitoring
-- Full-text search across chat history
-- Beautiful toast notifications
 
-### In Development 
-- Loading animations and spinners
-- Quick parameter adjustments during chat
-- Model download from Ollama registry
+- Multiple chat sessions with persistencecd weenus-aicd weenus-ai
+
+- AI-generated chat titles
+
+- Model switching during conversations
+
+- Per-conversation parameter configuration
+
+- Custom window controls# Install dependencies# Install dependencies
+
+- Connection status monitoring
+
+- Full-text search across chat historynpm installnpm install
+
+- Toast notifications
+
+- Loading spinner animations
+
+- Parameter adjustments during chat
+
+# Start development environment# Start the app
+
+### In Development
+
+- Model download from Ollama registrynpm run devnpm run dev
+
 - Message export (JSON/Markdown)
-- Keyboard shortcuts
+
+- Keyboard shortcuts``````
+
+- Image/Video generation features
+
+
 
 ---
 
-##  Development
+The app will automatically:The app will automatically:
+
+## Development
+
+1. Connect to Ollama (or show a "Start Ollama" button if it's not running)1. Connect to Ollama (or show a "Start Ollama" button if it's not running)
 
 ### Available Commands
 
+2. Load your installed AI models2. Load your installed AI models
+
 ```bash
-npm run dev          # Start development mode with hot reload
+
+npm run dev          # Start development with hot reload3. Open the chat interface ready to use3. Open a beautiful chat interface ready to use
+
 npm run build        # Build for production
+
 npm run lint         # Check code quality
+
 npm run format       # Format code with Prettier
-npm run test         # Run tests
+
+npm run test         # Run tests### First Time Setup### First Time Setup
+
 ```
+
+
 
 ### Tech Stack
 
+If Ollama isn't installed:If Ollama isn't installed, the app will guide you through:
+
 - **Frontend**: React 18 + TypeScript 5.2
-- **Desktop**: Electron 27 (frameless windows)
-- **Build**: Vite 4.5 (fast builds & HMR)
-- **State**: React Context API + Custom Hooks
-- **Storage**: electron-store (local JSON persistence)
-- **Icons**: Lucide React (professional vector icons)
-- **AI**: Ollama API (local model inference)
+
+- **Desktop**: Electron 27 (frameless windows)1. Download Ollama from [ollama.ai](https://ollama.ai)1. Download Ollama from [ollama.ai](https://ollama.ai)
+
+- **Build**: Vite 4.5 (fast builds)
+
+- **State**: React Context API + Custom Hooks2. Install at least one model: `ollama pull llama2`2. Install at least one model: `ollama pull llama2`
+
+- **Storage**: electron-store (local JSON)
+
+- **Icons**: Lucide React3. Start using Weenus AI3. Start chatting!
+
+- **AI Backend**: Ollama API
+
+
 
 ### Project Structure
 
+------
+
 ```
+
 src/
-├── components/        # Reusable UI components
-│   ├── layout/       # MainLayout, Sidebar, StatusBar, WindowControls
+
+├── components/        # UI components
+
+│   ├── layout/       # MainLayout, Sidebar, StatusBar, WindowControls## Features Explained## 🖼️ Screenshots
+
 │   ├── theme/        # ThemeProvider
+
 │   └── ui/           # Toast, ToggleSwitch
+
 ├── pages/            # Full-page views
-│   ├── ChatPage.tsx
+
+│   ├── ChatPage.tsx### Per-Conversation Parameters> *Coming soon - Screenshots will be added as development progresses*
+
 │   ├── SettingsPage.tsx
+
 │   └── ModelLibraryPage.tsx
+
 ├── services/         # Business logic
-│   ├── chat.ts       # Chat CRUD & search
-│   ├── ollama.ts     # Ollama API client
-│   └── modelParameters.ts
+
+│   ├── chat.tsIn the chat interface, access parameters to adjust:---
+
+│   ├── ollama.ts
+
+│   └── modelParameters.ts- **Temperature** (0.0-2.0): Control creativity and randomness
+
 ├── hooks/            # Custom React hooks
-│   ├── useChat.ts
+
+│   ├── useChat.ts- **Top-P** (0.0-1.0): Diversity in word choice##  Current Status
+
 │   ├── useOllama.ts
-│   └── useModelParameters.ts
+
+│   └── useModelParameters.ts- **Top-K** (1-100): Number of candidate words to consider
+
 └── types/            # TypeScript definitions
-```
 
----
+```- **Repeat Penalty** (0.5-2.0): Avoid repetitive responses**Version:** 0.1.0 (Alpha)  
 
-##  Design Philosophy
 
-### Local-First
-All your data stays on your machine. No cloud services, no tracking, no subscriptions. You own your conversations.
+
+---- **Max Tokens** (100-4096): Maximum response length**Last Updated:** November 11, 2025
+
+
+
+## Design Philosophy
+
+
+
+### Local-FirstChanges apply only to the current conversation.### What's Working 
+
+All your data stays on your machine. You own your conversations completely.
+
+- Real-time streaming chat with Ollama models
 
 ### Beautiful Simplicity
-Powerful AI features wrapped in an intuitive, cute interface. Professional design with a playful bunny theme.
 
-### Performance Matters
-Optimized for 60fps interactions with sub-3-second startup. Every animation is intentional and smooth.
+Powerful AI features in an intuitive, clean interface.### Chat History- Multiple chat sessions with persistence
+
+
+
+### Performance Matters- AI-generated chat titles
+
+Optimized for smooth interactions and fast startup times.
+
+- Automatically organized by date- Model switching during conversations
 
 ### Privacy by Default
-Your AI conversations are personal. Weenus AI never sends data to external servers.
+
+Your conversations never leave your computer.- Search across all conversations- Per-model parameter configuration
+
+
+
+---- Delete individual chats- Custom window controls (minimize/maximize/close)
+
+
+
+## Contributing- Full message preservation- Connection status monitoring
+
+
+
+Contributions welcome! Please:- Full-text search across chat history
+
+1. Report bugs via GitHub Issues
+
+2. Suggest features via Discussions### Model Management- Beautiful toast notifications
+
+3. Submit pull requests with improvements
+
+4. Improve documentation
+
+5. Share your experience
+
+View all installed Ollama models with metadata (name, size, modified date). Download additional models from the Ollama CLI.### In Development 
 
 ---
 
-##  Contributing
+- Loading animations and spinners
+
+## License
+
+---- Quick parameter adjustments during chat
+
+GNU Affero General Public License v3.0 - see [LICENSE](LICENSE) file
+
+- Model download from Ollama registry
+
+This means:
+
+- Free to use, modify, and distribute## Current Status- Message export (JSON/Markdown)
+
+- Source code must remain open
+
+- Network use equals distribution (must share modifications)- Keyboard shortcuts
+
+
+
+---**Version:** 0.1.0 (Alpha)
+
+
+
+## Acknowledgments**Last Updated:** November 2025---
+
+
+
+Built with open source technologies:
+
+- [Ollama](https://ollama.ai) - Local AI model runtime
+
+- [Electron](https://electronjs.org) - Desktop framework### Working Features##  Development
+
+- [React](https://reactjs.org) - UI library
+
+- [Vite](https://vitejs.dev) - Build tool- Real-time streaming chat with Ollama models
+
+- [Lucide](https://lucide.dev) - Icon system
+
+- Multiple chat sessions with persistence### Available Commands
+
+---
+
+- AI-generated chat titles
+
+## Roadmap
+
+- Model switching during conversations```bash
+
+### Near-term (Q4 2025)
+
+- Model download interface from Ollama registry- Per-conversation parameter configurationnpm run dev          # Start development mode with hot reload
+
+- Message export (JSON/Markdown)
+
+- Keyboard shortcuts- Custom window controlsnpm run build        # Build for production
+
+- Additional UI enhancements
+
+- Connection status monitoringnpm run lint         # Check code quality
+
+### Mid-term (Q1 2026)
+
+- Image generation interface- Full-text search across chat historynpm run format       # Format code with Prettier
+
+- Video generation interface
+
+- Advanced model management- Toast notificationsnpm run test         # Run tests
+
+- Statistics dashboard
+
+- Theme customization- Loading spinner animations```
+
+
+
+### Long-term- Parameter adjustments during chat
+
+- Plugin system
+
+- Multi-language support### Tech Stack
+
+- Mobile companion app
+
+- Advanced AI agent features### In Development
+
+
+
+---- Model download from Ollama registry- **Frontend**: React 18 + TypeScript 5.2
+
+
+
+Built with care by [Sawduzt](https://github.com/sawduzt)- Message export (JSON/Markdown)- **Desktop**: Electron 27 (frameless windows)
+
+
+
+Making local AI accessible, beautiful, and powerful.- Keyboard shortcuts- **Build**: Vite 4.5 (fast builds & HMR)
+
+
+- Image/Video generation features- **State**: React Context API + Custom Hooks
+
+- **Storage**: electron-store (local JSON persistence)
+
+---- **Icons**: Lucide React (professional vector icons)
+
+- **AI**: Ollama API (local model inference)
+
+## Development
+
+### Project Structure
+
+### Available Commands
+
+```
+
+```bashsrc/
+
+npm run dev          # Start development with hot reload├── components/        # Reusable UI components
+
+npm run build        # Build for production│   ├── layout/       # MainLayout, Sidebar, StatusBar, WindowControls
+
+npm run lint         # Check code quality│   ├── theme/        # ThemeProvider
+
+npm run format       # Format code with Prettier│   └── ui/           # Toast, ToggleSwitch
+
+npm run test         # Run tests├── pages/            # Full-page views
+
+```│   ├── ChatPage.tsx
+
+│   ├── SettingsPage.tsx
+
+### Tech Stack│   └── ModelLibraryPage.tsx
+
+├── services/         # Business logic
+
+- **Frontend**: React 18 + TypeScript 5.2│   ├── chat.ts       # Chat CRUD & search
+
+- **Desktop**: Electron 27 (frameless windows)│   ├── ollama.ts     # Ollama API client
+
+- **Build**: Vite 4.5 (fast builds)│   └── modelParameters.ts
+
+- **State**: React Context API + Custom Hooks├── hooks/            # Custom React hooks
+
+- **Storage**: electron-store (local JSON)│   ├── useChat.ts
+
+- **Icons**: Lucide React│   ├── useOllama.ts
+
+- **AI Backend**: Ollama API│   └── useModelParameters.ts
+
+└── types/            # TypeScript definitions
+
+### Project Structure```
+
+
+
+```---
+
+src/
+
+├── components/        # UI components##  Design Philosophy
+
+│   ├── layout/       # MainLayout, Sidebar, StatusBar, WindowControls
+
+│   ├── theme/        # ThemeProvider### Local-First
+
+│   └── ui/           # Toast, ToggleSwitchAll your data stays on your machine. No cloud services, no tracking, no subscriptions. You own your conversations.
+
+├── pages/            # Full-page views
+
+│   ├── ChatPage.tsx### Beautiful Simplicity
+
+│   ├── SettingsPage.tsxPowerful AI features wrapped in an intuitive, cute interface. Professional design with a playful bunny theme.
+
+│   └── ModelLibraryPage.tsx
+
+├── services/         # Business logic### Performance Matters
+
+│   ├── chat.tsOptimized for 60fps interactions with sub-3-second startup. Every animation is intentional and smooth.
+
+│   ├── ollama.ts
+
+│   └── modelParameters.ts### Privacy by Default
+
+├── hooks/            # Custom React hooksYour AI conversations are personal. Weenus AI never sends data to external servers.
+
+│   ├── useChat.ts
+
+│   ├── useOllama.ts---
+
+│   └── useModelParameters.ts
+
+└── types/            # TypeScript definitions##  Contributing
+
+```
 
 Contributions are welcome! Whether it's bug reports, feature requests, or code contributions.
 
-### Ways to Contribute
-- Report bugs via [GitHub Issues](https://github.com/sawduzt/weenus-ai/issues)
-- Suggest features via [Discussions](https://github.com/sawduzt/weenus-ai/discussions)
-- Submit pull requests (please read [CONTRIBUTING.md](CONTRIBUTING.md) first)
-- Improve documentation
-- Share your experience with Weenus AI
-
 ---
 
-##  License
+### Ways to Contribute
+
+## Design Philosophy- Report bugs via [GitHub Issues](https://github.com/sawduzt/weenus-ai/issues)
+
+- Suggest features via [Discussions](https://github.com/sawduzt/weenus-ai/discussions)
+
+### Local-First- Submit pull requests (please read [CONTRIBUTING.md](CONTRIBUTING.md) first)
+
+All your data stays on your machine. You own your conversations completely.- Improve documentation
+
+- Share your experience with Weenus AI
+
+### Beautiful Simplicity
+
+Powerful AI features in an intuitive, clean interface.---
+
+
+
+### Performance Matters##  License
+
+Optimized for smooth interactions and fast startup times.
 
 This project is licensed under the **GNU Affero General Public License v3.0** - see the [LICENSE](LICENSE) file for details.
 
-This means:
+### Privacy by Default
+
+Your conversations never leave your computer.This means:
+
 - ✅ Free to use, modify, and distribute
-- ✅ Source code must remain open
+
+---- ✅ Source code must remain open
+
 - ✅ Network use = distribution (must share modifications)
 
+## Contributing
+
 ---
 
-## 🙏 Acknowledgments
+Contributions welcome! Please:
 
-Built with amazing open source technologies:
-- [Ollama](https://ollama.ai) - Local AI model runtime
-- [Electron](https://electronjs.org) - Cross-platform desktop framework
+1. Report bugs via GitHub Issues## 🙏 Acknowledgments
+
+2. Suggest features via Discussions
+
+3. Submit pull requests with improvementsBuilt with amazing open source technologies:
+
+4. Improve documentation- [Ollama](https://ollama.ai) - Local AI model runtime
+
+5. Share your experience- [Electron](https://electronjs.org) - Cross-platform desktop framework
+
 - [React](https://reactjs.org) - UI framework
-- [Vite](https://vitejs.dev) - Lightning-fast build tool
+
+---- [Vite](https://vitejs.dev) - Lightning-fast build tool
+
 - [Lucide](https://lucide.dev) - Beautiful icon system
 
+## License
+
 ---
+
+GNU Affero General Public License v3.0 - see [LICENSE](LICENSE) file
 
 ## 🗺️ Roadmap
 
-### Near-term (Q4 2025)
-- [ ] In-chat parameter quick-adjust panel
-- [ ] Model download interface
+This means:
+
+- Free to use, modify, and distribute### Near-term (Q4 2025)
+
+- Source code must remain open- [ ] In-chat parameter quick-adjust panel
+
+- Network use equals distribution (must share modifications)- [ ] Model download interface
+
 - [ ] Message export (JSON/Markdown)
-- [ ] Keyboard shortcuts
+
+---- [ ] Keyboard shortcuts
+
 - [ ] Loading animations
 
+## Acknowledgments
+
 ### Mid-term (Q1 2026)
-- [ ] Image generation interface
-- [ ] Video generation interface
-- [ ] Advanced model management
-- [ ] Statistics dashboard
-- [ ] Theme customization
+
+Built with open source technologies:- [ ] Image generation interface
+
+- [Ollama](https://ollama.ai) - Local AI model runtime- [ ] Video generation interface
+
+- [Electron](https://electronjs.org) - Desktop framework- [ ] Advanced model management
+
+- [React](https://reactjs.org) - UI library- [ ] Statistics dashboard
+
+- [Vite](https://vitejs.dev) - Build tool- [ ] Theme customization
+
+- [Lucide](https://lucide.dev) - Icon system
 
 ### Long-term
-- [ ] Plugin system
+
+---- [ ] Plugin system
+
 - [ ] Multi-language support
-- [ ] Mobile companion app
+
+## Roadmap- [ ] Mobile companion app
+
 - [ ] Advanced AI agent features
 
----
+### Near-term (Q4 2025)
 
-<div align="center">
+- Model download interface from Ollama registry---
+
+- Message export (JSON/Markdown)
+
+- Keyboard shortcuts<div align="center">
+
+- Additional UI enhancements
 
 **Built with ❤️ by [Sawduzt](https://github.com/sawduzt)**
 
-*Making local AI accessible, beautiful, and powerful*
+### Mid-term (Q1 2026)
 
-[⭐ Star this repo](https://github.com/sawduzt/weenus-ai) • [🐛 Report Bug](https://github.com/sawduzt/weenus-ai/issues) • [💡 Request Feature](https://github.com/sawduzt/weenus-ai/issues)
+- Image generation interface*Making local AI accessible, beautiful, and powerful*
 
-</div></div>
+- Video generation interface
+
+- Advanced model management[⭐ Star this repo](https://github.com/sawduzt/weenus-ai) • [🐛 Report Bug](https://github.com/sawduzt/weenus-ai/issues) • [💡 Request Feature](https://github.com/sawduzt/weenus-ai/issues)
+
+- Statistics dashboard
+
+- Theme customization</div></div>
 
 
 
-## Getting started## Status
+### Long-term
+
+- Plugin system
+
+- Multi-language support## Getting started## Status
+
+- Mobile companion app
+
+- Advanced AI agent features
 
 
 
-### Prerequisites## 🚀 Development Status
+---### Prerequisites## 🚀 Development Status
 
-- Node.js 18+
 
-- Ollama (get it from [ollama.ai](https://ollama.ai))**Working** (November 11, 2025):
+
+Built with care by [Sawduzt](https://github.com/sawduzt)- Node.js 18+
+
+
+
+Making local AI accessible, beautiful, and powerful.- Ollama (get it from [ollama.ai](https://ollama.ai))**Working** (November 11, 2025):
+
 
 - At least one AI model installed (`ollama pull llama2`, etc.)
 

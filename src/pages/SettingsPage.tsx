@@ -8,6 +8,7 @@
 import { useState, useEffect } from 'react';
 import { FolderOpen, Save, Settings as SettingsIcon, Bot, Sliders, Wrench, Download, Upload, RotateCcw } from 'lucide-react';
 import { useToast } from '../components/ui/ToastProvider';
+import { ToggleSwitch } from '../components/ui/ToggleSwitch';
 import { ModelParametersConfigurator } from '../components/ModelParametersConfigurator';
 import './SettingsPage.css';
 
@@ -48,6 +49,8 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const [activeTab, setActiveTab] = useState<string>('general');
   const [isSaving, setIsSaving] = useState(false);
+  const [showRestartPrompt, setShowRestartPrompt] = useState(false);
+  const [prevModelPath, setPrevModelPath] = useState<string>('');
   const toast = useToast();
 
   // Load settings from electron store on mount
@@ -57,6 +60,7 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
         const savedModelPath = await window.electronAPI.store.get('modelPath');
         if (savedModelPath) {
           setSettings(prev => ({ ...prev, modelPath: savedModelPath }));
+          setPrevModelPath(savedModelPath);
         }
       }
     };
@@ -108,31 +112,53 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
   };
 
   const handleSaveSettings = async (): Promise<void> => {
-    if (!window.electronAPI?.ollama) {
-      toast.warning('Desktop App Required', 'Settings save with Ollama restart is only available in the desktop app.');
+    if (!window.electronAPI?.store) {
+      toast.warning('Desktop App Required', 'Settings save is only available in the desktop app.');
       return;
     }
 
     setIsSaving(true);
     
     try {
-      // Save model path to store
-      if (window.electronAPI?.store && settings.modelPath) {
-        await window.electronAPI.store.set('modelPath', settings.modelPath);
-      }
+      // Save all settings to store
+      await window.electronAPI.store.set('modelPath', settings.modelPath);
 
-      // Restart Ollama with new settings
-      const result = await window.electronAPI.ollama.restart(settings.modelPath || undefined);
-      
-      if (result.success) {
-        toast.success('Settings Saved!', 'Ollama has been restarted with the new model path.');
-      } else {
-        toast.warning('Partial Success', `Settings saved, but failed to restart Ollama:\n${result.error || 'Unknown error'}\n\nPlease restart Ollama manually.`);
+      toast.success('Settings Saved!', 'Your settings have been saved successfully.');
+
+      // Check if model path changed - if so, ask to restart Ollama
+      if (settings.modelPath !== prevModelPath) {
+        setShowRestartPrompt(true);
       }
     } catch (error) {
       console.error('Error saving settings:', error);
-      toast.error('Save Failed', 'Failed to save settings and restart Ollama.');
+      toast.error('Save Failed', 'Failed to save settings.');
     } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleRestartOllama = async (): Promise<void> => {
+    if (!window.electronAPI?.ollama) {
+      toast.warning('Desktop App Required', 'Ollama control is only available in the desktop app.');
+      return;
+    }
+
+    setIsSaving(true);
+    
+    try {
+      const result = await window.electronAPI.ollama.restart(settings.modelPath || undefined);
+      
+      if (result.success) {
+        toast.success('Ollama Restarted!', 'Ollama has been restarted with the new model path.');
+        setPrevModelPath(settings.modelPath);
+      } else {
+        toast.warning('Restart Failed', `Failed to restart Ollama:\n${result.error || 'Unknown error'}\n\nPlease restart Ollama manually.`);
+      }
+    } catch (error) {
+      console.error('Error restarting Ollama:', error);
+      toast.error('Restart Failed', 'Failed to restart Ollama.');
+    } finally {
+      setShowRestartPrompt(false);
       setIsSaving(false);
     }
   };
@@ -189,7 +215,7 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
           }}
         >
           <Save size={16} />
-          {isSaving ? 'Saving...' : 'Save & Restart Ollama'}
+          {isSaving ? 'Saving...' : 'Save'}
         </button>
       </div>
 
@@ -233,48 +259,30 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
               </div>
 
               <div className="setting-group">
-                <label className="setting-label">
-                  <input
-                    type="checkbox"
-                    checked={settings.autoSave}
-                    onChange={(e) => updateSetting('autoSave', e.target.checked)}
-                    className="setting-checkbox"
-                  />
-                  Auto-save conversations
-                </label>
-                <p className="setting-description">
-                  Automatically save chat history and settings
-                </p>
+                <ToggleSwitch
+                  checked={settings.autoSave}
+                  onChange={(checked) => updateSetting('autoSave', checked)}
+                  label="Auto-save conversations"
+                  description="Automatically save chat history and settings"
+                />
               </div>
 
               <div className="setting-group">
-                <label className="setting-label">
-                  <input
-                    type="checkbox"
-                    checked={settings.streamResponses}
-                    onChange={(e) => updateSetting('streamResponses', e.target.checked)}
-                    className="setting-checkbox"
-                  />
-                  Stream responses
-                </label>
-                <p className="setting-description">
-                  Show AI responses in real-time as they're generated
-                </p>
+                <ToggleSwitch
+                  checked={settings.streamResponses}
+                  onChange={(checked) => updateSetting('streamResponses', checked)}
+                  label="Stream responses"
+                  description="Show AI responses in real-time as they're generated"
+                />
               </div>
 
               <div className="setting-group">
-                <label className="setting-label">
-                  <input
-                    type="checkbox"
-                    checked={settings.hardwareAcceleration}
-                    onChange={(e) => updateSetting('hardwareAcceleration', e.target.checked)}
-                    className="setting-checkbox"
-                  />
-                  Hardware Acceleration
-                </label>
-                <p className="setting-description">
-                  Enable GPU acceleration for smoother animations and effects (recommended)
-                </p>
+                <ToggleSwitch
+                  checked={settings.hardwareAcceleration}
+                  onChange={(checked) => updateSetting('hardwareAcceleration', checked)}
+                  label="Hardware Acceleration"
+                  description="Enable GPU acceleration for smoother animations and effects (recommended)"
+                />
               </div>
             </div>
           )}
@@ -382,6 +390,72 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
           )}
         </div>
       </div>
+
+      {/* Restart Ollama Prompt */}
+      {showRestartPrompt && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+        }}>
+          <div style={{
+            backgroundColor: 'var(--bg-secondary)',
+            border: '1px solid var(--border)',
+            borderRadius: '8px',
+            padding: '24px',
+            maxWidth: '400px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          }}>
+            <h3 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)' }}>
+              Restart Ollama?
+            </h3>
+            <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
+              Model path has changed. Ollama needs to be restarted to use the new path. Would you like to restart it now?
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => setShowRestartPrompt(false)}
+                disabled={isSaving}
+                style={{
+                  padding: '8px 16px',
+                  background: 'var(--border)',
+                  color: 'var(--text-primary)',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: isSaving ? 'not-allowed' : 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                }}
+              >
+                Skip
+              </button>
+              <button
+                onClick={handleRestartOllama}
+                disabled={isSaving}
+                style={{
+                  padding: '8px 16px',
+                  background: 'var(--pink)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: isSaving ? 'not-allowed' : 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                }}
+              >
+                {isSaving ? 'Restarting...' : 'Restart Now'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

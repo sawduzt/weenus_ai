@@ -22,6 +22,7 @@ export interface MainLayoutProps {
   onNewChat?: () => void;
   onSelectChat?: (chatId: string) => void;
   activeChatId?: string | null;
+  onRefreshConnection?: () => Promise<void>;
   children: React.ReactNode;
 }
 
@@ -35,6 +36,7 @@ export function MainLayout({
   onNewChat,
   onSelectChat,
   activeChatId,
+  onRefreshConnection,
   children,
 }: MainLayoutProps): JSX.Element {
   return (
@@ -60,7 +62,7 @@ export function MainLayout({
         </div>
 
         {/* Status Bar */}
-        <StatusBar connectionStatus={connectionStatus} />
+        <StatusBar connectionStatus={connectionStatus} onRefresh={onRefreshConnection} />
       </div>
 
       {/* Windows Mica Effect Overlay */}

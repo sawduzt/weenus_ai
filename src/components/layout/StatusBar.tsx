@@ -5,14 +5,30 @@
  * at the bottom of the application window.
  */
 
+import { useState } from 'react';
+import { RefreshCw } from 'lucide-react';
 import { ConnectionStatus } from '../../types/global.types';
 import './StatusBar.css';
 
 export interface StatusBarProps {
   connectionStatus: ConnectionStatus;
+  onRefresh?: () => Promise<void>;
 }
 
-export function StatusBar({ connectionStatus }: StatusBarProps): JSX.Element {
+export function StatusBar({ connectionStatus, onRefresh }: StatusBarProps): JSX.Element {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    if (onRefresh && !isRefreshing) {
+      setIsRefreshing(true);
+      try {
+        await onRefresh();
+      } finally {
+        setIsRefreshing(false);
+      }
+    }
+  };
+
   const formatLastChecked = (date: Date): string => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
@@ -52,6 +68,34 @@ export function StatusBar({ connectionStatus }: StatusBarProps): JSX.Element {
         <span className="status-detail">
           Last checked: {formatLastChecked(connectionStatus.lastChecked)}
         </span>
+        {onRefresh && (
+          <button
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            title="Refresh connection status"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--text-secondary)',
+              cursor: isRefreshing ? 'not-allowed' : 'pointer',
+              padding: '4px 8px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              fontSize: '12px',
+              transition: 'color 0.2s ease',
+              opacity: isRefreshing ? 0.5 : 1,
+            }}
+            onMouseEnter={(e) => {
+              if (!isRefreshing) e.currentTarget.style.color = 'var(--text-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--text-secondary)';
+            }}
+          >
+            <RefreshCw size={14} style={{ animation: isRefreshing ? 'spin 1s linear infinite' : 'none' }} />
+          </button>
+        )}
       </div>
 
       {/* System Information */}

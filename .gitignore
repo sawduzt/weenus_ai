@@ -169,4 +169,7 @@ docs/.doctrees/
 *.backup
 
 # Electron builder output
-dist_electronAGENT_CONTEXT.md
+dist_electron/
+
+# Agent context (development only)
+AGENT_CONTEXT.md

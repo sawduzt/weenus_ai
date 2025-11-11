@@ -5,13 +5,13 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, User, Bot, RefreshCw, MessageCircle, Lightbulb } from 'lucide-react';
+import { Send, User, Bot, RefreshCw, MessageCircle, Lightbulb, Loader, Sliders } from 'lucide-react';
 import { useOllama } from '../hooks/useOllama';
 import { useChat } from '../hooks/useChat';
-import { useModelParameters } from '../hooks/useModelParameters';
 import { useToast } from '../components/ui/ToastProvider';
 import { WindowControls } from '../components/layout/WindowControls';
 import { chatService } from '../services/chat';
+import { streamingChatService } from '../services/streamingChat';
 import type { ChatMessage } from '../types/chat.types';
 import './ChatPage.css';
 
@@ -22,13 +22,21 @@ export interface ChatPageProps {
 
 export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Element {
   const [input, setInput] = useState('');
-  const [streamingResponse, setStreamingResponse] = useState('');
   const [isCheckingConnection, setIsCheckingConnection] = useState(true);
   const [isStartingOllama, setIsStartingOllama] = useState(false);
   const [isGeneratingResponse, setIsGeneratingResponse] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editedTitle, setEditedTitle] = useState('');
+  const [streamingResponse, setStreamingResponse] = useState('');
+  const [showParameterPanel, setShowParameterPanel] = useState(false);
+  const [chatParameters, setChatParameters] = useState({
+    temperature: 0.7,
+    topP: 0.9,
+    topK: 40,
+    repeatPenalty: 1.1,
+    maxTokens: 2048,
+  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const toast = useToast();
   const isFirstMessage = useRef(false);
@@ -43,9 +51,6 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   } = useOllama();
 
   const { activeChat, switchChat, createNewChat, refreshChats } = useChat();
-  
-  // Load model parameters for the currently selected model
-  const { parameters } = useModelParameters(currentModel || null);
 
   // Get messages from active chat or empty array
   const messages = activeChat?.messages || [];
@@ -95,6 +100,15 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, streamingResponse]);
+
+  // Subscribe to streaming updates when component mounts
+  useEffect(() => {
+    const unsubscribe = streamingChatService.subscribe('chat-page', (state) => {
+      setStreamingResponse(state.currentResponse);
+    });
+
+    return unsubscribe;
+  }, []);
 
   // Handle title editing
   const handleTitleClick = () => {
@@ -165,7 +179,10 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
         { role: 'user' as const, content: userInput }
       ];
 
-      // Generate AI response using /api/chat endpoint with model parameters
+      // Start streaming through the app-level service
+      streamingChatService.startStreaming(chatId);
+
+      // Generate AI response using /api/chat endpoint with chat-specific parameters
       let fullResponse = '';
       const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
@@ -175,13 +192,14 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           messages: conversationMessages,
           stream: true,
           options: {
-            temperature: parameters.temperature,
-            top_p: parameters.topP,
-            top_k: parameters.topK,
-            repeat_penalty: parameters.repeatPenalty,
-            num_predict: parameters.maxTokens,
+            temperature: chatParameters.temperature,
+            top_p: chatParameters.topP,
+            top_k: chatParameters.topK,
+            repeat_penalty: 1.1,
+            num_predict: 2048,
           },
         }),
+        signal: streamingChatService.getAbortSignal() || undefined,
       });
 
       if (!response.ok || !response.body) {
@@ -208,7 +226,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
               const json = JSON.parse(line);
               if (json.message?.content) {
                 fullResponse += json.message.content;
-                setStreamingResponse(fullResponse);
+                streamingChatService.appendResponse(json.message.content);
               }
             } catch (e) {
               console.error('Error parsing chunk:', e);
@@ -229,8 +247,16 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
       // Add assistant message to chat
       await chatService.addMessage(chatId, assistantMessage);
       
-      // Refresh chat to show assistant message
+      // END GENERATION IMMEDIATELY (before refreshing to avoid loading indicator flash)
+      setIsGeneratingResponse(false);
+      setLoadingMessage('');
+      
+      // Refresh chat to update sidebar with new message (loads from storage)
       await refreshChats();
+      
+      // NOW end streaming and clear the streaming response
+      streamingChatService.endStreaming();
+      setStreamingResponse('');
 
       // Generate title if this was the first message
       if (isFirstMessage.current) {
@@ -238,15 +264,46 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
         await chatService.generateTitle(chatId, userInput, currentModel);
         await refreshChats(); // Refresh again to show updated title
       }
-
-      setStreamingResponse('');
     } catch (error) {
-      console.error('Chat error:', error);
-      toast.error('Chat Error', 'Failed to send message. Please try again.');
-      setStreamingResponse('');
-    } finally {
+      // Handle abort error gracefully (user cancelled manually)
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.log('Chat streaming cancelled by user');
+      } else {
+        console.error('Chat error:', error);
+        toast.error('Chat Error', 'Failed to send message. Please try again.');
+      }
       setIsGeneratingResponse(false);
       setLoadingMessage('');
+      streamingChatService.reset();
+    } finally {
+      // Already handled above to prevent loading indicator flash
+    }
+  };
+
+  const handleStopGenerating = async () => {
+    streamingChatService.cancelStreaming();
+    setIsGeneratingResponse(false);
+    setLoadingMessage('');
+    
+    // Save the partial response that was streamed so far
+    if (streamingResponse && activeChatId) {
+      const assistantMessage: ChatMessage = {
+        id: `msg-${Date.now()}-assistant`,
+        role: 'assistant',
+        content: streamingResponse,
+        timestamp: new Date(),
+        model: currentModel,
+      };
+      
+      try {
+        await chatService.addMessage(activeChatId, assistantMessage);
+        await refreshChats();
+        streamingChatService.endStreaming();
+        setStreamingResponse('');
+      } catch (error) {
+        console.error('Error saving partial response:', error);
+        toast.error('Save Failed', 'Could not save partial response');
+      }
     }
   };
 
@@ -329,7 +386,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
         <div className="coming-soon">
           <div className="coming-soon-icon"><Bot size={48} /></div>
           <h2>Checking Ollama Connection...</h2>
-          <p>Please wait while we verify the Ollama service</p>
+          <p>Weenus is initializing</p>
         </div>
       </div>
     );
@@ -341,8 +398,8 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
       <div className="chat-page">
         <div className="coming-soon">
           <div className="coming-soon-icon"><Bot size={48} /></div>
-          <h2>Ollama Not Running</h2>
-          <p>Please start the Ollama service to begin chatting</p>
+          <h2>Weenus Needs Fuel</h2>
+          <p>Ollama service is not running. Let's start it up!</p>
           
           <div style={{ marginTop: '24px', display: 'flex', gap: '12px', justifyContent: 'center' }}>
             <button 
@@ -476,13 +533,14 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           <div className="coming-soon">
             <div className="coming-soon-icon"><MessageCircle size={48} /></div>
             <h2>Start a Conversation</h2>
-            <p>Select a model and type your message below</p>
+            <p>Select a model and type your message to begin</p>
           </div>
         ) : (
           <>
             {messages.map((message, index) => (
               <div
                 key={index}
+                className="fade-in"
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
@@ -491,6 +549,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
                   borderRadius: '12px',
                   background: message.role === 'user' ? 'var(--surface)' : 'var(--background)',
                   border: '1px solid var(--border)',
+                  animation: 'fadeIn 0.3s ease',
                 }}
               >
                 <div style={{
@@ -543,6 +602,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
                   fontSize: '14px',
                   fontStyle: 'italic',
                 }}>
+                  <Loader size={14} style={{ animation: 'spin 1s linear infinite' }} />
                   {loadingMessage}...
                 </div>
               </div>
@@ -608,42 +668,74 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
             onFocus={(e) => e.target.style.borderColor = 'var(--accent-primary)'}
             onBlur={(e) => e.target.style.borderColor = 'var(--border-primary)'}
           />
-          <button
-            type="submit"
-            disabled={!input.trim() || !currentModel || isGeneratingResponse}
-            style={{
-              padding: '14px 28px',
-              borderRadius: '16px',
-              border: 'none',
-              background: !input.trim() || !currentModel || isGeneratingResponse ? 'var(--border-primary)' : 'var(--accent-primary)',
-              color: 'white',
-              cursor: !input.trim() || !currentModel || isGeneratingResponse ? 'not-allowed' : 'pointer',
-              fontSize: '14px',
-              fontWeight: '600',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              if (!(!input.trim() || !currentModel || isGeneratingResponse)) {
-                e.currentTarget.style.background = 'var(--accent-hover)';
+          {isGeneratingResponse ? (
+            <button
+              type="button"
+              onClick={handleStopGenerating}
+              style={{
+                padding: '14px 28px',
+                borderRadius: '16px',
+                border: 'none',
+                background: 'var(--error)',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#c73030';
                 e.currentTarget.style.transform = 'translateY(-1px)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!(!input.trim() || !currentModel || isGeneratingResponse)) {
-                e.currentTarget.style.background = 'var(--accent-primary)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'var(--error)';
                 e.currentTarget.style.transform = 'translateY(0)';
-              }
-            }}
-          >
-            <Send size={16} />
-            {isGeneratingResponse ? 'Sending...' : 'Send'}
-          </button>
+              }}
+            >
+              <Lightbulb size={16} />
+              Stop
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={!input.trim() || !currentModel}
+              style={{
+                padding: '14px 28px',
+                borderRadius: '16px',
+                border: 'none',
+                background: !input.trim() || !currentModel ? 'var(--border-primary)' : 'var(--accent-primary)',
+                color: 'white',
+                cursor: !input.trim() || !currentModel ? 'not-allowed' : 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                if (!(!input.trim() || !currentModel)) {
+                  e.currentTarget.style.background = 'var(--accent-hover)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!(!input.trim() || !currentModel)) {
+                  e.currentTarget.style.background = 'var(--accent-primary)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }
+              }}
+            >
+              <Send size={16} />
+              Send
+            </button>
+          )}
         </form>
 
-        {/* Tool Bar - Model Selector and Future Tools */}
+        {/* Tool Bar - Model Selector and Parameter Adjuster */}
         <div style={{
           display: 'flex',
           gap: '12px',
@@ -704,15 +796,168 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
             </select>
           </div>
           
-          {/* Placeholder for future tools */}
-          <div style={{ 
-            fontSize: '12px', 
-            color: 'var(--text-muted)',
-            fontStyle: 'italic' 
-          }}>
-            More tools coming soon...
-          </div>
+          {/* Parameter Adjuster Toggle */}
+          <button
+            onClick={() => setShowParameterPanel(!showParameterPanel)}
+            style={{
+              padding: '8px 12px',
+              borderRadius: '12px',
+              border: '2px solid var(--border-primary)',
+              background: showParameterPanel ? 'rgba(255, 107, 157, 0.1)' : 'transparent',
+              color: 'var(--text-primary)',
+              cursor: 'pointer',
+              fontSize: '13px',
+              fontWeight: '500',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--accent-primary)';
+              e.currentTarget.style.background = 'rgba(255, 107, 157, 0.05)';
+            }}
+            onMouseLeave={(e) => {
+              if (!showParameterPanel) {
+                e.currentTarget.style.borderColor = 'var(--border-primary)';
+                e.currentTarget.style.background = 'transparent';
+              }
+            }}
+          >
+            <Sliders size={16} />
+            Parameters
+          </button>
         </div>
+
+        {/* Parameter Adjustment Panel */}
+        {showParameterPanel && (
+          <div style={{
+            padding: '12px 16px',
+            borderRadius: '12px',
+            border: '2px solid var(--border-primary)',
+            background: 'rgba(255, 107, 157, 0.02)',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(5, 1fr)',
+            gap: '12px',
+            animation: 'slideDown 0.2s ease',
+            alignItems: 'end',
+          }}>
+            {/* Temperature Slider */}
+            <div>
+              <label style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
+                Temperature: {chatParameters.temperature.toFixed(2)}
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="2"
+                step="0.1"
+                value={chatParameters.temperature}
+                onChange={(e) => setChatParameters(prev => ({ ...prev, temperature: parseFloat(e.target.value) }))}
+                style={{
+                  width: '100%',
+                  cursor: 'pointer',
+                  marginTop: '6px',
+                }}
+              />
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
+                Creativity
+              </p>
+            </div>
+
+            {/* Top-P Slider */}
+            <div>
+              <label style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
+                Top-P: {chatParameters.topP.toFixed(2)}
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={chatParameters.topP}
+                onChange={(e) => setChatParameters(prev => ({ ...prev, topP: parseFloat(e.target.value) }))}
+                style={{
+                  width: '100%',
+                  cursor: 'pointer',
+                  marginTop: '6px',
+                }}
+              />
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
+                Diversity
+              </p>
+            </div>
+
+            {/* Top-K Slider */}
+            <div>
+              <label style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
+                Top-K: {chatParameters.topK}
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                step="1"
+                value={chatParameters.topK}
+                onChange={(e) => setChatParameters(prev => ({ ...prev, topK: parseInt(e.target.value) }))}
+                style={{
+                  width: '100%',
+                  cursor: 'pointer',
+                  marginTop: '6px',
+                }}
+              />
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
+                Top candidates
+              </p>
+            </div>
+
+            {/* Repeat Penalty Slider */}
+            <div>
+              <label style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
+                Repeat Penalty: {chatParameters.repeatPenalty.toFixed(2)}
+              </label>
+              <input
+                type="range"
+                min="0.5"
+                max="2"
+                step="0.1"
+                value={chatParameters.repeatPenalty}
+                onChange={(e) => setChatParameters(prev => ({ ...prev, repeatPenalty: parseFloat(e.target.value) }))}
+                style={{
+                  width: '100%',
+                  cursor: 'pointer',
+                  marginTop: '6px',
+                }}
+              />
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
+                Avoid repetition
+              </p>
+            </div>
+
+            {/* Max Tokens Slider */}
+            <div>
+              <label style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: '500' }}>
+                Max Tokens: {chatParameters.maxTokens}
+              </label>
+              <input
+                type="range"
+                min="100"
+                max="4096"
+                step="100"
+                value={chatParameters.maxTokens}
+                onChange={(e) => setChatParameters(prev => ({ ...prev, maxTokens: parseInt(e.target.value) }))}
+                style={{
+                  width: '100%',
+                  cursor: 'pointer',
+                  marginTop: '6px',
+                }}
+              />
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
+                Response length
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
