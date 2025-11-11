@@ -126,7 +126,7 @@ export function StatusBar({
       {/* Application Info */}
       <div className="status-section app-info">
         <span className="app-version">Weenus AI v0.1.0</span>
-        <span className="build-info">Development Build</span>
+        <span className="build-info">Release Build</span>
       </div>
     </div>
   );
