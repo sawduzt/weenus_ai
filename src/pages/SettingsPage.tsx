@@ -190,33 +190,47 @@ export function SettingsPage({ onThemeChange, onHardwareAccelerationChange }: Se
 
   return (
     <div className="settings-page">
-      <div className="settings-header">
-        <h1>Settings</h1>
-        <p>Configure your Weenus AI experience</p>
-        <button
-          onClick={handleSaveSettings}
-          disabled={isSaving}
-          className="setting-button"
-          style={{
-            position: 'absolute',
-            top: '24px',
-            right: '24px',
-            padding: '10px 20px',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: isSaving ? 'var(--border)' : 'var(--pink)',
-            color: 'white',
-            fontWeight: '600',
-            fontSize: '14px',
-            cursor: isSaving ? 'not-allowed' : 'pointer',
-            border: 'none',
-            borderRadius: '6px',
-          }}
-        >
-          <Save size={16} />
-          {isSaving ? 'Saving...' : 'Save'}
-        </button>
+      <div className="settings-header" style={{ padding: '8px 2px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
+        <div style={{ flex: 1, paddingLeft: '10px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div>
+            <h1 
+              style={{ 
+                fontSize: '18px', 
+                margin: '0', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                fontWeight: '600',
+              }}
+            >
+              <SettingsIcon size={20} />
+              Settings
+            </h1>
+            <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--text-muted)' }}>Configure your Weenus AI experience</p>
+          </div>
+          
+          <button
+            onClick={handleSaveSettings}
+            disabled={isSaving}
+            className="setting-button"
+            style={{
+              padding: '10px 20px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: isSaving ? 'var(--border)' : 'var(--pink)',
+              color: 'white',
+              fontWeight: '600',
+              fontSize: '14px',
+              cursor: isSaving ? 'not-allowed' : 'pointer',
+              border: 'none',
+              borderRadius: '6px',
+            }}
+          >
+            <Save size={16} />
+            {isSaving ? 'Saving...' : 'Save'}
+          </button>
+        </div>
       </div>
 
       <div className="settings-content">
