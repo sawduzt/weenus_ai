@@ -8,7 +8,9 @@ import { useState, useRef, useEffect } from 'react';
 import { Send, User, Bot, RefreshCw, MessageCircle, Lightbulb, Loader, Sliders } from 'lucide-react';
 import { useOllama } from '../hooks/useOllama';
 import { useChat } from '../hooks/useChat';
+import { usePerChatParameters } from '../hooks/usePerChatParameters';
 import { useToast } from '../components/ui/ToastProvider';
+import { PerChatParameterAdjuster } from '../components/PerChatParameterAdjuster';
 import { chatService } from '../services/chat';
 import { streamingChatService } from '../services/streamingChat';
 import type { ChatMessage } from '../types/chat.types';
@@ -50,6 +52,14 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
   } = useOllama();
 
   const { activeChat, switchChat, createNewChat, refreshChats } = useChat();
+
+  // Per-chat parameter management
+  const {
+    effectiveParameters,
+    hasOverrides,
+    saveChatParameters,
+    resetToModelDefaults,
+  } = usePerChatParameters(activeChatId, currentModel);
 
   // Get messages from active chat or empty array
   const messages = activeChat?.messages || [];
@@ -181,7 +191,7 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
       // Start streaming through the app-level service
       streamingChatService.startStreaming(chatId);
 
-      // Generate AI response using /api/chat endpoint with chat-specific parameters
+      // Generate AI response using /api/chat endpoint with per-chat parameters
       let fullResponse = '';
       const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
@@ -191,11 +201,11 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
           messages: conversationMessages,
           stream: true,
           options: {
-            temperature: chatParameters.temperature,
-            top_p: chatParameters.topP,
-            top_k: chatParameters.topK,
-            repeat_penalty: 1.1,
-            num_predict: 2048,
+            temperature: effectiveParameters.temperature,
+            top_p: effectiveParameters.topP,
+            top_k: effectiveParameters.topK,
+            repeat_penalty: effectiveParameters.repeatPenalty,
+            num_predict: effectiveParameters.maxTokens,
           },
         }),
         signal: streamingChatService.getAbortSignal() || undefined,

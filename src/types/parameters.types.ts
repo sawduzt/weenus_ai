@@ -12,6 +12,13 @@ export interface ModelParameters {
   maxTokens: number;
 }
 
+// Alias for consistency - same as ModelParameters
+export type ParameterValues = ModelParameters;
+
+export interface ChatParameterOverride extends ModelParameters {
+  lastModified: number;
+}
+
 export interface SavedModelPreset {
   modelName: string;
   parameters: ModelParameters;
