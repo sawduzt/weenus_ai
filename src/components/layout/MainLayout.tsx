@@ -8,6 +8,7 @@
 import React from 'react';
 import { Sidebar } from './Sidebar';
 import { StatusBar } from './StatusBar';
+import { WindowControls } from './WindowControls';
 import { AppPage } from '../../App';
 import { ConnectionStatus } from '../../types/global.types';
 import './MainLayout.css';
@@ -54,6 +55,11 @@ export function MainLayout({
 
       {/* Main Content Area */}
       <div className="main-content">
+        {/* Window Controls - Appears on all pages */}
+        <div className="main-header">
+          <WindowControls />
+        </div>
+
         {/* Content */}
         <div 
           className={`content-area ${hardwareAcceleration ? 'hw-accelerated' : ''}`}

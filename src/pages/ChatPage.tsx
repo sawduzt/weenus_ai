@@ -9,7 +9,6 @@ import { Send, User, Bot, RefreshCw, MessageCircle, Lightbulb, Loader, Sliders }
 import { useOllama } from '../hooks/useOllama';
 import { useChat } from '../hooks/useChat';
 import { useToast } from '../components/ui/ToastProvider';
-import { WindowControls } from '../components/layout/WindowControls';
 import { chatService } from '../services/chat';
 import { streamingChatService } from '../services/streamingChat';
 import type { ChatMessage } from '../types/chat.types';
@@ -516,8 +515,6 @@ export function ChatPage({ activeChatId, onChatChange }: ChatPageProps): JSX.Ele
         </div>
         
         <p style={{ margin: '0', fontSize: '12px', color: 'var(--text-muted)', paddingRight: '140px' }}>Powered by Ollama</p>
-        
-        <WindowControls />
       </div>
 
       {/* Messages Area */}
