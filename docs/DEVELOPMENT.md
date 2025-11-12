@@ -1,51 +1,27 @@
-# Development Environment Setup
+# Development Guide
 
 This document provides comprehensive setup instructions for the Weenus AI development environment.
 
 ## 📋 Prerequisites
 
-Before setting up the development environment, ensure you have the following installed:
+Before setting up the development environment, ensure you have:
 
 - **Node.js** (v18 or higher) - [Download here](https://nodejs.org/)
-- **npm** (comes with Node.js) or **yarn**
+- **npm** (comes with Node.js)
 - **Git** for version control
-- **VS Code** (recommended) with the following extensions:
+- **Ollama** (for testing) - [Download here](https://ollama.ai)
+- **VS Code** (recommended) with extensions:
   - ESLint
   - Prettier - Code formatter
   - TypeScript and JavaScript Language Features
   - Auto Rename Tag (for React JSX)
 
-## 🎨 Phase 3 Updates (November 9, 2025) - COMPLETE UI IMPLEMENTATION
-
-**🚀 MAJOR MILESTONE**: Complete application foundation built in single development session!
-
-### Recently Completed Features:
-- **✅ Professional Icon System**: Complete Lucide React integration replacing all emojis
-- **✅ Custom Window Controls**: Native-style minimize/maximize/close buttons with Electron API
-- **✅ Enhanced Theming**: Cute pink theme with rounded design language and Windows Mica effects
-- **✅ Improved Layout**: Responsive sidebar, status bar curves, proper spacing throughout
-- **✅ UX Enhancements**: Clickable AI icon for sidebar expansion, improved interactions
-- **✅ Frameless Design**: Custom title bar with draggable regions for modern desktop feel
-
-### Current Status:
-- **Core Infrastructure**: ✅ Complete (Electron + React + TypeScript setup)
-- **UI Framework**: ✅ Complete (All layout components implemented)  
-- **Icon System**: ✅ Complete (Professional vector icons throughout)
-- **Theme System**: ✅ Complete (Pink theme with light/dark variants)
-- **Window Controls**: 🔧 Implemented but buttons non-functional (debugging needed)
-- **Final Polish**: 🔧 3 minor spacing/curve issues remaining
-
-### Outstanding TODO Items:
-1. **🚨 Critical**: Debug window control button functionality
-2. **🎨 Minor**: Adjust status bar padding (small gap from borders)  
-3. **🎨 Minor**: Fix sidebar bottom curve visibility when expanded
-4. **🧪 Testing**: Comprehensive UI validation across all states
-
 ## 🚀 Initial Setup
 
-1. **Clone the repository** (or extract if from archive):
+1. **Clone the repository**:
    ```bash
-   cd "d:\ai if it sucked\weenus-ai"
+   git clone https://github.com/sawduzt/weenus-ai.git
+   cd weenus-ai
    ```
 
 2. **Install dependencies**:
@@ -109,41 +85,45 @@ npm run preview      # Preview production build
 weenus-ai/
 ├── src/
 │   ├── components/          # Reusable UI components
-│   ├── pages/              # Main application pages
-│   ├── services/           # API and external services
-│   ├── store/              # State management
+│   │   ├── layout/         # Layout components (MainLayout, Sidebar, StatusBar, WindowControls)
+│   │   ├── ui/             # UI components (Toast, ToggleSwitch)
+│   │   └── theme/          # Theme provider
+│   ├── pages/              # Application pages (Chat, Settings, ModelLibrary, etc.)
+│   ├── services/           # API and external services (Ollama, chat, parameters)
+│   ├── hooks/              # Custom React hooks (useOllama, useChat, etc.)
 │   ├── types/              # TypeScript type definitions
-│   ├── utils/              # Helper functions
-│   └── assets/             # Static assets
+│   └── styles/             # Global styles and CSS
 ├── electron/
 │   ├── main.ts             # Electron main process
-│   └── preload.ts          # Preload script
-├── tests/                  # Test files
+│   └── preload/            # Preload scripts
 ├── docs/                   # Documentation
+│   ├── user/              # User-facing documentation
+│   └── developer/         # Technical documentation
+├── tests/                  # Test files
 └── build/                  # Build outputs
 ```
+
+For detailed project structure documentation, see [docs/developer/project-structure.md](developer/project-structure.md).
 
 ## ⚙️ Configuration Files
 
 ### ESLint (`.eslintrc.json`)
-- Enforces code quality and consistency
-- Configured for TypeScript and React
-- Includes recommended rules for modern development
+Enforces code quality and consistency for TypeScript and React.
 
 ### Prettier (`.prettierrc.json`)
-- Handles code formatting automatically
-- Configured for consistent style across the project
-- Integrates with VS Code for format-on-save
+Handles code formatting automatically with editor integration.
 
-### TypeScript (`tsconfig.json`)
+### TypeScript (`tsconfig.json`, `electron.tsconfig.json`)
 - Strict type checking enabled
+- Separate configs for renderer and main process
 - Modern ES features supported
-- Configured for React JSX
 
 ### Vite (`vite.config.ts`)
-- Fast development server
-- Hot module replacement
+- Fast development server with hot module replacement
 - Optimized production builds
+- Electron integration
+
+For detailed build system documentation, see [docs/developer/build-system.md](developer/build-system.md).
 
 ## 🔧 VS Code Integration
 
@@ -168,9 +148,9 @@ The project includes VS Code settings (`.vscode/settings.json`) that:
 - Follow React Hooks rules
 
 ### Styling Guidelines
-- Use CSS modules or styled-components
-- Follow BEM methodology for CSS classes
-- Maintain consistent spacing and naming
+- Use CSS modules for component styles
+- Follow consistent naming conventions
+- Maintain spacing and design system tokens
 
 ## 🚨 Common Issues & Solutions
 
@@ -190,23 +170,25 @@ npm run type-check
 
 ### Electron Issues
 ```bash
-# Rebuild native dependencies
-npm run rebuild
+# Rebuild native dependencies if needed
+npm rebuild
 ```
 
-## 📊 Performance Monitoring
+## 📊 Performance Guidelines
 
-Monitor development performance using:
+Monitor development performance:
 - Vite dev server metrics
 - TypeScript compilation time
 - ESLint execution time
-- Test execution time
 
-Keep build times under:
-- Development: < 3 seconds
+Target build times:
+- Development startup: < 5 seconds
 - Type checking: < 10 seconds
-- Full build: < 30 seconds
+- Full production build: < 30 seconds
 
 ---
 
-*This documentation is updated as the development environment evolves.*
+*For more detailed documentation, see:*
+- *[Build System](developer/build-system.md)*
+- *[Project Structure](developer/project-structure.md)*
+- *[Dependencies](developer/dependencies.md)*
