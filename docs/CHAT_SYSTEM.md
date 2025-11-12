@@ -132,21 +132,21 @@ App (state)
  │         └─> useChat (hook)
  │              └─> chatService (persistence)
  └─> ChatPage (props)
-      └─> [TODO: Integrate with useChat]
+      └─> useChat integration
 ```
 
-### ChatPage Integration (In Progress)
+### ChatPage Integration
 
 **Props:**
 - `activeChatId: string | null` - Current chat ID from App
 - `onChatChange: (id) => void` - Callback to notify App of chat changes
 
-**Next Steps:**
-1. Import `useChat` hook
-2. Load chat messages when `activeChatId` changes
-3. On first user message, create new chat if `activeChatId` is null
-4. After AI response, trigger title generation
-5. Save messages to active chat using `addMessage()`
+**Implementation:**
+- Uses `useChat` hook
+- Loads chat messages when `activeChatId` changes
+- Creates new chat if `activeChatId` is null
+- Triggers title generation after first AI response
+- Saves messages to active chat using `addMessage()`
 
 ## Search Functionality
 
@@ -211,27 +211,6 @@ The chat system uses the existing pink bunny theme:
 - Fade-in on chat creation
 - Slide-out on deletion
 - Smooth transitions on hover states
-
-## Known Limitations
-
-1. ChatPage integration incomplete (props defined but not used)
-2. Search results don't highlight matching text
-3. No chat export/import functionality
-4. No chat rename capability (only AI-generated titles)
-5. Unused variable warnings (`chatsToDisplay` in Sidebar, `activeChatId`/`onChatChange` in ChatPage)
-
-## Future Enhancements
-
-- [ ] Manual chat renaming
-- [ ] Chat export (JSON/Markdown)
-- [ ] Chat import
-- [ ] Pin favorite chats
-- [ ] Archive old chats
-- [ ] Search result highlighting
-- [ ] Keyboard shortcuts (Cmd/Ctrl+K for search)
-- [ ] Infinite scroll for large chat lists
-- [ ] Chat tags/categories
-- [ ] Multi-select delete
 
 ## Testing
 
