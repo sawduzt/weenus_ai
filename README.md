@@ -5,7 +5,7 @@ A local-first desktop application for AI chat powered by Ollama.
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Electron](https://img.shields.io/badge/Electron-27.0-purple?logo=electron)](https://www.electronjs.org/)
 [![React](https://img.shields.io/badge/React-18.2-cyan?logo=react)](https://reactjs.org/)
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-green.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Features
 
@@ -81,7 +81,7 @@ weenus-ai/
 
 ## License
 
-GNU Affero General Public License v3.0 - see [LICENSE](LICENSE)
+MIT License – see [LICENSE](LICENSE)
 
 ## Built By
 
