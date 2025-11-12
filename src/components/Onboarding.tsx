@@ -28,19 +28,21 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
     id: 'chat',
     title: 'Chat Interface',
     description: 'This is where you talk to AI models. Select a model from the dropdown, type your message, and press Enter to chat.',
-    highlight: 'chat-input-area',
+    highlight: 'nav-chat',
     position: 'top',
   },
   {
     id: 'models',
     title: 'Model Library',
     description: 'Go to the Model Library tab to download new AI models from Ollama or HuggingFace. Start with Mistral or Phi-3 for best performance!',
+    highlight: 'nav-models',
     position: 'bottom',
   },
   {
     id: 'settings',
     title: 'Smart Settings',
     description: 'Fine-tune how AI responds. Adjust Temperature for creativity, Max Tokens for response length, and more. Each model can have different settings!',
+    highlight: 'nav-settings',
     position: 'bottom',
   },
   {
@@ -78,9 +80,16 @@ export function Onboarding({ isOpen, onClose, onSkip }: OnboardingProps): JSX.El
   // Update highlight position
   useEffect(() => {
     if (step.highlight) {
-      const element = document.querySelector(`.${step.highlight}`);
+      // Try class selector first
+      let element = document.querySelector(`.${step.highlight}`);
+      // Try data-testid selector if class not found
+      if (!element) {
+        element = document.querySelector(`[data-testid="${step.highlight}"]`);
+      }
       if (element) {
         setHighlightRect(element.getBoundingClientRect());
+      } else {
+        setHighlightRect(null);
       }
     } else {
       setHighlightRect(null);
