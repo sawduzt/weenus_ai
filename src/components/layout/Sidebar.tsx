@@ -151,6 +151,7 @@ export function Sidebar({
               <li key={item.id}>
                 <button
                   className={`nav-item ${currentPage === item.id ? 'active' : ''}`}
+                  data-testid={`nav-${item.id}`}
                   onClick={() => onPageChange(item.id)}
                   title={collapsed ? item.description : ''}
                 >
