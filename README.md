@@ -59,4 +59,4 @@ GNU Affero General Public License v3.0 - see [LICENSE](LICENSE)
 
 ## Built By
 
-[Sawduzt](https://github.com/sawduzt)
+[Sawduzt](https://github.com/sawduzt) with alot of help from [Claude](https://www.anthropic.com/claude/sonnet)
