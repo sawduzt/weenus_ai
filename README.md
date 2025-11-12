@@ -85,4 +85,4 @@ GNU Affero General Public License v3.0 - see [LICENSE](LICENSE)
 
 ## Built By
 
-[Sawduzt](https://github.com/sawduzt) with help from [Claude](https://www.anthropic.com/claude)
+[Sawduzt](https://github.com/sawduzt) with help from [Claude](https://www.anthropic.com/claude) and [Copilot](https://github.com/copilot)
